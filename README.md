@@ -14,8 +14,8 @@ Bring your favorites in the homepage with a customizable Kanban style
 
 ## Installing
 
-- Download latest build from [releases](https://github.com/d3ward/b2ntp/releases)
-- From your chromium browser go on extensions page and enable dev mode 
+- Download latest 'b2ntp.zip' from [Releases](https://github.com/d3ward/b2ntp/releases)
+- On your Chromium based Browser go on Extensions page and enable dev mode 
 - Load the zip file or the unzipped folder 
 - Enjoy ! 
 
