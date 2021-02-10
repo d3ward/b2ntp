@@ -12,6 +12,13 @@ Bring your favorites in the homepage with a customizable Kanban style
 - Customizable colors, background and layout 
 - Simple sidebar Weather Widget with OpenWeatherMap API
 
+## Installing
+
+- Download latest build from [releases](https://github.com/d3ward/b2ntp/releases)
+- From your chromium browser go on extensions page and enable dev mode 
+- Load the zip file or the unzipped folder 
+- Enjoy ! 
+
 ## Contributing
 
 If you have a suggestion or want to report a bug feel free to share it by opening an issue
