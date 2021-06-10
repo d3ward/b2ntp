@@ -30,7 +30,7 @@ If you have a suggestion or want to report a bug feel free to share it by openin
 
 ## License
 
-Copyright 2020 d3ward
+Copyright 2021 d3ward
 Licensed under [NC-SA-4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)
 
 

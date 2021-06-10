@@ -2,19 +2,18 @@
   "manifest_version": 2,
   "name": "b2ntp",
   "description": "Simple and powerful New Tab Page with your bookmarks",
-  "version": "1.0.0",
-  "incognito": "split",
+  "version": "1.0.1",
   "chrome_url_overrides": {
     "newtab": "blank.html"
   },
   "browser_action": {
-        "default_icon": {
-          "16": "./src/16x16.png",
-          "48": "./src/48x48.png",
-          "128": "./src/128x128.png",
-          "512": "./src/512x512.png"
-        }
-      },
+    "default_icon":"./src/png/256x256.png"
+  },
+  "icons": {
+    "20": "src/png/20x20.png",
+    "48": "src/png/48x48.png",
+    "152": "src/png/128x128.png"
+  },
   "permissions": [
     "bookmarks"
   ]
