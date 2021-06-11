@@ -1626,10 +1626,6 @@ svg.wave {
   margin: 0 auto;
 }
 
-._ratio32 {
-  apsect-ratio: 3/2;
-}
-
 ._fit-cover {
   -o-object-fit: cover !important;
      object-fit: cover !important;

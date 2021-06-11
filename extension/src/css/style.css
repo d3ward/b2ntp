@@ -33,9 +33,11 @@ html,
 	--bg-tabs: var(--bg);
 	--brd-tabs-l: var(--primary);
 	--brd-tabs: var(--bg2);
-
 	--bg-input: var(--bg2);
 	--brd-input: var(--bg2);
+	/* ------------------ Details ----------------- */
+	--bg-details: var(--bg2);
+  	--bg-details-open: var(--bg3);
 	/* -------------- Weather Widget -------------- */
 	/* Weather visibility */
 	--wt: none;
@@ -392,7 +394,48 @@ div#toolbar>a+a {
 	border-color: var(--c9) !important;
 }
 
-
+/* ------------------ Details ----------------- */
+details {
+	width: 100%;
+	overflow-x: hidden;
+	display: flex;
+	flex-flow: wrap column;
+	border-radius: var(--radius);
+	-webkit-user-select: none;
+	   -moz-user-select: none;
+		-ms-user-select: none;
+			user-select: none;
+	transition: height 0.3s ease-in-out;
+	background: var(--bg-details);
+  }
+  details > summary {
+	outline-color: initial;
+	padding: 0.6rem;
+	border-radius: var(--radius);
+	outline: 0;
+	cursor: pointer;
+	font-weight: 500;
+	transition: background-color 0.4s ease-in-out;
+  }
+  details > summary:hover {
+	color: var(--primary);
+	background-color: var(--bg-details);
+  }
+  details > div {
+	padding: 0.5rem;
+  }
+  
+  details[open] summary {
+	background-color: var(--bg-details-open) !important;
+  }
+  details[open] > summary:hover {
+	color: var(--primary);
+	background-color: var(--bg-details);
+  }
+  
+  details + details {
+	margin-top: 0.5rem;
+  }
 /* ----------------- Bookmarks ---------------- */
 @keyframes expand {
 	from {
@@ -1222,8 +1265,8 @@ input[type=color]::-webkit-color-swatch {
 	border-radius: var(--radius);
 }
 textarea{
-	height: 300px;
-	min-height: 300px;
+	height: 200px;
+	min-height: 200px;
 }
 textarea,
 input:not([type=color]):not([type=range]):not([type=radio]):not([type=checkbox]),

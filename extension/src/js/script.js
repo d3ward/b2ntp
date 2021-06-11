@@ -491,7 +491,7 @@ function f_save_sb() {
       sKc[f_trim(zlen[0])] = f_trim(zlen[1]);
     }
   }
-  error = error || !(sKc['placeholder'] && sKc['default']);
+  error = error || !(sKc['default']);
   if (error) {
     alert("Looks like you removed important keywords like \n-placeholder\n-key\n-default\n Make sure to follow the syntax too :'k' -> 'value'");
   } else {
@@ -670,7 +670,7 @@ function displayClock() {
 
 //window.onload = matchLinks();
 var sb_input = document.getElementById("sb_input");
-if(sb_data["placeholder"] != "none"){
+if(sb_data["placeholder"].length > 1){
   sb_input.placeholder = sb_data["placeholder"];
 }
 sb_input.addEventListener("input", () => {
