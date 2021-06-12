@@ -1,5 +1,5 @@
 <p align="center">
- <img src="src/512x512.png" alt="b2ntp"
+ <img src="extension/src/png/512x512.png" alt="b2ntp"
 	title="b2ntp" width="160" height="160" />
 </p>
 
@@ -7,7 +7,7 @@ A simple and powerful New Tab Page with goal of speed and customization.
 Bring your favorites in the homepage with a customizable Kanban style
 
 ## Preview
-<img src="src/preview.png" alt="b2ntp"
+<img src="src/preview1.png" alt="b2ntp"
 	title="b2ntp"  />
 ## Features
 - Powerful search bar that look for your bookmarks or directly search on the web with shortcuts !
@@ -25,8 +25,8 @@ Bring your favorites in the homepage with a customizable Kanban style
 
 If you have a suggestion or want to report a bug feel free to share it by opening an issue
 
-## Libraries included
- 
+## Other projects & libraries included
+ - [Heroicons](https://heroicons.dev/) | [MIT License](https://github.com/tailwindlabs/heroicons/blob/master/LICENSE) A set of free high-quality SVG icons
  - [Croppie](http://foliotek.github.io/Croppie/) | [MIT License](https://github.com/Foliotek/Croppie/blob/master/LICENSE) A Javascript Image Cropper  
  - [Vanilla-Picker v2.10.1](https://vanilla-picker.js.org) | [ISC License](https://github.com/Sphinxxxx/vanilla-picker/blob/master/LICENSE.md) A simple, easy to use vanilla JS color picker with alpha selection.
 
