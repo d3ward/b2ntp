@@ -199,7 +199,7 @@ function carousel(){
   t.showSlides=(n)=>{
     var i;
     if (n > t.slides.length) t.index = 1
-    if (n < 1) t.index = slides.length()
+    if (n < 1) t.index = slides.length
     for (i = 0; i < slides.length; i++) {
         t.slides[i].style.display = "none";
     }
