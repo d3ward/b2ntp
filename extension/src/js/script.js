@@ -31,6 +31,11 @@ const icons = {
 };
 
 // ---------- UTILITY ----------------
+function sanitizeHTML (str) {
+	return str.replace(/javascript:/gi, '').replace(/[^\w-_. ]/gi, function (c) {
+		return `&#${c.charCodeAt(0)};`;
+	});
+}
 function alert(options){
   var t =this;
   t.count = 0;
@@ -57,12 +62,14 @@ function alert(options){
     }, timeout);
   }
   t.createItem = function(message, color){
-    var $item = document.createElement("div");
-    $item.classList.add("notify-item");
-    $item.classList.add(color);
-    $item.innerHTML = "<span>"+ message + "</span>"+close;
+    var item = document.createElement("div");
+    item.classList.add("notify-item");
+    item.classList.add(color);
+    var span = document.createElement("span");
+    span.textContent = message;
+    item.appendChild(span);
     t.count++;
-    return $item;
+    return item;
   }
   t.error = function(txt){
     t.show(t.createItem(txt,"error"));
@@ -318,7 +325,6 @@ function diff_hours(dt)
   }
 
 // ---------- CONFIGURATION ----------
-// div.innerHTML : {a.innerHTML : a.href}
 /**/
 
 //Get data from LocalStorage
@@ -421,9 +427,9 @@ function showPosition(position) {
         if (data == "") return;
         data = JSON.parse(data.substring(2, data.length - 1));
         document.getElementById("wth_l").style.opacity = 1;
-        document.getElementById("wth_c").innerHTML = data.list[0].name;
-        document.getElementById("wth_i").innerHTML = icons[data.list[0].weather[0].icon];
-        document.getElementById("wth_d1").innerHTML = capitalizeF(data.list[0].weather[0].description);
+        document.getElementById("wth_c").innerText = data.list[0].name;
+        document.getElementById("wth_i").appendChild(icons[data.list[0].weather[0].icon]);
+        document.getElementById("wth_d1").innerText = capitalizeF(data.list[0].weather[0].description);
         var temp = (data.list[0].main.temp - 273.15).toFixed(0);
         var temp_f = (data.list[0].main.feels_like - 273.15).toFixed(0);
         var temp_min = (data.list[0].main.temp_min - 273.15).toFixed(0);
@@ -438,8 +444,8 @@ function showPosition(position) {
           temp_max = (1.8 * temp_max  +  32).toFixed(0);
           tt = "&#8457;";
         }
-        document.getElementById("wth_t").innerHTML = temp  +  tt;
-        document.getElementById("wth_mm").innerHTML = temp_max  +  tt  +  " / "  +  temp_min  +  tt;
+        document.getElementById("wth_t").innerText = temp  +  tt;
+        document.getElementById("wth_mm").innerText = temp_max  +  tt  +  " / "  +  temp_min  +  tt;
         document.getElementById('wth_w').innerHTML = ('<i class="far fa-wind _'  +  windDeg  +  '-deg" title="Wind direction ('  +  windDeg  +  ' degrees)"></i> '  +  data.list[0].wind.speed  +  " mps");
         document.getElementById('wth_h').innerHTML = ('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path d="M160 292c0-15.5-12.5-28-28-28s-28 12.5-28 28 12.5 28 28 28 28-12.5 28-28zm92 60c-15.5 0-28 12.5-28 28s12.5 28 28 28 28-12.5 28-28-12.5-28-28-28zM223.9 22.1C219.5 7.5 205.8 0 192 0c-13.5 0-27 7.2-31.8 22.1C109.1 179.8 0 222.7 0 333.9 0 432.3 85.9 512 192 512s192-79.7 192-178.1c0-111.7-108.9-153.3-160.1-311.8zM192 480c-88.2 0-160-65.5-160-146.1 0-47.6 25-80.4 59.6-125.9 32.6-42.8 73.1-96 98.6-175.7.1-.1.8-.3 1.8-.3.7 0 1.2.1 1.4.1h.1c26 80.4 66.5 133.4 99.1 176.1C327.1 253.4 352 286 352 333.9c0 80.6-71.8 146.1-160 146.1zm61-212.2l-12.5-10c-3.5-2.8-8.5-2.2-11.2 1.2l-99.5 134c-2.8 3.5-2.2 8.5 1.2 11.2l12.5 10c3.5 2.8 8.5 2.2 11.2-1.2l99.5-134c2.8-3.4 2.2-8.5-1.2-11.2z"/></svg>'
         +  data.list[0].main.humidity  +  "%");
@@ -571,9 +577,12 @@ function matchLinks(regex = prevregexp) {
       var matches = 0,
         selected, slink = false;
       var fldName = fldKeys[i];
+      var title = document.createElement("div");
+      title.className = "title";
+      title.textContent = fldName;
       var section = document.createElement("div");
       section.id = bk_data[fldName][1];
-      section.innerHTML = "<div id='title'> " + fldName + "</div>";
+      section.appendChild(title);
       section.className = "section";
       var inner = document.createElement("div");
       var urlKeys = Object.keys(bk_data[fldName][0]);
@@ -583,7 +592,7 @@ function matchLinks(regex = prevregexp) {
           var link = document.createElement("a");
           link.id = bk_data[fldName][0][ln][1];
           link.href = bk_data[fldName][0][ln][0];
-          link.innerHTML = ln;
+          link.textContent = ln;
           if (!pivotbuffer++ && regex != "") {
             selected = true;
             link.className = "selected";
@@ -665,7 +674,7 @@ function displayClock() {
     (now.getMinutes() < 10 ? "0" + now.getMinutes() : now.getMinutes()) +
     ":" +
     (now.getSeconds() < 10 ? "0" + now.getSeconds() : now.getSeconds());
-  document.getElementById("clock").innerHTML = clock;
+  document.getElementById("clock").innerText = clock;
 }
 
 //window.onload = matchLinks();

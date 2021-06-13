@@ -455,10 +455,10 @@ div#links {
 	padding-bottom: 20px;
 	font-size: 16px;
 	border-radius: var(--radius);
-	animation: expand 1s;
+	animation: expand 1.3s;
 }
 
-div#links>div.section>#title {
+div#links>div.section>.title {
 	margin: 0;
 	padding: 8px;
 }
