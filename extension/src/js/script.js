@@ -29,39 +29,34 @@ const icons = {
   '01d': '<svg version="1.1" x="0px" y="0px" viewBox="0 0 44.9 44.9" xml:space="preserve"> <g fill="#ff0"> <circle cx="22.4" cy="22.6" r="11"/> <g> <path d="M22.6,8.1h-0.3c-0.3,0-0.6-0.3-0.6-0.6v-7c0-0.3,0.3-0.6,0.6-0.6l0.3,0c0.3,0,0.6,0.3,0.6,0.6 v7C23.2,7.8,22.9,8.1,22.6,8.1z"/> <path d="M22.6,36.8h-0.3c-0.3,0-0.6,0.3-0.6,0.6v7c0,0.3,0.3,0.6,0.6,0.6h0.3c0.3,0,0.6-0.3,0.6-0.6v-7 C23.2,37,22.9,36.8,22.6,36.8z"/> <path d="M8.1,22.3v0.3c0,0.3-0.3,0.6-0.6,0.6h-7c-0.3,0-0.6-0.3-0.6-0.6l0-0.3c0-0.3,0.3-0.6,0.6-0.6h7 C7.8,21.7,8.1,21.9,8.1,22.3z"/> <path d="M36.8,22.3v0.3c0,0.3,0.3,0.6,0.6,0.6h7c0.3,0,0.6-0.3,0.6-0.6v-0.3c0-0.3-0.3-0.6-0.6-0.6h-7 C37,21.7,36.8,21.9,36.8,22.3z"/> <path d="M11.4,31.6l0.2,0.3c0.2,0.2,0.2,0.6-0.1,0.8l-5.3,4.5c-0.2,0.2-0.6,0.2-0.8-0.1l-0.2-0.3 c-0.2-0.2-0.2-0.6,0.1-0.8l5.3-4.5C10.9,31.4,11.2,31.4,11.4,31.6z"/> <path d="M33.2,13l0.2,0.3c0.2,0.2,0.6,0.3,0.8,0.1l5.3-4.5c0.2-0.2,0.3-0.6,0.1-0.8l-0.2-0.3 c-0.2-0.2-0.6-0.3-0.8-0.1l-5.3,4.5C33,12.4,33,12.7,33.2,13z"/> <path d="M11.4,13.2l0.2-0.3c0.2-0.2,0.2-0.6-0.1-0.8L6.3,7.6C6.1,7.4,5.7,7.5,5.5,7.7L5.3,7.9 C5.1,8.2,5.1,8.5,5.4,8.7l5.3,4.5C10.9,13.5,11.2,13.5,11.4,13.2z"/> <path d="M33.2,31.9l0.2-0.3c0.2-0.2,0.6-0.3,0.8-0.1l5.3,4.5c0.2,0.2,0.3,0.6,0.1,0.8l-0.2,0.3 c-0.2,0.2-0.6,0.3-0.8,0.1l-5.3-4.5C33,32.5,33,32.1,33.2,31.9z"/> <animate attributeType="CSS" attributeName="opacity" attributeType="XML" dur="0.5s" keyTimes="0;0.5;1" repeatCount="indefinite" values="1;0.6;1" calcMode="linear"/> </g> </g> </svg>',
   '01n': '<svg version="1.1" x="0px" y="0px" viewBox="0 0 30.8 42.5" xml:space="preserve" > <path fill="#ff0" d="M15.3,21.4C15,12.1,21.1,4.2,29.7,1.7c-2.8-1.2-5.8-1.8-9.1-1.7C8.9,0.4-0.3,10.1,0,21.9 c0.3,11.7,10.1,20.9,21.9,20.6c3.2-0.1,6.3-0.9,8.9-2.3C22.2,38.3,15.6,30.7,15.3,21.4z"/> </svg>'
 };
-
 // ---------- UTILITY ----------------
-function sanitizeHTML (str) {
-	return str.replace(/javascript:/gi, '').replace(/[^\w-_. ]/gi, function (c) {
-		return `&#${c.charCodeAt(0)};`;
-	});
-}
-function alert(options){
-  var t =this;
+//Alert notification
+function alert(options) {
+  var t = this;
   t.count = 0;
   console.log(options.autoClose);
-  t.timeout = (options.timeout)? options.timeout : 3000;
-  t.autoClose= (options.hasOwnProperty('autoClose'))?options.autoClose : true;
-  const close= '<svg class="_icon" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>';
+  t.timeout = (options.timeout) ? options.timeout : 3000;
+  t.autoClose = (options.hasOwnProperty('autoClose')) ? options.autoClose : true;
+  const close = '<svg class="_icon" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>';
   t.container = document.querySelector("#nt1");
-  t.close= function($el){
+  t.close = function ($el) {
     $el.classList.add("animate-out");
-      setTimeout(() => {
-        $el.remove();
-        t.count --;
-      }, 300);
+    setTimeout(() => {
+      $el.remove();
+      t.count--;
+    }, 300);
   }
-  t.setCloseOnClick=function($el) {
-    $el.addEventListener("click", function() {
+  t.setCloseOnClick = function ($el) {
+    $el.addEventListener("click", function () {
       t.close($el);
     });
   }
-  t.setAutocloseTimeout=function($el, timeout) {
-    setTimeout(function() {
+  t.setAutocloseTimeout = function ($el, timeout) {
+    setTimeout(function () {
       t.close($el);
     }, timeout);
   }
-  t.createItem = function(message, color){
+  t.createItem = function (message, color) {
     var item = document.createElement("div");
     item.classList.add("notify-item");
     item.classList.add(color);
@@ -71,21 +66,21 @@ function alert(options){
     t.count++;
     return item;
   }
-  t.error = function(txt){
-    t.show(t.createItem(txt,"error"));
+  t.error = function (txt) {
+    t.show(t.createItem(txt, "error"));
   }
-  t.warn = function(txt){
-    t.show(t.createItem(txt,"warn"));
+  t.warn = function (txt) {
+    t.show(t.createItem(txt, "warn"));
   }
-  t.info = function(txt){
-    var l = t.createItem(txt,"info");
+  t.info = function (txt) {
+    var l = t.createItem(txt, "info");
     t.show(l);
   }
-  t.success = function(txt){
-    var l = t.createItem(txt,"success");
+  t.success = function (txt) {
+    var l = t.createItem(txt, "success");
     t.show(l);
   }
-  t.show = function(l){
+  t.show = function (l) {
     console.log(t.autoClose);
     if (t.autoClose)
       t.setAutocloseTimeout(l, t.timeout);
@@ -93,58 +88,50 @@ function alert(options){
     t.container.append(l);
   }
 }
-function aos(){
-  //Only Use the IntersectionObserver if it is supported
+//Animate on scroll
+function aos() {
   if (IntersectionObserver) {
-      //When the element is visible on the viewport, 
-      //add the _a_completed class so it creates the _aos.
-      let callback = function(entries) {
-          entries.forEach(entry => {
-              //if the element is visible, add the _a_completed class
-              if (entry.isIntersecting && !entry.target.classList.contains('_a_completed')) {
-                  entry.target.classList.add('_a_completed');
-              }
-              else{
-                entry.target.classList.remove('_a_completed');
-              }
-          });
-      }
-      //Create the observer
-      let observer = new IntersectionObserver(callback, {
-          root: null,
-          threshold: 0.2
+    let callback = function (entries) {
+      entries.forEach(entry => {
+        if (entry.isIntersecting && !entry.target.classList.contains('_a_completed'))
+          entry.target.classList.add('_a_completed');
+        else
+          entry.target.classList.remove('_a_completed');
       });
-
-      //Get and observe all the items with the item class
-      let items = document.querySelectorAll("[class*=_aos]");
-      items.forEach((item) => {
-          observer.observe(item);
-      });
+    }
+    let observer = new IntersectionObserver(callback, {
+      root: null,
+      threshold: 0.2
+    });
+    let items = document.querySelectorAll("[class*=_aos]");
+    items.forEach((item) => {
+      observer.observe(item);
+    });
   }
 }
-aos();
-function modal(id){
+//Modal
+function modal(id) {
   var t = this;
-  t.m = document.querySelector( (id)?id:'.modal');
-  if(t.m){
+  t.m = document.querySelector((id) ? id : '.modal');
+  if (t.m) {
     t.bdy = document.querySelector('html').classList;
-    t.targets = document.querySelectorAll('[data-toggle="'+t.m.id+'"]');
+    t.targets = document.querySelectorAll('[data-toggle="' + t.m.id + '"]');
     t.closebtns = t.m.querySelectorAll('.close-modal');
   }
-  t.show = function(){
+  t.show = function () {
     t.bdy.add('_overflowhidden');
     t.m.classList.add('_show-modal');
   }
-  t.hide = function(){
+  t.hide = function () {
     t.m.classList.remove('_show-modal');
     setTimeout(() => {
       t.bdy.remove('_overflowhidden');
     }, 400);
   }
-  t.listeners= function(){
-    t.targets.forEach(el=> {
+  t.listeners = function () {
+    t.targets.forEach(el => {
       el.addEventListener('click', function (e) {
-          t.show();
+        t.show();
       });
     });
     t.closebtns.forEach(function (item) {
@@ -153,46 +140,42 @@ function modal(id){
       });
     });
   }
-  if(t.m)
+  if (t.m)
     t.listeners();
 }
-new modal();
+//Theme for settings
 function theme() {
-  //Theme Switcher
   var toggles = document.getElementsByClassName("theme-toggle");
   if (window.CSS && CSS.supports("color", "var(--bg)") && toggles) {
     var storedTheme = localStorage.getItem('theme') || (window.matchMedia("(prefers-color-scheme: dark)").matches ?
       "dark" : "light");
     if (storedTheme)
       document.documentElement.setAttribute('data-theme', storedTheme)
-    for(var i=0;i<toggles.length;i++){
-        toggles[i].onclick = function () {
-          var currentTheme = document.documentElement.getAttribute("data-theme");
-          var targetTheme = "light";
-
-          if (currentTheme === "light") {
-            targetTheme = "dark";
-          }
-
-          document.documentElement.setAttribute('data-theme', targetTheme)
-          localStorage.setItem('theme', targetTheme);
-        };
+    for (var i = 0; i < toggles.length; i++) {
+      toggles[i].onclick = function () {
+        var currentTheme = document.documentElement.getAttribute("data-theme");
+        var targetTheme = "light";
+        if (currentTheme === "light")
+          targetTheme = "dark";
+        document.documentElement.setAttribute('data-theme', targetTheme)
+        localStorage.setItem('theme', targetTheme);
+      };
     }
-    
+
   }
 }
-theme();
-function gotop(){
-  var el =this;
-  el.gt =document.getElementById('gt-link');
-  el.scrollToTop= function(){
+//Go to top button
+function gotop() {
+  var el = this;
+  el.gt = document.getElementById('gt-link');
+  el.scrollToTop = function () {
     window.scroll({
-          top: 0,
-          left: 0,
-          behavior: 'smooth'
-        });
+      top: 0,
+      left: 0,
+      behavior: 'smooth'
+    });
   }
-  el.listeners= function(){
+  el.listeners = function () {
     window.addEventListener("scroll", () => {
       let y = window.scrollY;
       if (y > 0) {
@@ -208,27 +191,27 @@ function gotop(){
       }
     }
   }
-  if(el.gt){
+  if (el.gt) {
     el.listeners();
   }
 }
-new gotop();
-function pagesRoute(){
+//Manage pages 
+function pagesRoute() {
   const link = Array.from(document.querySelectorAll('[topage]'));
-  if(link){
+  if (link) {
     const navigate = (id) => {
       var activePage = document.querySelector("section.page-active");
       var activeLink = document.querySelector("[topage].active");
-      if (activePage) 
+      if (activePage)
         activePage.classList.remove("page-active");
-      if(activeLink)
+      if (activeLink)
         activeLink.classList.remove("active");
       var nextPage = document.querySelector(id);
-      var nextLink = document.querySelector("[topage='"+id+"']");
-      if (nextPage) 
+      var nextLink = document.querySelector("[topage='" + id + "']");
+      if (nextPage)
         nextPage.classList.add("page-active");
-      if (nextLink) 
-          nextLink.classList.add("active");
+      if (nextLink)
+        nextLink.classList.add("active");
     }
     link.forEach(function (page) {
       var id = page.getAttribute("topage");
@@ -238,43 +221,35 @@ function pagesRoute(){
     })
   }
 }
-pagesRoute();
-function sidebar(){
-  var t=this;
-  t.m= false;
-  t.n= document.querySelector("aside").classList;
-  t.listener = function(){
+//Manage sidebar 
+function sidebar() {
+  var t = this;
+  t.m = false;
+  t.n = document.querySelector("aside").classList;
+  t.listener = function () {
     t.b = document.querySelector(".open-aside");
-    t.b.addEventListener('click',function(){
-      if(t.m){
+    t.b.addEventListener('click', function () {
+      if (t.m) {
         t.n.remove("opened");
-        t.m=false;
-      }else{
+        t.m = false;
+      } else {
         t.n.add("opened");
-        t.m=true;
+        t.m = true;
       }
     });
   }
-  t.close=function(){
+  t.close = function () {
     document.getElementById("mySidebar").style.width = "85px";
     document.getElementById("main").style.marginLeft = "85px";
     t.mini = true;
   }
-  t.open=function(){
+  t.open = function () {
     document.getElementById("mySidebar").style.width = "250px";
     document.getElementById("main").style.marginLeft = "250px";
     t.mini = false;
   }
   t.listener();
 }
-new sidebar();
-/* --------------- Toast Message -------------- */
-
-var ntoast = new alert({timeout:2000});
-
-/* ------------------- Modal ------------------ */
-
-
 //Function to generate gradient color
 function random_gradient() {
   var colorOne = {
@@ -287,15 +262,9 @@ function random_gradient() {
     G: Math.floor(Math.random() * 255),
     B: Math.floor(Math.random() * 255)
   };
-  colorOne.rgb = 'rgb('  +  colorOne.R  +  ','  +  colorOne.G  +  ','  +  colorOne.B  +  ')';
-  colorTwo.rgb = 'rgb('  +  colorTwo.R  +  ','  +  colorTwo.G  +  ','  +  colorTwo.B  +  ')';
-  return 'radial-gradient(at top left, '  +  colorOne.rgb  +  ', '  +  colorTwo.rgb  +  ')';
-}
-
-//Function to select an option
-function selectElement(id, valueToSelect) {    
-    let el = document.getElementById(id);
-    el.value = valueToSelect;
+  colorOne.rgb = 'rgb(' + colorOne.R + ',' + colorOne.G + ',' + colorOne.B + ')';
+  colorTwo.rgb = 'rgb(' + colorTwo.R + ',' + colorTwo.G + ',' + colorTwo.B + ')';
+  return 'radial-gradient(at top left, ' + colorOne.rgb + ', ' + colorTwo.rgb + ')';
 }
 //Functions for localstorage store and get
 function localStore(key, obj) {
@@ -305,56 +274,70 @@ function localGet(key) {
   return JSON.parse(window.localStorage.getItem(key));
 }
 //Get elapsed minutes to date 
-function diff_hours(dt) 
- {
+function diff_hours(dt) {
   var now = new Date();
-  var diff =(new Date(dt) - now.getTime()) / 1000;
-  diff /= 60 ;
+  var diff = (new Date(dt) - now.getTime()) / 1000;
+  diff /= 60;
   return Math.abs(Math.round(diff));
- }
- function capitalizeF(str) {return str.charAt(0).toUpperCase()  +  str.slice(1);}
-  function getJSON(url) {
-    var resp = '';
-    var xmlHttp = new XMLHttpRequest();
-    if (xmlHttp != null) {
-      xmlHttp.open("GET", url, false, {async: true});
-      try {xmlHttp.send(null);} catch {console.error("xmlHttp send failed");}
-      resp = xmlHttp.responseText;
+}
+//Capitalize first letter of string
+function capitalizeF(str) {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+//Get json from url 
+function getJSON(url) {
+  var resp = '';
+  var xmlHttp = new XMLHttpRequest();
+  if (xmlHttp != null) {
+    xmlHttp.open("GET", url, false, {
+      async: true
+    });
+    try {
+      xmlHttp.send(null);
+    } catch {
+      console.error("xmlHttp send failed");
     }
-    return resp;
+    resp = xmlHttp.responseText;
   }
+  return resp;
+}
+//Function to select an option
+function selectElement(id, valueToSelect) {
+  let el = document.getElementById(id);
+  el.value = valueToSelect;
+}
 
-// ---------- CONFIGURATION ----------
-/**/
+/* ---------------- Toast Alert --------------- */
+var ntoast = new alert({
+  timeout: 2000
+});
 
-//Get data from LocalStorage
+
+/* ------- Data Setup and Configuration ------- */
 var bk_data = localGet('bk_data');
 var bk_time = localGet('bk_time');
 var sb_data = localGet('sb_data');
 var wth_data = localGet("wth_data");
 var bdy_data = localGet("bdy_data");
+var bg_value = getComputedStyle(document.body).getPropertyValue("--bg-img");
+var grid_wrap = getComputedStyle(document.body).getPropertyValue("--grid-wrap");
+var grid_width = getComputedStyle(document.body).getPropertyValue("--grid-width");
 
 if (bdy_data != undefined) {
   document.body.setAttribute("style", (bdy_data).replace('"', ''));
-}else{
-  document.body.style.setProperty("--bg-img",'radial-gradient(at top left, rgb(150,245,220), rgb(56,97,139))');
+} else {
+  document.body.style.setProperty("--bg-img", 'radial-gradient(at top left, rgb(150,245,220), rgb(56,97,139))');
 }
-var bg_value = getComputedStyle(document.body).getPropertyValue("--bg-img");
-document.getElementById("wllp_value").value=bg_value;
-var grid_wrap= getComputedStyle(document.body).getPropertyValue("--grid-wrap");
-var grid_width= getComputedStyle(document.body).getPropertyValue("--grid-width");
-
-if(grid_wrap==" none"  && grid_width==" 33.33%"){
-  selectElement("grid_layout","h");
-}else if(grid_wrap==" wrap" && grid_width==" 33.33%"){
-  selectElement("grid_layout","v3");
-}else{
-  selectElement("grid_layout","v2");
+document.getElementById("wllp_value").value = bg_value;
+if (grid_wrap == " none" && grid_width == " 33.33%") {
+  selectElement("grid_layout", "h");
+} else if (grid_wrap == " wrap" && grid_width == " 33.33%") {
+  selectElement("grid_layout", "v3");
+} else {
+  selectElement("grid_layout", "v2");
 }
-//Check data
-if(sb_data == undefined){
+if (sb_data == undefined) {
   sb_data = {
-    // Query variable name is q, hardcoded, looks like a standard already anyways
     "placeholder": "Search with shortcuts..",
     "default": "d",
     "b": "https://bing.com/search?q=",
@@ -363,41 +346,43 @@ if(sb_data == undefined){
     "r": "https://www.reddit.com/search?q=",
     "y": "https://www.youtube.com/results?q="
   };
-  localStore('sb_data',sb_data);
+  localStore('sb_data', sb_data);
 }
 if (bk_data == undefined || bk_time == undefined) {
   bk_data = {};
-  //Get bk_data into the array objects
   getBookmarks();
   console.log("bk_data undefined");
-}else{
-    if(diff_hours(bk_time) > 60 ){
-      bk_data = {};
-      console.log("Passed 60 minutes, sync");
-      ntoast.success('Passed 60 minutes, updated from bookmarks');
-      getBookmarks();
-    }
+} else {
+  if (diff_hours(bk_time) > 60) {
+    bk_data = {};
+    console.log("Passed 60 minutes, sync");
+    ntoast.success('Passed 60 minutes, updated from bookmarks');
+    getBookmarks();
+  }
 }
 if (wth_data == undefined) {
-  wth_data = {status:false,api: "",lon: "",lat: ""}
+  wth_data = {
+    status: false,
+    api: "",
+    lon: "",
+    lat: ""
+  }
 }
-/* ---------- Weather Settings Config --------- */
 
-const wt_checkbox= document.getElementById("wt_status");
+/* ---------- Weather Settings Config --------- */
+const wt_checkbox = document.getElementById("wt_status");
 var wth_status = wth_data.status;
 wt_checkbox.checked = wth_status;
-document.body.style.setProperty("--wt", (wth_status)?"block":"none");
+document.body.style.setProperty("--wt", (wth_status) ? "block" : "none");
 document.getElementById("wt_ik").value = wth_data.api;
 document.getElementById("wt_ila").value = wth_data.lat;
 document.getElementById("wt_iln").value = wth_data.lon;
-
-wt_checkbox.onclick=()=>{
-  var wth_status=wt_checkbox.checked;
-document.body.style.setProperty("--wt", (wth_status)?"block":"none");
+wt_checkbox.onclick = () => {
+  var wth_status = wt_checkbox.checked;
+  document.body.style.setProperty("--wt", (wth_status) ? "block" : "none");
 }
 
 function f_save_wth() {
-
   const status = document.getElementById("wt_status").checked;
   const api = document.getElementById("wt_ik").value;
   const lat = document.getElementById("wt_ila").value;
@@ -407,66 +392,77 @@ function f_save_wth() {
     wth_data.api = api;
     wth_data.lon = lon;
     wth_data.lat = lat;
-  } 
+  }
   localStore("wth_data", wth_data);
-    f_setup_wth();
+  f_setup_wth();
 }
-function f_get_ll() {try {navigator.geolocation.getCurrentPosition(showPosition);}catch (e){alert(e);}}
+
+function f_get_ll() {
+  try {
+    navigator.geolocation.getCurrentPosition(showPosition);
+  } catch (e) {
+    alert(e);
+  }
+}
+
 function showPosition(position) {
   document.getElementById("wt_ila").value = position.coords.latitude;
   document.getElementById("wt_iln").value = position.coords.longitude;
 }
 
-  function f_setup_wth() {
-    var appid = wth_data.api;
-    if (appid.length > 6 && appid != "" && wth_status) {
-      if ((typeof localStorage.cachedWeatherUpdate == "undefined") || ((Date.now() / 1000) - localStorage.cachedWeatherUpdate) > 600) {
-        document.getElementById('wth_s').style.display = "none";
-        var url = 'https://api.openweathermap.org/data/2.5/find?lat='  +  wth_data.lat  +  '&lon='  +  wth_data.lon  +  '&cnt=1&appid='  +  appid  +  '&callback=?';
-        var data = getJSON(url);
-        if (data == "") return;
-        data = JSON.parse(data.substring(2, data.length - 1));
-        document.getElementById("wth_l").style.opacity = 1;
-        document.getElementById("wth_c").innerText = data.list[0].name;
-        document.getElementById("wth_i").appendChild(icons[data.list[0].weather[0].icon]);
-        document.getElementById("wth_d1").innerText = capitalizeF(data.list[0].weather[0].description);
-        var temp = (data.list[0].main.temp - 273.15).toFixed(0);
-        var temp_f = (data.list[0].main.feels_like - 273.15).toFixed(0);
-        var temp_min = (data.list[0].main.temp_min - 273.15).toFixed(0);
-        var temp_max = (data.list[0].main.temp_max - 273.15).toFixed(0);
-        var tt = "&#8451;";
-        var windDeg = data.list[0].wind.deg;
-        //convert to F
-        if (0) {
-          temp = (1.8 * temp  +  32).toFixed(0);
-          temp_f = (1.8 * temp_f  +  32).toFixed(0);
-          temp_min = (1.8 * temp_min  +  32).toFixed(0);
-          temp_max = (1.8 * temp_max  +  32).toFixed(0);
-          tt = "&#8457;";
-        }
-        document.getElementById("wth_t").innerText = temp  +  tt;
-        document.getElementById("wth_mm").innerText = temp_max  +  tt  +  " / "  +  temp_min  +  tt;
-        document.getElementById('wth_w').innerHTML = ('<i class="far fa-wind _'  +  windDeg  +  '-deg" title="Wind direction ('  +  windDeg  +  ' degrees)"></i> '  +  data.list[0].wind.speed  +  " mps");
-        document.getElementById('wth_h').innerHTML = ('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path d="M160 292c0-15.5-12.5-28-28-28s-28 12.5-28 28 12.5 28 28 28 28-12.5 28-28zm92 60c-15.5 0-28 12.5-28 28s12.5 28 28 28 28-12.5 28-28-12.5-28-28-28zM223.9 22.1C219.5 7.5 205.8 0 192 0c-13.5 0-27 7.2-31.8 22.1C109.1 179.8 0 222.7 0 333.9 0 432.3 85.9 512 192 512s192-79.7 192-178.1c0-111.7-108.9-153.3-160.1-311.8zM192 480c-88.2 0-160-65.5-160-146.1 0-47.6 25-80.4 59.6-125.9 32.6-42.8 73.1-96 98.6-175.7.1-.1.8-.3 1.8-.3.7 0 1.2.1 1.4.1h.1c26 80.4 66.5 133.4 99.1 176.1C327.1 253.4 352 286 352 333.9c0 80.6-71.8 146.1-160 146.1zm61-212.2l-12.5-10c-3.5-2.8-8.5-2.2-11.2 1.2l-99.5 134c-2.8 3.5-2.2 8.5 1.2 11.2l12.5 10c3.5 2.8 8.5 2.2 11.2-1.2l99.5-134c2.8-3.4 2.2-8.5-1.2-11.2z"/></svg>'
-        +  data.list[0].main.humidity  +  "%");
+function f_setup_wth() {
+  var appid = wth_data.api;
+  if (appid.length > 6 && appid != "" && wth_status) {
+    if ((typeof localStorage.cachedWeatherUpdate == "undefined") || ((Date.now() / 1000) - localStorage.cachedWeatherUpdate) > 600) {
+      document.getElementById('wth_s').style.display = "none";
+      var url = 'https://api.openweathermap.org/data/2.5/find?lat=' + wth_data.lat + '&lon=' + wth_data.lon + '&cnt=1&appid=' + appid + '&callback=?';
+      var data = getJSON(url);
+      if (data == "") return;
+      data = JSON.parse(data.substring(2, data.length - 1));
+      document.getElementById("wth_l").style.opacity = 1;
+      document.getElementById("wth_c").innerText = data.list[0].name;
+      document.getElementById("wth_i").appendChild(icons[data.list[0].weather[0].icon]);
+      document.getElementById("wth_d1").innerText = capitalizeF(data.list[0].weather[0].description);
+      var temp = (data.list[0].main.temp - 273.15).toFixed(0);
+      var temp_f = (data.list[0].main.feels_like - 273.15).toFixed(0);
+      var temp_min = (data.list[0].main.temp_min - 273.15).toFixed(0);
+      var temp_max = (data.list[0].main.temp_max - 273.15).toFixed(0);
+      var tt = "&#8451;";
+      var windDeg = data.list[0].wind.deg;
+      //convert to F
+      if (0) {
+        temp = (1.8 * temp + 32).toFixed(0);
+        temp_f = (1.8 * temp_f + 32).toFixed(0);
+        temp_min = (1.8 * temp_min + 32).toFixed(0);
+        temp_max = (1.8 * temp_max + 32).toFixed(0);
+        tt = "&#8457;";
       }
-      document.getElementById('wth_l').style.display = "none";
-      document.getElementById('wth_top').style.opacity = 1;
-      document.getElementById('wth_btm').style.opacity = 1;
-    } else {
-      document.getElementById('wth_l').style.display = "none";
-      document.getElementById('wth_s').style.opacity = 1;
+      document.getElementById("wth_t").innerText = temp + tt;
+      document.getElementById("wth_mm").innerText = temp_max + tt + " / " + temp_min + tt;
+      document.getElementById('wth_w').innerHTML = ('<i class="far fa-wind _' + windDeg + '-deg" title="Wind direction (' + windDeg + ' degrees)"></i> ' + data.list[0].wind.speed + " mps");
+      document.getElementById('wth_h').innerHTML = ('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path d="M160 292c0-15.5-12.5-28-28-28s-28 12.5-28 28 12.5 28 28 28 28-12.5 28-28zm92 60c-15.5 0-28 12.5-28 28s12.5 28 28 28 28-12.5 28-28-12.5-28-28-28zM223.9 22.1C219.5 7.5 205.8 0 192 0c-13.5 0-27 7.2-31.8 22.1C109.1 179.8 0 222.7 0 333.9 0 432.3 85.9 512 192 512s192-79.7 192-178.1c0-111.7-108.9-153.3-160.1-311.8zM192 480c-88.2 0-160-65.5-160-146.1 0-47.6 25-80.4 59.6-125.9 32.6-42.8 73.1-96 98.6-175.7.1-.1.8-.3 1.8-.3.7 0 1.2.1 1.4.1h.1c26 80.4 66.5 133.4 99.1 176.1C327.1 253.4 352 286 352 333.9c0 80.6-71.8 146.1-160 146.1zm61-212.2l-12.5-10c-3.5-2.8-8.5-2.2-11.2 1.2l-99.5 134c-2.8 3.5-2.2 8.5 1.2 11.2l12.5 10c3.5 2.8 8.5 2.2 11.2-1.2l99.5-134c2.8-3.4 2.2-8.5-1.2-11.2z"/></svg>' +
+        data.list[0].main.humidity + "%");
     }
+    document.getElementById('wth_l').style.display = "none";
+    document.getElementById('wth_top').style.opacity = 1;
+    document.getElementById('wth_btm').style.opacity = 1;
+  } else {
+    document.getElementById('wth_l').style.display = "none";
+    document.getElementById('wth_s').style.opacity = 1;
   }
-  f_setup_wth();
+}
+f_setup_wth();
 
 
 //Set up data
 const sb_len = document.getElementById("sb_txt");
 var sk = sb_data;
 var sb_len_v = "";
-for (var key in sk) {sb_len_v  += key  +  ' -> '  +  sk[key]  +  '\n';}
+for (var key in sk) {
+  sb_len_v += key + ' -> ' + sk[key] + '\n';
+}
 sb_len.value = sb_len_v;
+
 function f_trim(s) {
   s = s.replace(/(^\s*)|(\s*$)/gi, "");
   s = s.replace(/[ ]{2,}/gi, " ");
@@ -475,20 +471,22 @@ function f_trim(s) {
 }
 //Function save body style
 function f_save_bdy() {
-  localStore("bdy_data",document.body.getAttribute("style"));
+  localStore("bdy_data", document.body.getAttribute("style"));
   console.log("Settings saved !");
   ntoast.success('Settings saved !');
 }
-  
+
 /* ---- Function to save search bar config ---- */
-function f_save_sb() { 
+function f_save_sb() {
   var tlen = f_trim(document.getElementById("sb_txt").value) + "\n";
   var error = false;
   var lines = tlen.split('\n');
   lines.splice(-1, 1);
-  lines= lines.filter(function(e){ return e.replace(/(\r\n|\n|\r)/gm,"")});
+  lines = lines.filter(function (e) {
+    return e.replace(/(\r\n|\n|\r)/gm, "")
+  });
   var sKc = {};
-  for (var i = 0; i < lines.length; i++ ) {
+  for (var i = 0; i < lines.length; i++) {
     var zlen = lines[i].split("->");
     if (zlen.length != 2) {
       i = lines.length;
@@ -502,10 +500,14 @@ function f_save_sb() {
     alert("Looks like you removed important keywords like \n-placeholder\n-key\n-default\n Make sure to follow the syntax too :'k' -> 'value'");
   } else {
     sb_data = sKc;
-    localStore('sb_data',sb_data);
+    localStore('sb_data', sb_data);
   }
 }
-document.getElementById("mdl_save").onclick=()=>{f_save_sb();f_save_wth();f_save_bdy();};
+document.getElementById("mdl_save").onclick = () => {
+  f_save_sb();
+  f_save_wth();
+  f_save_bdy();
+};
 
 // ---------- BUILD PAGE ----------
 var pivotmatch = 0;
@@ -644,28 +646,29 @@ document.getElementById("action").children[0].onkeypress = function (e) {
   }
 };
 
-document.getElementById("get_ll").onclick=()=>{
+document.getElementById("get_ll").onclick = () => {
   f_get_ll();
 }
 
-document.getElementById("sync-bk").onclick= ()=>{
+document.getElementById("sync-bk").onclick = () => {
   console.log("Sync bk_data...");
   bk_data = {};
   getBookmarks();
   console.log("Sync from your bookmarks done!");
   ntoast.info('Sync from your bookmarks done !');
 }
-document.getElementById("reset-ntp").onclick=()=>{
+document.getElementById("reset-ntp").onclick = () => {
   var r = confirm("You will not lose your bookmarks , only the settings !\nAre you sure you want to reset the ntp settings? ");
   if (r == true) {
     window.localStorage.clear();
     console.log("Reset of settings done !");
     ntoast.warn("Reset of settings done !");
-    setTimeout(()=>{
+    setTimeout(() => {
       location.reload();
-    },1000);
+    }, 1000);
   }
 }
+
 function displayClock() {
   var now = new Date();
   var clock =
@@ -679,7 +682,7 @@ function displayClock() {
 
 //window.onload = matchLinks();
 var sb_input = document.getElementById("sb_input");
-if(sb_data["placeholder"].length > 1){
+if (sb_data["placeholder"].length > 1) {
   sb_input.placeholder = sb_data["placeholder"];
 }
 sb_input.addEventListener("input", () => {
@@ -697,104 +700,135 @@ displayClock();
 setInterval(displayClock, 1000);
 
 
-  /* ----------- Config NTP Background ---------- */
-  const wDevice = (window.innerWidth) ? window.innerWidth : screen.width;
-  const hDevice = (window.innerHeight) ? (window.innerHeight  +  56) : screen.height;
-  const bg_pld = document.getElementById('bg_pld'),
-    crop = document.getElementById('crop'),
-    result = document.getElementById('result'),
-    imgRes = document.getElementById('imgRes'),
-    crpp = document.getElementById('croppie');
-  var cr, cr_img = '',img_w = wDevice / 2,img_h = hDevice / 2,isCrop = 0;
-  while (img_w > 300) {img_w = img_w / 1.2;img_h = img_h / 1.2;}
-  document.body.style.setProperty("--bg-cw", img_w  +  "px");
-  document.body.style.setProperty("--bg-ch", img_h  +  "px");
-  function savebg_cropped() {
-    document.body.style.setProperty("--bg-img", "url("  +  imgRes.src  +  ")");
-    document.body.style.setProperty("--bg-cl", "#fff");
-    cropCancel();
-    //f_save_bdy();
-  }
-  const wllp_file = document.getElementById("wllp_file");
-  const grid_layout= document.getElementById("grid_layout");
-  wllp_file.onchange=()=>{ f_wallp1();};
-  document.getElementById("wllp_url").onclick=()=>{f_wallp2();};
-  document.getElementById("wllp_gradient").onclick=()=>{f_wallp3();};
-  document.getElementById("wllp_custom").onclick=()=>{f_wallp4();};
-  document.getElementById("wllp_clearvalue").onclick=()=>{
-    document.getElementById("wllp_value").value="";
-  };
-  document.getElementById("crop_cancel").onclick=()=>{cropCancel();};
-  document.getElementById("crop_cancel2").onclick=()=>{cropCancel();};
-  document.getElementById("crop_next").onclick=()=>{cropResult();};
-  document.getElementById("crop_save").onclick=()=>{savebg_cropped();};
-  grid_layout.onchange=()=>{
-    var lv=grid_layout.value;
-    if(lv=="h"){
-      document.body.style.setProperty("--grid-wrap", 'none');
-      document.body.style.setProperty("--grid-width", '33.33%');
-    }else if(lv=='v2'){
-      document.body.style.setProperty("--grid-wrap", 'wrap');
-      document.body.style.setProperty("--grid-width", '50%');
-    }else{
-      document.body.style.setProperty("--grid-wrap", 'wrap');
-      document.body.style.setProperty("--grid-width", '33.33%');
-    }
-  }
+/* ----------- Config NTP Background ---------- */
+const wDevice = (window.innerWidth) ? window.innerWidth : screen.width;
+const hDevice = (window.innerHeight) ? (window.innerHeight + 56) : screen.height;
+const bg_pld = document.getElementById('bg_pld'),
+  crop = document.getElementById('crop'),
+  result = document.getElementById('result'),
+  imgRes = document.getElementById('imgRes'),
+  crpp = document.getElementById('croppie');
+var cr, cr_img = '',
+  img_w = wDevice / 2,
+  img_h = hDevice / 2,
+  isCrop = 0;
+while (img_w > 300) {
+  img_w = img_w / 1.2;
+  img_h = img_h / 1.2;
+}
+document.body.style.setProperty("--bg-cw", img_w + "px");
+document.body.style.setProperty("--bg-ch", img_h + "px");
 
-  /* ------------ Config Color Picker ----------- */
-  const cp_stt =document.querySelectorAll(".stt_clfrt");
-  const cp_lrt = document.getElementById("cl_vn");
-  var cp_current_el;
-  var picker = new Picker({
-    parent: document.querySelector('#cp_v'),
-    popup: false,
-    cancelButton: true,
-    onDone: function (color) {
-      if (cp_current_el != null ) 
-        document.body.style.setProperty("--c"  +  cp_current_el, color.hex);
-      cp_lrt.classList.toggle("show-lrt");
-    }
-  });
+function savebg_cropped() {
+  document.body.style.setProperty("--bg-img", "url(" + imgRes.src + ")");
+  document.body.style.setProperty("--bg-cl", "#fff");
+  cropCancel();
+  //f_save_bdy();
+}
+const wllp_file = document.getElementById("wllp_file");
+const grid_layout = document.getElementById("grid_layout");
+wllp_file.onchange = () => {
+  f_wallp1();
+};
+document.getElementById("wllp_url").onclick = () => {
+  f_wallp2();
+};
+document.getElementById("wllp_gradient").onclick = () => {
+  f_wallp3();
+};
+document.getElementById("wllp_custom").onclick = () => {
+  f_wallp4();
+};
+document.getElementById("wllp_clearvalue").onclick = () => {
+  document.getElementById("wllp_value").value = "";
+};
+document.getElementById("crop_cancel").onclick = () => {
+  cropCancel();
+};
+document.getElementById("crop_cancel2").onclick = () => {
+  cropCancel();
+};
+document.getElementById("crop_next").onclick = () => {
+  cropResult();
+};
+document.getElementById("crop_save").onclick = () => {
+  savebg_cropped();
+};
+grid_layout.onchange = () => {
+  var lv = grid_layout.value;
+  if (lv == "h") {
+    document.body.style.setProperty("--grid-wrap", 'none');
+    document.body.style.setProperty("--grid-width", '33.33%');
+  } else if (lv == 'v2') {
+    document.body.style.setProperty("--grid-wrap", 'wrap');
+    document.body.style.setProperty("--grid-width", '50%');
+  } else {
+    document.body.style.setProperty("--grid-wrap", 'wrap');
+    document.body.style.setProperty("--grid-width", '33.33%');
+  }
+}
 
-  cp_stt.forEach(element => {
-    element.onclick=()=>{f_cp_rgb((element.id).replace(/\D/g, ""))};
-  });
- document.getElementById("close_clvn").onclick=()=>{f_close_cl()};
-  function f_cp_rgb(t) {
-    cp_current_el = t;
-    let color = getComputedStyle(document.body).getPropertyValue("--c"  +  t);
-    picker.setColor(color, true);
+/* ------------ Config Color Picker ----------- */
+const cp_stt = document.querySelectorAll(".stt_clfrt");
+const cp_lrt = document.getElementById("cl_vn");
+var cp_current_el;
+var picker = new Picker({
+  parent: document.querySelector('#cp_v'),
+  popup: false,
+  cancelButton: true,
+  onDone: function (color) {
+    if (cp_current_el != null)
+      document.body.style.setProperty("--c" + cp_current_el, color.hex);
     cp_lrt.classList.toggle("show-lrt");
   }
-  function f_close_cl() {
-    cp_lrt.classList.toggle("show-lrt");
-  }
-  document.getElementById('backup_btn').onclick = function () {
-    var dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(localStorage));
-    var date = new Date();
-    var exportFileDefaultName = 'b2ntp_' + date.getUTCFullYear() + '' + (date.getUTCMonth() + 1) + '' + date.getUTCDate() + '_' +
-        date.getHours() + '_' + date.getMinutes() + '.json';
-      var linkElement = document.createElement('a');
-      linkElement.setAttribute('href', dataUri);
-      linkElement.setAttribute('download', exportFileDefaultName);
-      linkElement.click();
-    }
-  //Function to import backup file
-  document.getElementById('restore_btn').onchange = function () {
-    var file = this.files[0];
-    var reader = new FileReader();
-    reader.onload = function (progressEvent) {
-      localStorage.clear();
-      var data = JSON.parse(this.result);
-      Object.keys(data).forEach(function (k) {localStorage.setItem(k, data[k]);});
-      localStorage.ntp_ver = ntp_ver;
-    };
-    reader.readAsText(file);
+});
 
-    location.reload();
+cp_stt.forEach(element => {
+  element.onclick = () => {
+    f_cp_rgb((element.id).replace(/\D/g, ""))
   };
-  
+});
+document.getElementById("close_clvn").onclick = () => {
+  f_close_cl()
+};
+
+function f_cp_rgb(t) {
+  cp_current_el = t;
+  let color = getComputedStyle(document.body).getPropertyValue("--c" + t);
+  picker.setColor(color, true);
+  cp_lrt.classList.toggle("show-lrt");
+}
+
+function f_close_cl() {
+  cp_lrt.classList.toggle("show-lrt");
+}
+document.getElementById('backup_btn').onclick = function () {
+  var dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(localStorage));
+  var date = new Date();
+  var exportFileDefaultName = 'b2ntp_' + date.getUTCFullYear() + '' + (date.getUTCMonth() + 1) + '' + date.getUTCDate() + '_' +
+    date.getHours() + '_' + date.getMinutes() + '.json';
+  var linkElement = document.createElement('a');
+  linkElement.setAttribute('href', dataUri);
+  linkElement.setAttribute('download', exportFileDefaultName);
+  linkElement.click();
+}
+//Function to import backup file
+document.getElementById('restore_btn').onchange = function () {
+  var file = this.files[0];
+  var reader = new FileReader();
+  reader.onload = function (progressEvent) {
+    localStorage.clear();
+    var data = JSON.parse(this.result);
+    Object.keys(data).forEach(function (k) {
+      localStorage.setItem(k, data[k]);
+    });
+    localStorage.ntp_ver = ntp_ver;
+  };
+  reader.readAsText(file);
+
+  location.reload();
+};
+
 /* ------------ CONTEXT MENU CONFIG ----------- */
 
 /*
@@ -834,86 +868,110 @@ setInterval(displayClock, 1000);
 */
 
 
-  function f_wallp1() {
-    var file = wllp_file.files[0];
-    if (file && file.type.match('image.*')) {
-      var reader = new FileReader();
-      reader.onload = function (e) {
-        bg_pld.style.display = "none";
-        if (cr_img == '') {
-          cr_img = e.target.result;
-          cropInit();
-        } else {
-          cr_img = e.target.result;
-          bindCropImg();
-        }
-        crop.style.display = "inline";
-      }
-      reader.readAsDataURL(file);
-    }
-  }
-  function f_wallp2() {
-    var url = prompt("Enter url of the wallpaper . \n", "url");
-    var image = new Image();
-    image.crossOrigin = "Anonymous";
-    image.onload = function (e) {
+function f_wallp1() {
+  var file = wllp_file.files[0];
+  if (file && file.type.match('image.*')) {
+    var reader = new FileReader();
+    reader.onload = function (e) {
       bg_pld.style.display = "none";
       if (cr_img == '') {
-        cr_img = image.src;
+        cr_img = e.target.result;
         cropInit();
       } else {
-        cr_img = image.src;
+        cr_img = e.target.result;
         bindCropImg();
       }
       crop.style.display = "inline";
-    };
-    image.src = (url);
+    }
+    reader.readAsDataURL(file);
   }
-  function f_wallp3() {
-    var rg =random_gradient()
-    document.body.style.setProperty("--bg-img",rg);
-    document.getElementById("wllp_value").value= rg;
-  }
-  function f_wallp4() {
-    var v =document.getElementById("wllp_value").value;
-    document.body.style.setProperty("--bg-img",v);
-    document.body.style.setProperty("--bg-cl",v);
-  }
+}
+
+function f_wallp2() {
+  var url = prompt("Enter url of the wallpaper . \n", "url");
+  var image = new Image();
+  image.crossOrigin = "Anonymous";
+  image.onload = function (e) {
+    bg_pld.style.display = "none";
+    if (cr_img == '') {
+      cr_img = image.src;
+      cropInit();
+    } else {
+      cr_img = image.src;
+      bindCropImg();
+    }
+    crop.style.display = "inline";
+  };
+  image.src = (url);
+}
+
+function f_wallp3() {
+  var rg = random_gradient()
+  document.body.style.setProperty("--bg-img", rg);
+  document.getElementById("wllp_value").value = rg;
+}
+
+function f_wallp4() {
+  var v = document.getElementById("wllp_value").value;
+  document.body.style.setProperty("--bg-img", v);
+  document.body.style.setProperty("--bg-cl", v);
+}
 
 /* -------------- Config Croppie -------------- */
-  function cropInit(){
-    cr = new Croppie(crpp, {
-      viewport: {width: img_w,height: img_h},
-      boundary: {width: img_w,height: img_h},
-      mouseWheelZoom: false,
-      enableOrientation: true
-    });
-    bindCropImg();
+function cropInit() {
+  cr = new Croppie(crpp, {
+    viewport: {
+      width: img_w,
+      height: img_h
+    },
+    boundary: {
+      width: img_w,
+      height: img_h
+    },
+    mouseWheelZoom: false,
+    enableOrientation: true
+  });
+  bindCropImg();
+}
+
+function bindCropImg() {
+  cr.bind({
+    url: cr_img
+  })
+}
+
+function cropCancel() {
+  if (bg_pld.style.display == "none") {
+    bg_pld.style.display = "inline";
+    crop.style.display = "none";
+    result.style.display = "none";
+    wllp_file.value = "";
+    isCrop = 0;
   }
-  function bindCropImg(){cr.bind({url: cr_img})
-  }
-  function cropCancel(){
-    if (bg_pld.style.display == "none") {
-      bg_pld.style.display = "inline";
+}
+
+function cropResult() {
+  if (!isCrop) {
+    isCrop = 1;
+    cr.result({
+      type: 'base64', // canvas(base64)|html
+      size: '{width:wDevice, height:hDevice}',
+      format: 'jpeg', //'jpeg'|'png'|'webp'
+      quality: 1 //0~1
+    }).then(function (resp) {
       crop.style.display = "none";
-      result.style.display = "none";
-      wllp_file.value = "";
-      isCrop = 0;
-    }
+      imgRes.src = resp;
+      document.getElementById("wllp_value").value = resp;
+      result.style.display = "inline";
+    });
   }
-  function cropResult() {
-    if (!isCrop) {
-      isCrop = 1;
-      cr.result({
-        type: 'base64', // canvas(base64)|html
-        size: '{width:wDevice, height:hDevice}',
-        format: 'jpeg', //'jpeg'|'png'|'webp'
-        quality: 1 //0~1
-      }).then(function (resp) {
-        crop.style.display = "none";
-        imgRes.src = resp;
-        document.getElementById("wllp_value").value=resp;
-        result.style.display = "inline";
-      });
-    }
-  }
+}
+
+window.addEventListener("DOMContentLoaded", function () {
+  aos();
+  modal();
+  theme();
+  gotop();
+  pagesRoute();
+  sidebar();
+});
