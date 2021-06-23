@@ -2,7 +2,7 @@
   "manifest_version": 2,
   "name": "b2ntp",
   "description": "Simple and powerful New Tab Page with your bookmarks",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "chrome_url_overrides": {
     "newtab": "blank.html"
   },

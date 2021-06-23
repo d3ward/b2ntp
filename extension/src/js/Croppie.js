@@ -2,840 +2,1624 @@
  * Croppie
  * Copyright 2019
  * Foliotek
- * Version: 2.6.5
- * http://foliotek.github.io/Croppie/
+ * Version: 2.6.4
  *************************/
-! function (e, t) {
-    "function" == typeof define && define.amd ? define(["exports"], t) : "object" == typeof exports && "string" != typeof exports.nodeName ? t(exports) : t(e.commonJsStrict = {})
-}(this, (function (e) {
-    "function" != typeof Promise && function (e) {
-        function t(e, t) {
-            return function () {
-                e.apply(t, arguments)
+ (function (root, factory) {
+    if (typeof define === 'function' && define.amd) {
+        // AMD. Register as an anonymous module.
+        define(factory);
+    } else if (typeof exports === 'object' && typeof exports.nodeName !== 'string') {
+        // CommonJS
+        module.exports = factory();
+    } else {
+        // Browser globals
+        root.Croppie = factory();
+    }
+}(typeof self !== 'undefined' ? self : this, function () {
+
+    /* Polyfills */
+    if (typeof Promise !== 'function') {
+        /*! promise-polyfill 3.1.0 */
+        !function(a){function b(a,b){return function(){a.apply(b,arguments)}}function c(a){if("object"!==typeof this)throw new TypeError("Promises must be constructed via new");if("function"!==typeof a)throw new TypeError("not a function");this._state=null,this._value=null,this._deferreds=[],i(a,b(e,this),b(f,this))}function d(a){var b=this;return null===this._state?void this._deferreds.push(a):void k(function(){var c=b._state?a.onFulfilled:a.onRejected;if(null===c)return void(b._state?a.resolve:a.reject)(b._value);var d;try{d=c(b._value)}catch(e){return void a.reject(e)}a.resolve(d)})}function e(a){try{if(a===this)throw new TypeError("A promise cannot be resolved with itself.");if(a&&("object"===typeof a||"function"===typeof a)){var c=a.then;if("function"===typeof c)return void i(b(c,a),b(e,this),b(f,this))}this._state=!0,this._value=a,g.call(this)}catch(d){f.call(this,d)}}function f(a){this._state=!1,this._value=a,g.call(this)}function g(){for(var a=0,b=this._deferreds.length;b>a;a++)d.call(this,this._deferreds[a]);this._deferreds=null}function h(a,b,c,d){this.onFulfilled="function"===typeof a?a:null,this.onRejected="function"===typeof b?b:null,this.resolve=c,this.reject=d}function i(a,b,c){var d=!1;try{a(function(a){d||(d=!0,b(a))},function(a){d||(d=!0,c(a))})}catch(e){if(d)return;d=!0,c(e)}}var j=setTimeout,k="function"===typeof setImmediate&&setImmediate||function(a){j(a,1)},l=Array.isArray||function(a){return"[object Array]"===Object.prototype.toString.call(a)};c.prototype["catch"]=function(a){return this.then(null,a)},c.prototype.then=function(a,b){var e=this;return new c(function(c,f){d.call(e,new h(a,b,c,f))})},c.all=function(){var a=Array.prototype.slice.call(1===arguments.length&&l(arguments[0])?arguments[0]:arguments);return new c(function(b,c){function d(f,g){try{if(g&&("object"===typeof g||"function"===typeof g)){var h=g.then;if("function"===typeof h)return void h.call(g,function(a){d(f,a)},c)}a[f]=g,0===--e&&b(a)}catch(i){c(i)}}if(0===a.length)return b([]);for(var e=a.length,f=0;f<a.length;f++)d(f,a[f])})},c.resolve=function(a){return a&&"object"===typeof a&&a.constructor===c?a:new c(function(b){b(a)})},c.reject=function(a){return new c(function(b,c){c(a)})},c.race=function(a){return new c(function(b,c){for(var d=0,e=a.length;e>d;d++)a[d].then(b,c)})},c._setImmediateFn=function(a){k=a},"undefined"!==typeof module&&module.exports?module.exports=c:a.Promise||(a.Promise=c)}(this);
+    }
+
+    if ( typeof window.CustomEvent !== "function" ) {
+        (function(){
+            function CustomEvent ( event, params ) {
+                params = params || { bubbles: false, cancelable: false, detail: undefined };
+                var evt = document.createEvent( 'CustomEvent' );
+                evt.initCustomEvent( event, params.bubbles, params.cancelable, params.detail );
+                return evt;
             }
-        }
+            CustomEvent.prototype = window.Event.prototype;
+            window.CustomEvent = CustomEvent;
+        }());
+    }
 
-        function i(e) {
-            if ("object" != typeof this) throw new TypeError("Promises must be constructed via new");
-            if ("function" != typeof e) throw new TypeError("not a function");
-            this._state = null, this._value = null, this._deferreds = [], s(e, t(o, this), t(r, this))
-        }
+    if (!HTMLCanvasElement.prototype.toBlob) {
+        Object.defineProperty(HTMLCanvasElement.prototype, 'toBlob', {
+            value: function (callback, type, quality) {
+                var binStr = atob( this.toDataURL(type, quality).split(',')[1] ),
+                len = binStr.length,
+                arr = new Uint8Array(len);
 
-        function n(e) {
-            var t = this;
-            return null === this._state ? void this._deferreds.push(e) : void h((function () {
-                var i = t._state ? e.onFulfilled : e.onRejected;
-                if (null !== i) {
-                    var n;
-                    try {
-                        n = i(t._value)
-                    } catch (t) {
-                        return void e.reject(t)
-                    }
-                    e.resolve(n)
-                } else(t._state ? e.resolve : e.reject)(t._value)
-            }))
-        }
-
-        function o(e) {
-            try {
-                if (e === this) throw new TypeError("A promise cannot be resolved with itself.");
-                if (e && ("object" == typeof e || "function" == typeof e)) {
-                    var i = e.then;
-                    if ("function" == typeof i) return void s(t(i, e), t(o, this), t(r, this))
+                for (var i=0; i<len; i++ ) {
+                    arr[i] = binStr.charCodeAt(i);
                 }
-                this._state = !0, this._value = e, a.call(this)
-            } catch (e) {
-                r.call(this, e)
+
+                callback( new Blob( [arr], {type: type || 'image/png'} ) );
+            }
+        });
+    }
+    /* End Polyfills */
+
+    var cssPrefixes = ['Webkit', 'Moz', 'ms'],
+        emptyStyles = document.createElement('div').style,
+        EXIF_NORM = [1,8,3,6],
+        EXIF_FLIP = [2,7,4,5],
+        CSS_TRANS_ORG,
+        CSS_TRANSFORM,
+        CSS_USERSELECT;
+
+    function vendorPrefix(prop) {
+        if (prop in emptyStyles) {
+            return prop;
+        }
+
+        var capProp = prop[0].toUpperCase() + prop.slice(1),
+            i = cssPrefixes.length;
+
+        while (i--) {
+            prop = cssPrefixes[i] + capProp;
+            if (prop in emptyStyles) {
+                return prop;
             }
         }
+    }
 
-        function r(e) {
-            this._state = !1, this._value = e, a.call(this)
-        }
+    CSS_TRANSFORM = vendorPrefix('transform');
+    CSS_TRANS_ORG = vendorPrefix('transformOrigin');
+    CSS_USERSELECT = vendorPrefix('userSelect');
 
-        function a() {
-            for (var e = 0, t = this._deferreds.length; t > e; e++) n.call(this, this._deferreds[e]);
-            this._deferreds = null
-        }
+    function getExifOffset(ornt, rotate) {
+        var arr = EXIF_NORM.indexOf(ornt) > -1 ? EXIF_NORM : EXIF_FLIP,
+            index = arr.indexOf(ornt),
+            offset = (rotate / 90) % arr.length;// 180 = 2%4 = 2 shift exif by 2 indexes
 
-        function s(e, t, i) {
-            var n = !1;
-            try {
-                e((function (e) {
-                    n || (n = !0, t(e))
-                }), (function (e) {
-                    n || (n = !0, i(e))
-                }))
-            } catch (e) {
-                if (n) return;
-                n = !0, i(e)
+        return arr[(arr.length + index + (offset % arr.length)) % arr.length];
+    }
+
+    // Credits to : Andrew Dupont - http://andrewdupont.net/2009/08/28/deep-extending-objects-in-javascript/
+    function deepExtend(destination, source) {
+        destination = destination || {};
+        for (var property in source) {
+            if (source[property] && source[property].constructor && source[property].constructor === Object) {
+                destination[property] = destination[property] || {};
+                deepExtend(destination[property], source[property]);
+            } else {
+                destination[property] = source[property];
             }
         }
-        var l = setTimeout,
-            h = "function" == typeof setImmediate && setImmediate || function (e) {
-                l(e, 1)
-            },
-            u = Array.isArray || function (e) {
-                return "[object Array]" === Object.prototype.toString.call(e)
+        return destination;
+    }
+
+    function clone(object) {
+        return deepExtend({}, object);
+    }
+
+    function debounce(func, wait, immediate) {
+        var timeout;
+        return function () {
+            var context = this, args = arguments;
+            var later = function () {
+                timeout = null;
+                if (!immediate) func.apply(context, args);
             };
-        i.prototype.catch = function (e) {
-            return this.then(null, e)
-        }, i.prototype.then = function (e, t) {
-            var o = this;
-            return new i((function (i, r) {
-                n.call(o, new function (e, t, i, n) {
-                    this.onFulfilled = "function" == typeof e ? e : null, this.onRejected = "function" == typeof t ? t : null, this.resolve = i, this.reject = n
-                }(e, t, i, r))
-            }))
-        }, i.all = function () {
-            var e = Array.prototype.slice.call(1 === arguments.length && u(arguments[0]) ? arguments[0] : arguments);
-            return new i((function (t, i) {
-                function n(r, a) {
-                    try {
-                        if (a && ("object" == typeof a || "function" == typeof a)) {
-                            var s = a.then;
-                            if ("function" == typeof s) return void s.call(a, (function (e) {
-                                n(r, e)
-                            }), i)
-                        }
-                        e[r] = a, 0 == --o && t(e)
-                    } catch (e) {
-                        i(e)
-                    }
-                }
-                if (0 === e.length) return t([]);
-                for (var o = e.length, r = 0; r < e.length; r++) n(r, e[r])
-            }))
-        }, i.resolve = function (e) {
-            return e && "object" == typeof e && e.constructor === i ? e : new i((function (t) {
-                t(e)
-            }))
-        }, i.reject = function (e) {
-            return new i((function (t, i) {
-                i(e)
-            }))
-        }, i.race = function (e) {
-            return new i((function (t, i) {
-                for (var n = 0, o = e.length; o > n; n++) e[n].then(t, i)
-            }))
-        }, i._setImmediateFn = function (e) {
-            h = e
-        }, "undefined" != typeof module && module.exports ? module.exports = i : e.Promise || (e.Promise = i)
-    }(this), "function" != typeof window.CustomEvent && function () {
-        function e(e, t) {
-            t = t || {
-                bubbles: !1,
-                cancelable: !1,
-                detail: void 0
-            };
-            var i = document.createEvent("CustomEvent");
-            return i.initCustomEvent(e, t.bubbles, t.cancelable, t.detail), i
-        }
-        e.prototype = window.Event.prototype, window.CustomEvent = e
-    }(), HTMLCanvasElement.prototype.toBlob || Object.defineProperty(HTMLCanvasElement.prototype, "toBlob", {
-        value: function (e, t, i) {
-            for (var n = atob(this.toDataURL(t, i).split(",")[1]), o = n.length, r = new Uint8Array(o), a = 0; a < o; a++) r[a] = n.charCodeAt(a);
-            e(new Blob([r], {
-                type: t || "image/png"
-            }))
-        }
-    });
-    var t, i, n, o = ["Webkit", "Moz", "ms"],
-        r = document.createElement("div").style,
-        a = [1, 8, 3, 6],
-        s = [2, 7, 4, 5];
-
-    function l(e) {
-        if (e in r) return e;
-        for (var t = e[0].toUpperCase() + e.slice(1), i = o.length; i--;)
-            if ((e = o[i] + t) in r) return e
-    }
-
-    function h(e, t) {
-        for (var i in e = e || {}, t) t[i] && t[i].constructor && t[i].constructor === Object ? (e[i] = e[i] || {}, h(e[i], t[i])) : e[i] = t[i];
-        return e
-    }
-
-    function u(e) {
-        return h({}, e)
-    }
-
-    function c(e) {
-        if ("createEvent" in document) {
-            var t = document.createEvent("HTMLEvents");
-            t.initEvent("change", !1, !0), e.dispatchEvent(t)
-        } else e.fireEvent("onchange")
-    }
-
-    function p(e, t, i) {
-        if ("string" == typeof t) {
-            var n = t;
-            (t = {})[n] = i
-        }
-        for (var o in t) e.style[o] = t[o]
-    }
-
-    function d(e, t) {
-        e.classList ? e.classList.add(t) : e.className += " " + t
-    }
-
-    function m(e, t) {
-        for (var i in t) e.setAttribute(i, t[i])
-    }
-
-    function f(e) {
-        return parseInt(e, 10)
-    }
-
-    function v(e, t) {
-        var i = e.naturalWidth,
-            n = e.naturalHeight,
-            o = t || b(e);
-        if (o && o >= 5) {
-            var r = i;
-            i = n, n = r
-        }
-        return {
-            width: i,
-            height: n
-        }
-    }
-    i = l("transform"), t = l("transformOrigin"), n = l("userSelect");
-    var g = {
-            translate3d: {
-                suffix: ", 0px"
-            },
-            translate: {
-                suffix: ""
-            }
-        },
-        w = function (e, t, i) {
-            this.x = parseFloat(e), this.y = parseFloat(t), this.scale = parseFloat(i)
+            var callNow = immediate && !timeout;
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+            if (callNow) func.apply(context, args);
         };
-    w.parse = function (e) {
-        return e.style ? w.parse(e.style[i]) : e.indexOf("matrix") > -1 || e.indexOf("none") > -1 ? w.fromMatrix(e) : w.fromString(e)
-    }, w.fromMatrix = function (e) {
-        var t = e.substring(7).split(",");
-        return t.length && "none" !== e || (t = [1, 0, 0, 1, 0, 0]), new w(f(t[4]), f(t[5]), parseFloat(t[0]))
-    }, w.fromString = function (e) {
-        var t = e.split(") "),
-            i = t[0].substring(q.globals.translate.length + 1).split(","),
-            n = t.length > 1 ? t[1].substring(6) : 1,
-            o = i.length > 1 ? i[0] : 0,
-            r = i.length > 1 ? i[1] : 0;
-        return new w(o, r, n)
-    }, w.prototype.toString = function () {
-        var e = g[q.globals.translate].suffix || "";
-        return q.globals.translate + "(" + this.x + "px, " + this.y + "px" + e + ") scale(" + this.scale + ")"
-    };
-    var y = function (e) {
-        if (!e || !e.style[t]) return this.x = 0, void(this.y = 0);
-        var i = e.style[t].split(" ");
-        this.x = parseFloat(i[0]), this.y = parseFloat(i[1])
-    };
-
-    function b(e) {
-        return e.exifdata ? e.exifdata.Orientation : 1
     }
 
-    function x(e, t, i) {
-        var n = t.width,
-            o = t.height,
-            r = e.getContext("2d");
-        switch (e.width = t.width, e.height = t.height, r.save(), i) {
-            case 2:
-                r.translate(n, 0), r.scale(-1, 1);
-                break;
-            case 3:
-                r.translate(n, o), r.rotate(180 * Math.PI / 180);
-                break;
-            case 4:
-                r.translate(0, o), r.scale(1, -1);
-                break;
-            case 5:
-                e.width = o, e.height = n, r.rotate(90 * Math.PI / 180), r.scale(1, -1);
-                break;
-            case 6:
-                e.width = o, e.height = n, r.rotate(90 * Math.PI / 180), r.translate(0, -o);
-                break;
-            case 7:
-                e.width = o, e.height = n, r.rotate(-90 * Math.PI / 180), r.translate(-n, o), r.scale(1, -1);
-                break;
-            case 8:
-                e.width = o, e.height = n, r.translate(0, n), r.rotate(-90 * Math.PI / 180)
+    function dispatchChange(element) {
+        if ("createEvent" in document) {
+            var evt = document.createEvent("HTMLEvents");
+            evt.initEvent("change", false, true);
+            element.dispatchEvent(evt);
         }
-        r.drawImage(t, 0, 0, n, o), r.restore()
-    }
-
-    function C() {
-        var e, t, o, r, a, s = this.options.viewport.type ? "cr-vp-" + this.options.viewport.type : null;
-        this.options.useCanvas = this.options.enableOrientation || E.call(this), this.data = {}, this.elements = {}, e = this.elements.boundary = document.createElement("div"), t = this.elements.viewport = document.createElement("div"), this.elements.img = document.createElement("img"), o = this.elements.overlay = document.createElement("div"), this.options.useCanvas ? (this.elements.canvas = document.createElement("canvas"), this.elements.preview = this.elements.canvas) : this.elements.preview = this.elements.img, d(e, "cr-boundary"), e.setAttribute("aria-dropeffect", "none"), r = this.options.boundary.width, a = this.options.boundary.height, p(e, {
-                width: r + (isNaN(r) ? "" : "px"),
-                height: a + (isNaN(a) ? "" : "px")
-            }), d(t, "cr-viewport"), s && d(t, s), p(t, {
-                width: this.options.viewport.width + "px",
-                height: this.options.viewport.height + "px"
-            }), t.setAttribute("tabindex", 0), d(this.elements.preview, "cr-image"), m(this.elements.preview, {
-                alt: "preview",
-                "aria-grabbed": "false"
-            }), d(o, "cr-overlay"), this.element.appendChild(e), e.appendChild(this.elements.preview), e.appendChild(t), e.appendChild(o), d(this.element, "croppie-container"), this.options.customClass && d(this.element, this.options.customClass),
-            function () {
-                var e, t, o, r, a, s = this,
-                    l = !1;
-
-                function h(e, t) {
-                    var i = s.elements.preview.getBoundingClientRect(),
-                        n = a.y + t,
-                        o = a.x + e;
-                    s.options.enforceBoundary ? (r.top > i.top + t && r.bottom < i.bottom + t && (a.y = n), r.left > i.left + e && r.right < i.right + e && (a.x = o)) : (a.y = n, a.x = o)
-                }
-
-                function u(e) {
-                    s.elements.preview.setAttribute("aria-grabbed", e), s.elements.boundary.setAttribute("aria-dropeffect", e ? "move" : "none")
-                }
-
-                function d(i) {
-                    if ((void 0 === i.button || 0 === i.button) && (i.preventDefault(), !l)) {
-                        if (l = !0, e = i.pageX, t = i.pageY, i.touches) {
-                            var o = i.touches[0];
-                            e = o.pageX, t = o.pageY
-                        }
-                        u(l), a = w.parse(s.elements.preview), window.addEventListener("mousemove", m), window.addEventListener("touchmove", m), window.addEventListener("mouseup", f), window.addEventListener("touchend", f), document.body.style[n] = "none", r = s.elements.viewport.getBoundingClientRect()
-                    }
-                }
-
-                function m(n) {
-                    var r = n.pageX,
-                        l = n.pageY;
-                    if (n.touches) {
-                        var u = n.touches[0];
-                        r = u.pageX, l = u.pageY
-                    }
-                    var d = r - e,
-                        m = l - t,
-                        f = {};
-                    if ("touchmove" === n.type && n.touches.length > 1) {
-                        var v = n.touches[0],
-                            g = n.touches[1],
-                            w = Math.sqrt((v.pageX - g.pageX) * (v.pageX - g.pageX) + (v.pageY - g.pageY) * (v.pageY - g.pageY));
-                        o || (o = w / s._currentZoom);
-                        var y = w / o;
-                        return L.call(s, y), void c(s.elements.zoomer)
-                    }
-                    h(d, m), f[i] = a.toString(), p(s.elements.preview, f), R.call(s), t = l, e = r
-                }
-
-                function f() {
-                    u(l = !1), window.removeEventListener("mousemove", m), window.removeEventListener("touchmove", m), window.removeEventListener("mouseup", f), window.removeEventListener("touchend", f), document.body.style[n] = "", B.call(s), Y.call(s), o = 0
-                }
-                s.elements.overlay.addEventListener("mousedown", d), s.elements.viewport.addEventListener("keydown", (function (e) {
-                    var t = 37,
-                        l = 38,
-                        u = 39,
-                        c = 40;
-                    if (!e.shiftKey || e.keyCode !== l && e.keyCode !== c) {
-                        if (s.options.enableKeyMovement && e.keyCode >= 37 && e.keyCode <= 40) {
-                            e.preventDefault();
-                            var d = function (e) {
-                                switch (e) {
-                                    case t:
-                                        return [1, 0];
-                                    case l:
-                                        return [0, 1];
-                                    case u:
-                                        return [-1, 0];
-                                    case c:
-                                        return [0, -1]
-                                }
-                            }(e.keyCode);
-                            a = w.parse(s.elements.preview), document.body.style[n] = "none", r = s.elements.viewport.getBoundingClientRect(),
-                                function (e) {
-                                    var t, r, l = {};
-                                    h(e[0], e[1]), l[i] = a.toString(), p(s.elements.preview, l), R.call(s), document.body.style[n] = "", B.call(s), Y.call(s), o = 0
-                                }(d)
-                        }
-                    } else {
-                        var m = 0;
-                        m = e.keyCode === l ? parseFloat(s.elements.zoomer.value, 10) + parseFloat(s.elements.zoomer.step, 10) : parseFloat(s.elements.zoomer.value, 10) - parseFloat(s.elements.zoomer.step, 10), s.setZoom(m)
-                    }
-                })), s.elements.overlay.addEventListener("touchstart", d)
-            }.call(this), this.options.enableZoom && function () {
-                var e = this,
-                    t = e.elements.zoomerWrap = document.createElement("div"),
-                    i = e.elements.zoomer = document.createElement("input");
-
-                function n() {
-                    _.call(e, {
-                        value: parseFloat(i.value),
-                        origin: new y(e.elements.preview),
-                        viewportRect: e.elements.viewport.getBoundingClientRect(),
-                        transform: w.parse(e.elements.preview)
-                    })
-                }
-
-                function o(t) {
-                    var i, o;
-                    if ("ctrl" === e.options.mouseWheelZoom && !0 !== t.ctrlKey) return 0;
-                    i = t.wheelDelta ? t.wheelDelta / 1200 : t.deltaY ? t.deltaY / 1060 : t.detail ? t.detail / -60 : 0, o = e._currentZoom + i * e._currentZoom, t.preventDefault(), L.call(e, o), n.call(e)
-                }
-                d(t, "cr-slider-wrap"), d(i, "cr-slider"), i.type = "range", i.step = "0.0001", i.value = 1, i.style.display = e.options.showZoomer ? "" : "none", i.setAttribute("aria-label", "zoom"), e.element.appendChild(t), t.appendChild(i), e._currentZoom = 1, e.elements.zoomer.addEventListener("input", n), e.elements.zoomer.addEventListener("change", n), e.options.mouseWheelZoom && (e.elements.boundary.addEventListener("mousewheel", o), e.elements.boundary.addEventListener("DOMMouseScroll", o))
-            }.call(this), this.options.enableResize && function () {
-                var e, t, i, o, r, a, s, l = this,
-                    h = document.createElement("div"),
-                    u = !1,
-                    c = 50;
-
-                function m(a) {
-                    if ((void 0 === a.button || 0 === a.button) && (a.preventDefault(), !u)) {
-                        var s = l.elements.overlay.getBoundingClientRect();
-                        if (u = !0, t = a.pageX, i = a.pageY, e = -1 !== a.currentTarget.className.indexOf("vertical") ? "v" : "h", o = s.width, r = s.height, a.touches) {
-                            var h = a.touches[0];
-                            t = h.pageX, i = h.pageY
-                        }
-                        window.addEventListener("mousemove", f), window.addEventListener("touchmove", f), window.addEventListener("mouseup", v), window.addEventListener("touchend", v), document.body.style[n] = "none"
-                    }
-                }
-
-                function f(n) {
-                    var a = n.pageX,
-                        s = n.pageY;
-                    if (n.preventDefault(), n.touches) {
-                        var u = n.touches[0];
-                        a = u.pageX, s = u.pageY
-                    }
-                    var d = a - t,
-                        m = s - i,
-                        f = l.options.viewport.height + m,
-                        v = l.options.viewport.width + d;
-                    "v" === e && f >= c && f <= r ? (p(h, {
-                        height: f + "px"
-                    }), l.options.boundary.height += m, p(l.elements.boundary, {
-                        height: l.options.boundary.height + "px"
-                    }), l.options.viewport.height += m, p(l.elements.viewport, {
-                        height: l.options.viewport.height + "px"
-                    })) : "h" === e && v >= c && v <= o && (p(h, {
-                        width: v + "px"
-                    }), l.options.boundary.width += d, p(l.elements.boundary, {
-                        width: l.options.boundary.width + "px"
-                    }), l.options.viewport.width += d, p(l.elements.viewport, {
-                        width: l.options.viewport.width + "px"
-                    })), R.call(l), k.call(l), B.call(l), Y.call(l), i = s, t = a
-                }
-
-                function v() {
-                    u = !1, window.removeEventListener("mousemove", f), window.removeEventListener("touchmove", f), window.removeEventListener("mouseup", v), window.removeEventListener("touchend", v), document.body.style[n] = ""
-                }
-                d(h, "cr-resizer"), p(h, {
-                    width: this.options.viewport.width + "px",
-                    height: this.options.viewport.height + "px"
-                }), this.options.resizeControls.height && (d(a = document.createElement("div"), "cr-resizer-vertical"), h.appendChild(a)), this.options.resizeControls.width && (d(s = document.createElement("div"), "cr-resizer-horisontal"), h.appendChild(s)), a && (a.addEventListener("mousedown", m), a.addEventListener("touchstart", m)), s && (s.addEventListener("mousedown", m), s.addEventListener("touchstart", m)), this.elements.boundary.appendChild(h)
-            }.call(this)
-    }
-
-    function E() {
-        return this.options.enableExif && window.EXIF
-    }
-
-    function L(e) {
-        if (this.options.enableZoom) {
-            var t = this.elements.zoomer,
-                i = j(e, 4);
-            t.value = Math.max(t.min, Math.min(t.max, i))
-        }
-    }
-
-    function _(e) {
-        var n = this,
-            o = e ? e.transform : w.parse(n.elements.preview),
-            r = e ? e.viewportRect : n.elements.viewport.getBoundingClientRect(),
-            a = e ? e.origin : new y(n.elements.preview);
-
-        function s() {
-            var e = {};
-            e[i] = o.toString(), e[t] = a.toString(), p(n.elements.preview, e)
-        }
-        if (n._currentZoom = e ? e.value : n._currentZoom, o.scale = n._currentZoom, n.elements.zoomer.setAttribute("aria-valuenow", n._currentZoom), s(), n.options.enforceBoundary) {
-            var l = function (e) {
-                    var t = this._currentZoom,
-                        i = e.width,
-                        n = e.height,
-                        o = this.elements.boundary.clientWidth / 2,
-                        r = this.elements.boundary.clientHeight / 2,
-                        a = this.elements.preview.getBoundingClientRect(),
-                        s = a.width,
-                        l = a.height,
-                        h = i / 2,
-                        u = n / 2,
-                        c = -1 * (h / t - o),
-                        p = -1 * (u / t - r),
-                        d = 1 / t * h,
-                        m = 1 / t * u;
-                    return {
-                        translate: {
-                            maxX: c,
-                            minX: c - (s * (1 / t) - i * (1 / t)),
-                            maxY: p,
-                            minY: p - (l * (1 / t) - n * (1 / t))
-                        },
-                        origin: {
-                            maxX: s * (1 / t) - d,
-                            minX: d,
-                            maxY: l * (1 / t) - m,
-                            minY: m
-                        }
-                    }
-                }.call(n, r),
-                h = l.translate,
-                u = l.origin;
-            o.x >= h.maxX && (a.x = u.minX, o.x = h.maxX), o.x <= h.minX && (a.x = u.maxX, o.x = h.minX), o.y >= h.maxY && (a.y = u.minY, o.y = h.maxY), o.y <= h.minY && (a.y = u.maxY, o.y = h.minY)
-        }
-        s(), X.call(n), Y.call(n)
-    }
-
-    function B() {
-        var e = this._currentZoom,
-            n = this.elements.preview.getBoundingClientRect(),
-            o = this.elements.viewport.getBoundingClientRect(),
-            r = w.parse(this.elements.preview.style[i]),
-            a = new y(this.elements.preview),
-            s = o.top - n.top + o.height / 2,
-            l = o.left - n.left + o.width / 2,
-            h = {},
-            u = {};
-        h.y = s / e, h.x = l / e, u.y = (h.y - a.y) * (1 - e), u.x = (h.x - a.x) * (1 - e), r.x -= u.x, r.y -= u.y;
-        var c = {};
-        c[t] = h.x + "px " + h.y + "px", c[i] = r.toString(), p(this.elements.preview, c)
-    }
-
-    function R() {
-        if (this.elements) {
-            var e = this.elements.boundary.getBoundingClientRect(),
-                t = this.elements.preview.getBoundingClientRect();
-            p(this.elements.overlay, {
-                width: t.width + "px",
-                height: t.height + "px",
-                top: t.top - e.top + "px",
-                left: t.left - e.left + "px"
-            })
-        }
-    }
-    y.prototype.toString = function () {
-        return this.x + "px " + this.y + "px"
-    };
-    var Z, z, M, I, X = (Z = R, z = 500, function () {
-        var e = this,
-            t = arguments,
-            i = M;
-        clearTimeout(I), I = setTimeout((function () {
-            I = null, Z.apply(e, t)
-        }), z), i && Z.apply(e, t)
-    });
-
-    function Y() {
-        var e, t = this.get();
-        F.call(this) && (this.options.update.call(this, t), this.$ && "undefined" == typeof Prototype ? this.$(this.element).trigger("update.croppie", t) : (window.CustomEvent ? e = new CustomEvent("update", {
-            detail: t
-        }) : (e = document.createEvent("CustomEvent")).initCustomEvent("update", !0, !0, t), this.element.dispatchEvent(e)))
-    }
-
-    function F() {
-        return this.elements.preview.offsetHeight > 0 && this.elements.preview.offsetWidth > 0
-    }
-
-    function W() {
-        var e, n = {},
-            o = this.elements.preview,
-            r = new w(0, 0, 1),
-            a = new y;
-        F.call(this) && !this.data.bound && (this.data.bound = !0, n[i] = r.toString(), n[t] = a.toString(), n.opacity = 1, p(o, n), e = this.elements.preview.getBoundingClientRect(), this._originalImageWidth = e.width, this._originalImageHeight = e.height, this.data.orientation = b(this.elements.img), this.options.enableZoom ? k.call(this, !0) : this._currentZoom = 1, r.scale = this._currentZoom, n[i] = r.toString(), p(o, n), this.data.points.length ? function (e) {
-            if (4 !== e.length) throw "Croppie - Invalid number of points supplied: " + e;
-            var n = e[2] - e[0],
-                o = this.elements.viewport.getBoundingClientRect(),
-                r = this.elements.boundary.getBoundingClientRect(),
-                a_left = o.left - r.left,
-                a_top = o.top - r.top,
-                s = o.width / n,
-                l = e[1],
-                h = e[0],
-                u = -1 * e[1] + a_top,
-                c = -1 * e[0] + a_left,
-                d = {};
-            d[t] = h + "px " + l + "px", d[i] = new w(c, u, s).toString(), p(this.elements.preview, d), L.call(this, s), this._currentZoom = s
-        }.call(this, this.data.points) : function () {
-            var e = this.elements.preview.getBoundingClientRect(),
-                t = this.elements.viewport.getBoundingClientRect(),
-                n = this.elements.boundary.getBoundingClientRect(),
-                o = t.left - n.left,
-                r = t.top - n.top,
-                a = o - (e.width - t.width) / 2,
-                s = r - (e.height - t.height) / 2,
-                l = new w(a, s, this._currentZoom);
-            p(this.elements.preview, i, l.toString())
-        }.call(this), B.call(this), R.call(this))
-    }
-
-    function k(e) {
-        var t, i, n, o, r = 0,
-            a = this.options.maxZoom || 1.5,
-            s = this.elements.zoomer,
-            l = parseFloat(s.value),
-            h = this.elements.boundary.getBoundingClientRect(),
-            u = v(this.elements.img, this.data.orientation),
-            p = this.elements.viewport.getBoundingClientRect();
-        this.options.enforceBoundary && (n = p.width / u.width, o = p.height / u.height, r = Math.max(n, o)), r >= a && (a = r + 1), s.min = j(r, 4), s.max = j(a, 4), !e && (l < s.min || l > s.max) ? L.call(this, l < s.min ? s.min : s.max) : e && (i = Math.max(h.width / u.width, h.height / u.height), t = null !== this.data.boundZoom ? this.data.boundZoom : i, L.call(this, t)), c(s)
-    }
-
-    function A(e) {
-        var t = e.points,
-            i = f(t[0]),
-            n = f(t[1]),
-            o = f(t[2]) - i,
-            r = f(t[3]) - n,
-            a = e.circle,
-            s = document.createElement("canvas"),
-            l = s.getContext("2d"),
-            h = e.outputWidth || o,
-            u = e.outputHeight || r;
-        return e.outputWidth && e.outputHeight, s.width = h, s.height = u, e.backgroundColor && (l.fillStyle = e.backgroundColor, l.fillRect(0, 0, h, u)), !1 !== this.options.enforceBoundary && (o = Math.min(o, this._originalImageWidth), r = Math.min(r, this._originalImageHeight)), l.drawImage(this.elements.preview, i, n, o, r, 0, 0, h, u), a && (l.fillStyle = "#fff", l.globalCompositeOperation = "destination-in", l.beginPath(), l.arc(s.width / 2, s.height / 2, s.width / 2, 0, 2 * Math.PI, !0), l.closePath(), l.fill()), s
-    }
-
-    function O(e, t) {
-        var i, n, o, r, a = this,
-            s = [],
-            l = null,
-            h = E.call(a);
-        if ("string" == typeof e) i = e, e = {};
-        else if (Array.isArray(e)) s = e.slice();
         else {
-            if (void 0 === e && a.data.url) return W.call(a), Y.call(a), null;
-            i = e.url, s = e.points || [], l = void 0 === e.zoom ? null : e.zoom
+            element.fireEvent("onchange");
         }
-        return a.data.bound = !1, a.data.url = i || a.data.url, a.data.boundZoom = l, (n = i, o = h, r = new Image, r.style.opacity = 0, new Promise((function (e) {
-            function t() {
-                r.style.opacity = 1, setTimeout((function () {
-                    e(r)
-                }), 1)
+    }
+
+    //http://jsperf.com/vanilla-css
+    function css(el, styles, val) {
+        if (typeof (styles) === 'string') {
+            var tmp = styles;
+            styles = {};
+            styles[tmp] = val;
+        }
+
+        for (var prop in styles) {
+            el.style[prop] = styles[prop];
+        }
+    }
+
+    function addClass(el, c) {
+        if (el.classList) {
+            el.classList.add(c);
+        }
+        else {
+            el.className += ' ' + c;
+        }
+    }
+
+    function removeClass(el, c) {
+        if (el.classList) {
+            el.classList.remove(c);
+        }
+        else {
+            el.className = el.className.replace(c, '');
+        }
+    }
+
+    function setAttributes(el, attrs) {
+        for (var key in attrs) {
+            el.setAttribute(key, attrs[key]);
+        }
+    }
+
+    function num(v) {
+        return parseInt(v, 10);
+    }
+
+    /* Utilities */
+    function loadImage(src, doExif) {
+        var img = new Image();
+        img.style.opacity = '0';
+        return new Promise(function (resolve, reject) {
+            function _resolve() {
+                img.style.opacity = '1';
+                setTimeout(function () {
+                    resolve(img);
+                }, 1);
             }
-            r.removeAttribute("crossOrigin"), n.match(/^https?:\/\/|^\/\//) && r.setAttribute("crossOrigin", "anonymous"), r.onload = function () {
-                o ? EXIF.getData(r, (function () {
-                    t()
-                })) : t()
-            }, r.src = n
-        }))).then((function (i) {
-            if (function (e) {
-                    this.elements.img.parentNode && (Array.prototype.forEach.call(this.elements.img.classList, (function (t) {
-                        e.classList.add(t)
-                    })), this.elements.img.parentNode.replaceChild(e, this.elements.img), this.elements.preview = e), this.elements.img = e
-                }.call(a, i), s.length) a.options.relative && (s = [s[0] * i.naturalWidth / 100, s[1] * i.naturalHeight / 100, s[2] * i.naturalWidth / 100, s[3] * i.naturalHeight / 100]);
+
+            img.removeAttribute('crossOrigin');
+            if (src.match(/^https?:\/\/|^\/\//)) {
+                img.setAttribute('crossOrigin', 'anonymous');
+            }
+
+            img.onload = function () {
+                if (doExif) {
+                    EXIF.getData(img, function () {
+                        _resolve();
+                    });
+                }
+                else {
+                    _resolve();
+                }
+            };
+            img.onerror = function (ev) {
+                img.style.opacity = 1;
+                setTimeout(function () {
+                    reject(ev);
+                }, 1);
+            };
+            img.src = src;
+        });
+    }
+
+    function naturalImageDimensions(img, ornt) {
+        var w = img.naturalWidth;
+        var h = img.naturalHeight;
+        var orient = ornt || getExifOrientation(img);
+        if (orient && orient >= 5) {
+            var x= w;
+            w = h;
+            h = x;
+        }
+        return { width: w, height: h };
+    }
+
+    /* CSS Transform Prototype */
+    var TRANSLATE_OPTS = {
+        'translate3d': {
+            suffix: ', 0px'
+        },
+        'translate': {
+            suffix: ''
+        }
+    };
+    var Transform = function (x, y, scale) {
+        this.x = parseFloat(x);
+        this.y = parseFloat(y);
+        this.scale = parseFloat(scale);
+    };
+
+    Transform.parse = function (v) {
+        if (v.style) {
+            return Transform.parse(v.style[CSS_TRANSFORM]);
+        }
+        else if (v.indexOf('matrix') > -1 || v.indexOf('none') > -1) {
+            return Transform.fromMatrix(v);
+        }
+        else {
+            return Transform.fromString(v);
+        }
+    };
+
+    Transform.fromMatrix = function (v) {
+        var vals = v.substring(7).split(',');
+        if (!vals.length || v === 'none') {
+            vals = [1, 0, 0, 1, 0, 0];
+        }
+
+        return new Transform(num(vals[4]), num(vals[5]), parseFloat(vals[0]));
+    };
+
+    Transform.fromString = function (v) {
+        var values = v.split(') '),
+            translate = values[0].substring(Croppie.globals.translate.length + 1).split(','),
+            scale = values.length > 1 ? values[1].substring(6) : 1,
+            x = translate.length > 1 ? translate[0] : 0,
+            y = translate.length > 1 ? translate[1] : 0;
+
+        return new Transform(x, y, scale);
+    };
+
+    Transform.prototype.toString = function () {
+        var suffix = TRANSLATE_OPTS[Croppie.globals.translate].suffix || '';
+        return Croppie.globals.translate + '(' + this.x + 'px, ' + this.y + 'px' + suffix + ') scale(' + this.scale + ')';
+    };
+
+    var TransformOrigin = function (el) {
+        if (!el || !el.style[CSS_TRANS_ORG]) {
+            this.x = 0;
+            this.y = 0;
+            return;
+        }
+        var css = el.style[CSS_TRANS_ORG].split(' ');
+        this.x = parseFloat(css[0]);
+        this.y = parseFloat(css[1]);
+    };
+
+    TransformOrigin.prototype.toString = function () {
+        return this.x + 'px ' + this.y + 'px';
+    };
+
+    function getExifOrientation (img) {
+        return img.exifdata && img.exifdata.Orientation ? num(img.exifdata.Orientation) : 1;
+    }
+
+    function drawCanvas(canvas, img, orientation) {
+        var width = img.width,
+            height = img.height,
+            ctx = canvas.getContext('2d');
+
+        canvas.width = img.width;
+        canvas.height = img.height;
+
+        ctx.save();
+        switch (orientation) {
+          case 2:
+             ctx.translate(width, 0);
+             ctx.scale(-1, 1);
+             break;
+
+          case 3:
+              ctx.translate(width, height);
+              ctx.rotate(180*Math.PI/180);
+              break;
+
+          case 4:
+              ctx.translate(0, height);
+              ctx.scale(1, -1);
+              break;
+
+          case 5:
+              canvas.width = height;
+              canvas.height = width;
+              ctx.rotate(90*Math.PI/180);
+              ctx.scale(1, -1);
+              break;
+
+          case 6:
+              canvas.width = height;
+              canvas.height = width;
+              ctx.rotate(90*Math.PI/180);
+              ctx.translate(0, -height);
+              break;
+
+          case 7:
+              canvas.width = height;
+              canvas.height = width;
+              ctx.rotate(-90*Math.PI/180);
+              ctx.translate(-width, height);
+              ctx.scale(1, -1);
+              break;
+
+          case 8:
+              canvas.width = height;
+              canvas.height = width;
+              ctx.translate(0, width);
+              ctx.rotate(-90*Math.PI/180);
+              break;
+        }
+        ctx.drawImage(img, 0,0, width, height);
+        ctx.restore();
+    }
+
+    /* Private Methods */
+    function _create() {
+        var self = this,
+            contClass = 'croppie-container',
+            customViewportClass = self.options.viewport.type ? 'cr-vp-' + self.options.viewport.type : null,
+            boundary, img, viewport, overlay, bw, bh;
+
+        self.options.useCanvas = self.options.enableOrientation || _hasExif.call(self);
+        // Properties on class
+        self.data = {};
+        self.elements = {};
+
+        boundary = self.elements.boundary = document.createElement('div');
+        viewport = self.elements.viewport = document.createElement('div');
+        img = self.elements.img = document.createElement('img');
+        overlay = self.elements.overlay = document.createElement('div');
+
+        if (self.options.useCanvas) {
+            self.elements.canvas = document.createElement('canvas');
+            self.elements.preview = self.elements.canvas;
+        }
+        else {
+            self.elements.preview = img;
+        }
+
+        addClass(boundary, 'cr-boundary');
+        boundary.setAttribute('aria-dropeffect', 'none');
+        bw = self.options.boundary.width;
+        bh = self.options.boundary.height;
+        css(boundary, {
+            width: (bw + (isNaN(bw) ? '' : 'px')),
+            height: (bh + (isNaN(bh) ? '' : 'px'))
+        });
+
+        addClass(viewport, 'cr-viewport');
+        if (customViewportClass) {
+            addClass(viewport, customViewportClass);
+        }
+        css(viewport, {
+            width: self.options.viewport.width + 'px',
+            height: self.options.viewport.height + 'px'
+        });
+        viewport.setAttribute('tabindex', 0);
+
+        addClass(self.elements.preview, 'cr-image');
+        setAttributes(self.elements.preview, { 'alt': 'preview', 'aria-grabbed': 'false' });
+        addClass(overlay, 'cr-overlay');
+
+        self.element.appendChild(boundary);
+        boundary.appendChild(self.elements.preview);
+        boundary.appendChild(viewport);
+        boundary.appendChild(overlay);
+
+        addClass(self.element, contClass);
+        if (self.options.customClass) {
+            addClass(self.element, self.options.customClass);
+        }
+
+        _initDraggable.call(this);
+
+        if (self.options.enableZoom) {
+            _initializeZoom.call(self);
+        }
+
+        // if (self.options.enableOrientation) {
+        //     _initRotationControls.call(self);
+        // }
+
+        if (self.options.enableResize) {
+            _initializeResize.call(self);
+        }
+    }
+
+    // function _initRotationControls () {
+    //     var self = this,
+    //         wrap, btnLeft, btnRight, iLeft, iRight;
+
+    //     wrap = document.createElement('div');
+    //     self.elements.orientationBtnLeft = btnLeft = document.createElement('button');
+    //     self.elements.orientationBtnRight = btnRight = document.createElement('button');
+
+    //     wrap.appendChild(btnLeft);
+    //     wrap.appendChild(btnRight);
+
+    //     iLeft = document.createElement('i');
+    //     iRight = document.createElement('i');
+    //     btnLeft.appendChild(iLeft);
+    //     btnRight.appendChild(iRight);
+
+    //     addClass(wrap, 'cr-rotate-controls');
+    //     addClass(btnLeft, 'cr-rotate-l');
+    //     addClass(btnRight, 'cr-rotate-r');
+
+    //     self.elements.boundary.appendChild(wrap);
+
+    //     btnLeft.addEventListener('click', function () {
+    //         self.rotate(-90);
+    //     });
+    //     btnRight.addEventListener('click', function () {
+    //         self.rotate(90);
+    //     });
+    // }
+
+    function _hasExif() {
+        return this.options.enableExif && window.EXIF;
+    }
+
+    function _initializeResize () {
+        var self = this;
+        var wrap = document.createElement('div');
+        var isDragging = false;
+        var direction;
+        var originalX;
+        var originalY;
+        var minSize = 50;
+        var maxWidth;
+        var maxHeight;
+        var vr;
+        var hr;
+
+        addClass(wrap, 'cr-resizer');
+        css(wrap, {
+            width: this.options.viewport.width + 'px',
+            height: this.options.viewport.height + 'px'
+        });
+
+        if (this.options.resizeControls.height) {
+            vr = document.createElement('div');
+            addClass(vr, 'cr-resizer-vertical');
+            wrap.appendChild(vr);
+        }
+
+        if (this.options.resizeControls.width) {
+            hr = document.createElement('div');
+            addClass(hr, 'cr-resizer-horisontal');
+            wrap.appendChild(hr);
+        }
+
+        function mouseDown(ev) {
+            if (ev.button !== undefined && ev.button !== 0) return;
+
+            ev.preventDefault();
+            if (isDragging) {
+                return;
+            }
+
+            var overlayRect = self.elements.overlay.getBoundingClientRect();
+
+            isDragging = true;
+            originalX = ev.pageX;
+            originalY = ev.pageY;
+            direction = ev.currentTarget.className.indexOf('vertical') !== -1 ? 'v' : 'h';
+            maxWidth = overlayRect.width;
+            maxHeight = overlayRect.height;
+
+            if (ev.touches) {
+                var touches = ev.touches[0];
+                originalX = touches.pageX;
+                originalY = touches.pageY;
+            }
+
+            window.addEventListener('mousemove', mouseMove);
+            window.addEventListener('touchmove', mouseMove);
+            window.addEventListener('mouseup', mouseUp);
+            window.addEventListener('touchend', mouseUp);
+            document.body.style[CSS_USERSELECT] = 'none';
+        }
+
+        function mouseMove(ev) {
+            var pageX = ev.pageX;
+            var pageY = ev.pageY;
+
+            ev.preventDefault();
+
+            if (ev.touches) {
+                var touches = ev.touches[0];
+                pageX = touches.pageX;
+                pageY = touches.pageY;
+            }
+
+            var deltaX = pageX - originalX;
+            var deltaY = pageY - originalY;
+            var newHeight = self.options.viewport.height + deltaY;
+            var newWidth = self.options.viewport.width + deltaX;
+
+            if (direction === 'v' && newHeight >= minSize && newHeight <= maxHeight) {
+                css(wrap, {
+                    height: newHeight + 'px'
+                });
+
+                self.options.boundary.height += deltaY;
+                css(self.elements.boundary, {
+                    height: self.options.boundary.height + 'px'
+                });
+
+                self.options.viewport.height += deltaY;
+                css(self.elements.viewport, {
+                    height: self.options.viewport.height + 'px'
+                });
+            }
+            else if (direction === 'h' && newWidth >= minSize && newWidth <= maxWidth) {
+                css(wrap, {
+                    width: newWidth + 'px'
+                });
+
+                self.options.boundary.width += deltaX;
+                css(self.elements.boundary, {
+                    width: self.options.boundary.width + 'px'
+                });
+
+                self.options.viewport.width += deltaX;
+                css(self.elements.viewport, {
+                    width: self.options.viewport.width + 'px'
+                });
+            }
+
+            _updateOverlay.call(self);
+            _updateZoomLimits.call(self);
+            _updateCenterPoint.call(self);
+            _triggerUpdate.call(self);
+            originalY = pageY;
+            originalX = pageX;
+        }
+
+        function mouseUp() {
+            isDragging = false;
+            window.removeEventListener('mousemove', mouseMove);
+            window.removeEventListener('touchmove', mouseMove);
+            window.removeEventListener('mouseup', mouseUp);
+            window.removeEventListener('touchend', mouseUp);
+            document.body.style[CSS_USERSELECT] = '';
+        }
+
+        if (vr) {
+            vr.addEventListener('mousedown', mouseDown);
+            vr.addEventListener('touchstart', mouseDown);
+        }
+
+        if (hr) {
+            hr.addEventListener('mousedown', mouseDown);
+            hr.addEventListener('touchstart', mouseDown);
+        }
+
+        this.elements.boundary.appendChild(wrap);
+    }
+
+    function _setZoomerVal(v) {
+        if (this.options.enableZoom) {
+            var z = this.elements.zoomer,
+                val = fix(v, 4);
+
+            z.value = Math.max(parseFloat(z.min), Math.min(parseFloat(z.max), val)).toString();
+        }
+    }
+
+    function _initializeZoom() {
+        var self = this,
+            wrap = self.elements.zoomerWrap = document.createElement('div'),
+            zoomer = self.elements.zoomer = document.createElement('input');
+
+        addClass(wrap, 'cr-slider-wrap');
+        addClass(zoomer, 'cr-slider');
+        zoomer.type = 'range';
+        zoomer.step = '0.0001';
+        zoomer.value = '1';
+        zoomer.style.display = self.options.showZoomer ? '' : 'none';
+        zoomer.setAttribute('aria-label', 'zoom');
+
+        self.element.appendChild(wrap);
+        wrap.appendChild(zoomer);
+
+        self._currentZoom = 1;
+
+        function change() {
+            _onZoom.call(self, {
+                value: parseFloat(zoomer.value),
+                origin: new TransformOrigin(self.elements.preview),
+                viewportRect: self.elements.viewport.getBoundingClientRect(),
+                transform: Transform.parse(self.elements.preview)
+            });
+        }
+
+        function scroll(ev) {
+            var delta, targetZoom;
+
+            if(self.options.mouseWheelZoom === 'ctrl' && ev.ctrlKey !== true){
+              return 0; 
+            } else if (ev.wheelDelta) {
+                delta = ev.wheelDelta / 1200; //wheelDelta min: -120 max: 120 // max x 10 x 2
+            } else if (ev.deltaY) {
+                delta = ev.deltaY / 1060; //deltaY min: -53 max: 53 // max x 10 x 2
+            } else if (ev.detail) {
+                delta = ev.detail / -60; //delta min: -3 max: 3 // max x 10 x 2
+            } else {
+                delta = 0;
+            }
+
+            targetZoom = self._currentZoom + (delta * self._currentZoom);
+
+            ev.preventDefault();
+            _setZoomerVal.call(self, targetZoom);
+            change.call(self);
+        }
+
+        self.elements.zoomer.addEventListener('input', change);// this is being fired twice on keypress
+        self.elements.zoomer.addEventListener('change', change);
+
+        if (self.options.mouseWheelZoom) {
+            self.elements.boundary.addEventListener('mousewheel', scroll);
+            self.elements.boundary.addEventListener('DOMMouseScroll', scroll);
+        }
+    }
+
+    function _onZoom(ui) {
+        var self = this,
+            transform = ui ? ui.transform : Transform.parse(self.elements.preview),
+            vpRect = ui ? ui.viewportRect : self.elements.viewport.getBoundingClientRect(),
+            origin = ui ? ui.origin : new TransformOrigin(self.elements.preview);
+
+        function applyCss() {
+            var transCss = {};
+            transCss[CSS_TRANSFORM] = transform.toString();
+            transCss[CSS_TRANS_ORG] = origin.toString();
+            css(self.elements.preview, transCss);
+        }
+
+        self._currentZoom = ui ? ui.value : self._currentZoom;
+        transform.scale = self._currentZoom;
+        self.elements.zoomer.setAttribute('aria-valuenow', self._currentZoom);
+        applyCss();
+
+        if (self.options.enforceBoundary) {
+            var boundaries = _getVirtualBoundaries.call(self, vpRect),
+                transBoundaries = boundaries.translate,
+                oBoundaries = boundaries.origin;
+
+            if (transform.x >= transBoundaries.maxX) {
+                origin.x = oBoundaries.minX;
+                transform.x = transBoundaries.maxX;
+            }
+
+            if (transform.x <= transBoundaries.minX) {
+                origin.x = oBoundaries.maxX;
+                transform.x = transBoundaries.minX;
+            }
+
+            if (transform.y >= transBoundaries.maxY) {
+                origin.y = oBoundaries.minY;
+                transform.y = transBoundaries.maxY;
+            }
+
+            if (transform.y <= transBoundaries.minY) {
+                origin.y = oBoundaries.maxY;
+                transform.y = transBoundaries.minY;
+            }
+        }
+        applyCss();
+        _debouncedOverlay.call(self);
+        _triggerUpdate.call(self);
+    }
+
+    function _getVirtualBoundaries(viewport) {
+        var self = this,
+            scale = self._currentZoom,
+            vpWidth = viewport.width,
+            vpHeight = viewport.height,
+            centerFromBoundaryX = self.elements.boundary.clientWidth / 2,
+            centerFromBoundaryY = self.elements.boundary.clientHeight / 2,
+            imgRect = self.elements.preview.getBoundingClientRect(),
+            curImgWidth = imgRect.width,
+            curImgHeight = imgRect.height,
+            halfWidth = vpWidth / 2,
+            halfHeight = vpHeight / 2;
+
+        var maxX = ((halfWidth / scale) - centerFromBoundaryX) * -1;
+        var minX = maxX - ((curImgWidth * (1 / scale)) - (vpWidth * (1 / scale)));
+
+        var maxY = ((halfHeight / scale) - centerFromBoundaryY) * -1;
+        var minY = maxY - ((curImgHeight * (1 / scale)) - (vpHeight * (1 / scale)));
+
+        var originMinX = (1 / scale) * halfWidth;
+        var originMaxX = (curImgWidth * (1 / scale)) - originMinX;
+
+        var originMinY = (1 / scale) * halfHeight;
+        var originMaxY = (curImgHeight * (1 / scale)) - originMinY;
+
+        return {
+            translate: {
+                maxX: maxX,
+                minX: minX,
+                maxY: maxY,
+                minY: minY
+            },
+            origin: {
+                maxX: originMaxX,
+                minX: originMinX,
+                maxY: originMaxY,
+                minY: originMinY
+            }
+        };
+    }
+
+    function _updateCenterPoint(rotate) {
+        var self = this,
+            scale = self._currentZoom,
+            data = self.elements.preview.getBoundingClientRect(),
+            vpData = self.elements.viewport.getBoundingClientRect(),
+            transform = Transform.parse(self.elements.preview.style[CSS_TRANSFORM]),
+            pc = new TransformOrigin(self.elements.preview),
+            top = (vpData.top - data.top) + (vpData.height / 2),
+            left = (vpData.left - data.left) + (vpData.width / 2),
+            center = {},
+            adj = {};
+
+        if (rotate) {
+            var cx = pc.x;
+            var cy = pc.y;
+            var tx = transform.x;
+            var ty = transform.y;
+
+            center.y = cx;
+            center.x = cy;
+            transform.y = tx;
+            transform.x = ty;
+        }
+        else {
+            center.y = top / scale;
+            center.x = left / scale;
+
+            adj.y = (center.y - pc.y) * (1 - scale);
+            adj.x = (center.x - pc.x) * (1 - scale);
+
+            transform.x -= adj.x;
+            transform.y -= adj.y;
+        }
+
+        var newCss = {};
+        newCss[CSS_TRANS_ORG] = center.x + 'px ' + center.y + 'px';
+        newCss[CSS_TRANSFORM] = transform.toString();
+        css(self.elements.preview, newCss);
+    }
+
+    function _initDraggable() {
+        var self = this,
+            isDragging = false,
+            originalX,
+            originalY,
+            originalDistance,
+            vpRect,
+            transform;
+
+        function assignTransformCoordinates(deltaX, deltaY) {
+            var imgRect = self.elements.preview.getBoundingClientRect(),
+                top = transform.y + deltaY,
+                left = transform.x + deltaX;
+
+            if (self.options.enforceBoundary) {
+                if (vpRect.top > imgRect.top + deltaY && vpRect.bottom < imgRect.bottom + deltaY) {
+                    transform.y = top;
+                }
+
+                if (vpRect.left > imgRect.left + deltaX && vpRect.right < imgRect.right + deltaX) {
+                    transform.x = left;
+                }
+            }
             else {
-                var n, o, r = v(i),
-                    l = a.elements.viewport.getBoundingClientRect(),
-                    h = l.width / l.height;
-                r.width / r.height > h ? n = (o = r.height) * h : (n = r.width, o = r.height / h);
-                var u = (r.width - n) / 2,
-                    c = (r.height - o) / 2,
-                    p = u + n,
-                    d = c + o;
-                a.data.points = [u, c, p, d]
+                transform.y = top;
+                transform.x = left;
             }
-            a.data.points = s.map((function (e) {
-                return parseFloat(e)
-            })), a.options.useCanvas && function (e) {
-                var t = this.elements.canvas,
-                    i = this.elements.img,
-                    n = t.getContext("2d"),
-                    o = E.call(this);
-                e = this.options.enableOrientation && e, n.clearRect(0, 0, t.width, t.height), t.width = i.width, t.height = i.height, o && !e ? x(t, i, f(b(i) || 0)) : e && x(t, i, e)
-            }.call(a, e.orientation || 1), W.call(a), Y.call(a), t && t()
-        })).catch((function (e) {
-            console.error("Croppie:" + e)
-        }))
+        }
+
+        function toggleGrabState(isDragging) {
+          self.elements.preview.setAttribute('aria-grabbed', isDragging);
+          self.elements.boundary.setAttribute('aria-dropeffect', isDragging? 'move': 'none');
+        }
+
+        function keyDown(ev) {
+            var LEFT_ARROW  = 37,
+                UP_ARROW    = 38,
+                RIGHT_ARROW = 39,
+                DOWN_ARROW  = 40;
+
+            if (ev.shiftKey && (ev.keyCode === UP_ARROW || ev.keyCode === DOWN_ARROW)) {
+                var zoom;
+                if (ev.keyCode === UP_ARROW) {
+                    zoom = parseFloat(self.elements.zoomer.value) + parseFloat(self.elements.zoomer.step)
+                }
+                else {
+                    zoom = parseFloat(self.elements.zoomer.value) - parseFloat(self.elements.zoomer.step)
+                }
+                self.setZoom(zoom);
+            }
+            else if (self.options.enableKeyMovement && (ev.keyCode >= 37 && ev.keyCode <= 40)) {
+                ev.preventDefault();
+                var movement = parseKeyDown(ev.keyCode);
+
+                transform = Transform.parse(self.elements.preview);
+                document.body.style[CSS_USERSELECT] = 'none';
+                vpRect = self.elements.viewport.getBoundingClientRect();
+                keyMove(movement);
+            }
+
+            function parseKeyDown(key) {
+                switch (key) {
+                    case LEFT_ARROW:
+                        return [1, 0];
+                    case UP_ARROW:
+                        return [0, 1];
+                    case RIGHT_ARROW:
+                        return [-1, 0];
+                    case DOWN_ARROW:
+                        return [0, -1];
+                }
+            }
+        }
+
+        function keyMove(movement) {
+            var deltaX = movement[0],
+                deltaY = movement[1],
+                newCss = {};
+
+            assignTransformCoordinates(deltaX, deltaY);
+
+            newCss[CSS_TRANSFORM] = transform.toString();
+            css(self.elements.preview, newCss);
+            _updateOverlay.call(self);
+            document.body.style[CSS_USERSELECT] = '';
+            _updateCenterPoint.call(self);
+            _triggerUpdate.call(self);
+            originalDistance = 0;
+        }
+
+        function mouseDown(ev) {
+            if (ev.button !== undefined && ev.button !== 0) return;
+
+            ev.preventDefault();
+            if (isDragging) return;
+            isDragging = true;
+            originalX = ev.pageX;
+            originalY = ev.pageY;
+
+            if (ev.touches) {
+                var touches = ev.touches[0];
+                originalX = touches.pageX;
+                originalY = touches.pageY;
+            }
+            toggleGrabState(isDragging);
+            transform = Transform.parse(self.elements.preview);
+            window.addEventListener('mousemove', mouseMove);
+            window.addEventListener('touchmove', mouseMove);
+            window.addEventListener('mouseup', mouseUp);
+            window.addEventListener('touchend', mouseUp);
+            document.body.style[CSS_USERSELECT] = 'none';
+            vpRect = self.elements.viewport.getBoundingClientRect();
+        }
+
+        function mouseMove(ev) {
+            ev.preventDefault();
+            var pageX = ev.pageX,
+                pageY = ev.pageY;
+
+            if (ev.touches) {
+                var touches = ev.touches[0];
+                pageX = touches.pageX;
+                pageY = touches.pageY;
+            }
+
+            var deltaX = pageX - originalX,
+                deltaY = pageY - originalY,
+                newCss = {};
+
+            if (ev.type === 'touchmove') {
+                if (ev.touches.length > 1) {
+                    var touch1 = ev.touches[0];
+                    var touch2 = ev.touches[1];
+                    var dist = Math.sqrt((touch1.pageX - touch2.pageX) * (touch1.pageX - touch2.pageX) + (touch1.pageY - touch2.pageY) * (touch1.pageY - touch2.pageY));
+
+                    if (!originalDistance) {
+                        originalDistance = dist / self._currentZoom;
+                    }
+
+                    var scale = dist / originalDistance;
+
+                    _setZoomerVal.call(self, scale);
+                    dispatchChange(self.elements.zoomer);
+                    return;
+                }
+            }
+
+            assignTransformCoordinates(deltaX, deltaY);
+
+            newCss[CSS_TRANSFORM] = transform.toString();
+            css(self.elements.preview, newCss);
+            _updateOverlay.call(self);
+            originalY = pageY;
+            originalX = pageX;
+        }
+
+        function mouseUp() {
+            isDragging = false;
+            toggleGrabState(isDragging);
+            window.removeEventListener('mousemove', mouseMove);
+            window.removeEventListener('touchmove', mouseMove);
+            window.removeEventListener('mouseup', mouseUp);
+            window.removeEventListener('touchend', mouseUp);
+            document.body.style[CSS_USERSELECT] = '';
+            _updateCenterPoint.call(self);
+            _triggerUpdate.call(self);
+            originalDistance = 0;
+        }
+
+        self.elements.overlay.addEventListener('mousedown', mouseDown);
+        self.elements.viewport.addEventListener('keydown', keyDown);
+        self.elements.overlay.addEventListener('touchstart', mouseDown);
     }
 
-    function j(e, t) {
-        return parseFloat(e).toFixed(t || 0)
-    }
+    function _updateOverlay() {
+        if (!this.elements) return; // since this is debounced, it can be fired after destroy
+        var self = this,
+            boundRect = self.elements.boundary.getBoundingClientRect(),
+            imgData = self.elements.preview.getBoundingClientRect();
 
-    function H() {
-        var e = this.elements.preview.getBoundingClientRect(),
-            t = this.elements.viewport.getBoundingClientRect(),
-            i = t.left - e.left,
-            n = t.top - e.top,
-            o = (t.width - this.elements.viewport.offsetWidth) / 2,
-            r = (t.height - this.elements.viewport.offsetHeight) / 2,
-            a = i + this.elements.viewport.offsetWidth + o,
-            s = n + this.elements.viewport.offsetHeight + r,
-            l = this._currentZoom;
-        (l === 1 / 0 || isNaN(l)) && (l = 1);
-        var h = this.options.enforceBoundary ? 0 : Number.NEGATIVE_INFINITY;
-        return i = Math.max(h, i / l), n = Math.max(h, n / l), a = Math.max(h, a / l), s = Math.max(h, s / l), {
-            points: [j(i), j(n), j(a), j(s)],
-            zoom: l,
-            orientation: this.data.orientation
+        css(self.elements.overlay, {
+            width: imgData.width + 'px',
+            height: imgData.height + 'px',
+            top: (imgData.top - boundRect.top) + 'px',
+            left: (imgData.left - boundRect.left) + 'px'
+        });
+    }
+    var _debouncedOverlay = debounce(_updateOverlay, 500);
+
+    function _triggerUpdate() {
+        var self = this,
+            data = self.get();
+
+        if (!_isVisible.call(self)) {
+            return;
+        }
+
+        self.options.update.call(self, data);
+        if (self.$ && typeof Prototype === 'undefined') {
+            self.$(self.element).trigger('update.croppie', data);
+        }
+        else {
+            var ev;
+            if (window.CustomEvent) {
+                ev = new CustomEvent('update', { detail: data });
+            } else {
+                ev = document.createEvent('CustomEvent');
+                ev.initCustomEvent('update', true, true, data);
+            }
+
+            self.element.dispatchEvent(ev);
         }
     }
-    var N = {
-            type: "canvas",
-            format: "png",
+
+    function _isVisible() {
+        return this.elements.preview.offsetHeight > 0 && this.elements.preview.offsetWidth > 0;
+    }
+
+    function _updatePropertiesFromImage() {
+        var self = this,
+            initialZoom = 1,
+            cssReset = {},
+            img = self.elements.preview,
+            imgData,
+            transformReset = new Transform(0, 0, initialZoom),
+            originReset = new TransformOrigin(),
+            isVisible = _isVisible.call(self);
+
+        if (!isVisible || self.data.bound) {// if the croppie isn't visible or it doesn't need binding
+            return;
+        }
+
+        self.data.bound = true;
+        cssReset[CSS_TRANSFORM] = transformReset.toString();
+        cssReset[CSS_TRANS_ORG] = originReset.toString();
+        cssReset['opacity'] = 1;
+        css(img, cssReset);
+
+        imgData = self.elements.preview.getBoundingClientRect();
+
+        self._originalImageWidth = imgData.width;
+        self._originalImageHeight = imgData.height;
+        self.data.orientation = getExifOrientation(self.elements.img);
+
+        if (self.options.enableZoom) {
+            _updateZoomLimits.call(self, true);
+        }
+        else {
+            self._currentZoom = initialZoom;
+        }
+
+        transformReset.scale = self._currentZoom;
+        cssReset[CSS_TRANSFORM] = transformReset.toString();
+        css(img, cssReset);
+
+        if (self.data.points.length) {
+            _bindPoints.call(self, self.data.points);
+        }
+        else {
+            _centerImage.call(self);
+        }
+
+        _updateCenterPoint.call(self);
+        _updateOverlay.call(self);
+    }
+
+    function _updateZoomLimits (initial) {
+        var self = this,
+            minZoom = Math.max(self.options.minZoom, 0) || 0,
+            maxZoom = self.options.maxZoom || 1.5,
+            initialZoom,
+            defaultInitialZoom,
+            zoomer = self.elements.zoomer,
+            scale = parseFloat(zoomer.value),
+            boundaryData = self.elements.boundary.getBoundingClientRect(),
+            imgData = naturalImageDimensions(self.elements.img, self.data.orientation),
+            vpData = self.elements.viewport.getBoundingClientRect(),
+            minW,
+            minH;
+        if (self.options.enforceBoundary) {
+            minW = vpData.width / imgData.width;
+            minH = vpData.height / imgData.height;
+            minZoom = Math.max(minW, minH);
+        }
+
+        if (minZoom >= maxZoom) {
+            maxZoom = minZoom + 1;
+        }
+
+        zoomer.min = fix(minZoom, 4);
+        zoomer.max = fix(maxZoom, 4);
+        
+        if (!initial && (scale < zoomer.min || scale > zoomer.max)) {
+            _setZoomerVal.call(self, scale < zoomer.min ? zoomer.min : zoomer.max);
+        }
+        else if (initial) {
+            defaultInitialZoom = Math.max((boundaryData.width / imgData.width), (boundaryData.height / imgData.height));
+            initialZoom = self.data.boundZoom !== null ? self.data.boundZoom : defaultInitialZoom;
+            _setZoomerVal.call(self, initialZoom);
+        }
+
+        dispatchChange(zoomer);
+    }
+
+    function _bindPoints(points) {
+        if (points.length !== 4) {
+            throw "Croppie - Invalid number of points supplied: " + points;
+        }
+        var self = this,
+            pointsWidth = points[2] - points[0],
+            // pointsHeight = points[3] - points[1],
+            vpData = self.elements.viewport.getBoundingClientRect(),
+            boundRect = self.elements.boundary.getBoundingClientRect(),
+            vpOffset = {
+                left: vpData.left - boundRect.left,
+                top: vpData.top - boundRect.top
+            },
+            scale = vpData.width / pointsWidth,
+            originTop = points[1],
+            originLeft = points[0],
+            transformTop = (-1 * points[1]) + vpOffset.top,
+            transformLeft = (-1 * points[0]) + vpOffset.left,
+            newCss = {};
+
+        newCss[CSS_TRANS_ORG] = originLeft + 'px ' + originTop + 'px';
+        newCss[CSS_TRANSFORM] = new Transform(transformLeft, transformTop, scale).toString();
+        css(self.elements.preview, newCss);
+
+        _setZoomerVal.call(self, scale);
+        self._currentZoom = scale;
+    }
+
+    function _centerImage() {
+        var self = this,
+            imgDim = self.elements.preview.getBoundingClientRect(),
+            vpDim = self.elements.viewport.getBoundingClientRect(),
+            boundDim = self.elements.boundary.getBoundingClientRect(),
+            vpLeft = vpDim.left - boundDim.left,
+            vpTop = vpDim.top - boundDim.top,
+            w = vpLeft - ((imgDim.width - vpDim.width) / 2),
+            h = vpTop - ((imgDim.height - vpDim.height) / 2),
+            transform = new Transform(w, h, self._currentZoom);
+
+        css(self.elements.preview, CSS_TRANSFORM, transform.toString());
+    }
+
+    function _transferImageToCanvas(customOrientation) {
+        var self = this,
+            canvas = self.elements.canvas,
+            img = self.elements.img,
+            ctx = canvas.getContext('2d');
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        canvas.width = img.width;
+        canvas.height = img.height;
+
+        var orientation = self.options.enableOrientation && customOrientation || getExifOrientation(img);
+        drawCanvas(canvas, img, orientation);
+    }
+
+    function _getCanvas(data) {
+        var self = this,
+            points = data.points,
+            left = num(points[0]),
+            top = num(points[1]),
+            right = num(points[2]),
+            bottom = num(points[3]),
+            width = right-left,
+            height = bottom-top,
+            circle = data.circle,
+            canvas = document.createElement('canvas'),
+            ctx = canvas.getContext('2d'),
+            startX = 0,
+            startY = 0,
+            canvasWidth = data.outputWidth || width,
+            canvasHeight = data.outputHeight || height;
+
+        canvas.width = canvasWidth;
+        canvas.height = canvasHeight;
+
+        if (data.backgroundColor) {
+            ctx.fillStyle = data.backgroundColor;
+            ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+        }
+
+        // By default assume we're going to draw the entire
+        // source image onto the destination canvas.
+        var sx = left,
+            sy = top,
+            sWidth = width,
+            sHeight = height,
+            dx = 0,
+            dy = 0,
+            dWidth = canvasWidth,
+            dHeight = canvasHeight;
+
+        //
+        // Do not go outside of the original image's bounds along the x-axis.
+        // Handle translations when projecting onto the destination canvas.
+        //
+
+        // The smallest possible source x-position is 0.
+        if (left < 0) {
+            sx = 0;
+            dx = (Math.abs(left) / width) * canvasWidth;
+        }
+
+        // The largest possible source width is the original image's width.
+        if (sWidth + sx > self._originalImageWidth) {
+            sWidth = self._originalImageWidth - sx;
+            dWidth =  (sWidth / width) * canvasWidth;
+        }
+
+        //
+        // Do not go outside of the original image's bounds along the y-axis.
+        //
+
+        // The smallest possible source y-position is 0.
+        if (top < 0) {
+            sy = 0;
+            dy = (Math.abs(top) / height) * canvasHeight;
+        }
+
+        // The largest possible source height is the original image's height.
+        if (sHeight + sy > self._originalImageHeight) {
+            sHeight = self._originalImageHeight - sy;
+            dHeight = (sHeight / height) * canvasHeight;
+        }
+
+        // console.table({ left, right, top, bottom, canvasWidth, canvasHeight, width, height, startX, startY, circle, sx, sy, dx, dy, sWidth, sHeight, dWidth, dHeight });
+
+        ctx.drawImage(this.elements.preview, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
+        if (circle) {
+            ctx.fillStyle = '#fff';
+            ctx.globalCompositeOperation = 'destination-in';
+            ctx.beginPath();
+            ctx.arc(canvas.width / 2, canvas.height / 2, canvas.width / 2, 0, Math.PI * 2, true);
+            ctx.closePath();
+            ctx.fill();
+        }
+        return canvas;
+    }
+
+    function _getHtmlResult(data) {
+        var points = data.points,
+            div = document.createElement('div'),
+            img = document.createElement('img'),
+            width = points[2] - points[0],
+            height = points[3] - points[1];
+
+        addClass(div, 'croppie-result');
+        div.appendChild(img);
+        css(img, {
+            left: (-1 * points[0]) + 'px',
+            top: (-1 * points[1]) + 'px'
+        });
+        img.src = data.url;
+        css(div, {
+            width: width + 'px',
+            height: height + 'px'
+        });
+
+        return div;
+    }
+
+    function _getBase64Result(data) {
+        return _getCanvas.call(this, data).toDataURL(data.format, data.quality);
+    }
+
+    function _getBlobResult(data) {
+        var self = this;
+        return new Promise(function (resolve) {
+            _getCanvas.call(self, data).toBlob(function (blob) {
+                resolve(blob);
+            }, data.format, data.quality);
+        });
+    }
+
+    function _replaceImage(img) {
+        if (this.elements.img.parentNode) {
+            Array.prototype.forEach.call(this.elements.img.classList, function(c) { img.classList.add(c); });
+            this.elements.img.parentNode.replaceChild(img, this.elements.img);
+            this.elements.preview = img; // if the img is attached to the DOM, they're not using the canvas
+        }
+        this.elements.img = img;
+    }
+
+    function _bind(options, cb) {
+        var self = this,
+            url,
+            points = [],
+            zoom = null,
+            hasExif = _hasExif.call(self);
+
+        if (typeof (options) === 'string') {
+            url = options;
+            options = {};
+        }
+        else if (Array.isArray(options)) {
+            points = options.slice();
+        }
+        else if (typeof (options) === 'undefined' && self.data.url) { //refreshing
+            _updatePropertiesFromImage.call(self);
+            _triggerUpdate.call(self);
+            return null;
+        }
+        else {
+            url = options.url;
+            points = options.points || [];
+            zoom = typeof(options.zoom) === 'undefined' ? null : options.zoom;
+        }
+
+        self.data.bound = false;
+        self.data.url = url || self.data.url;
+        self.data.boundZoom = zoom;
+
+        return loadImage(url, hasExif).then(function (img) {
+            _replaceImage.call(self, img);
+            if (!points.length) {
+                var natDim = naturalImageDimensions(img);
+                var rect = self.elements.viewport.getBoundingClientRect();
+                var aspectRatio = rect.width / rect.height;
+                var imgAspectRatio = natDim.width / natDim.height;
+                var width, height;
+
+                if (imgAspectRatio > aspectRatio) {
+                    height = natDim.height;
+                    width = height * aspectRatio;
+                }
+                else {
+                    width = natDim.width;
+                    height = natDim.height / aspectRatio;
+                }
+
+                var x0 = (natDim.width - width) / 2;
+                var y0 = (natDim.height - height) / 2;
+                var x1 = x0 + width;
+                var y1 = y0 + height;
+                self.data.points = [x0, y0, x1, y1];
+            }
+            else if (self.options.relative) {
+                points = [
+                    points[0] * img.naturalWidth / 100,
+                    points[1] * img.naturalHeight / 100,
+                    points[2] * img.naturalWidth / 100,
+                    points[3] * img.naturalHeight / 100
+                ];
+            }
+
+            self.data.points = points.map(function (p) {
+                return parseFloat(p);
+            });
+            if (self.options.useCanvas) {
+                _transferImageToCanvas.call(self, options.orientation);
+            }
+            _updatePropertiesFromImage.call(self);
+            _triggerUpdate.call(self);
+            cb && cb();
+        });
+    }
+
+    function fix(v, decimalPoints) {
+        return parseFloat(v).toFixed(decimalPoints || 0);
+    }
+
+    function _get() {
+        var self = this,
+            imgData = self.elements.preview.getBoundingClientRect(),
+            vpData = self.elements.viewport.getBoundingClientRect(),
+            x1 = vpData.left - imgData.left,
+            y1 = vpData.top - imgData.top,
+            widthDiff = (vpData.width - self.elements.viewport.offsetWidth) / 2, //border
+            heightDiff = (vpData.height - self.elements.viewport.offsetHeight) / 2,
+            x2 = x1 + self.elements.viewport.offsetWidth + widthDiff,
+            y2 = y1 + self.elements.viewport.offsetHeight + heightDiff,
+            scale = self._currentZoom;
+
+        if (scale === Infinity || isNaN(scale)) {
+            scale = 1;
+        }
+
+        var max = self.options.enforceBoundary ? 0 : Number.NEGATIVE_INFINITY;
+        x1 = Math.max(max, x1 / scale);
+        y1 = Math.max(max, y1 / scale);
+        x2 = Math.max(max, x2 / scale);
+        y2 = Math.max(max, y2 / scale);
+
+        return {
+            points: [fix(x1), fix(y1), fix(x2), fix(y2)],
+            zoom: scale,
+            orientation: self.data.orientation
+        };
+    }
+
+    var RESULT_DEFAULTS = {
+            type: 'canvas',
+            format: 'png',
             quality: 1
         },
-        S = ["jpeg", "webp", "png"];
+        RESULT_FORMATS = ['jpeg', 'webp', 'png'];
 
-    function P(e) {
-        var t = this,
-            i = H.call(t),
-            n = h(u(N), u(e)),
-            o = "string" == typeof e ? e : n.type || "base64",
-            r = n.size || "viewport",
-            a = n.format,
-            s = n.quality,
-            l = n.backgroundColor,
-            c = "boolean" == typeof n.circle ? n.circle : "circle" === t.options.viewport.type,
-            m = t.elements.viewport.getBoundingClientRect(),
-            f = m.width / m.height;
-        return "viewport" === r ? (i.outputWidth = m.width, i.outputHeight = m.height) : "object" == typeof r && (r.width && r.height ? (i.outputWidth = r.width, i.outputHeight = r.height) : r.width ? (i.outputWidth = r.width, i.outputHeight = r.width / f) : r.height && (i.outputWidth = r.height * f, i.outputHeight = r.height)), S.indexOf(a) > -1 && (i.format = "image/" + a, i.quality = s), i.circle = c, i.url = t.data.url, i.backgroundColor = l, new Promise((function (e, n) {
-            switch (o.toLowerCase()) {
-                case "rawcanvas":
-                    e(A.call(t, i));
+    function _result(options) {
+        var self = this,
+            data = _get.call(self),
+            opts = deepExtend(clone(RESULT_DEFAULTS), clone(options)),
+            resultType = (typeof (options) === 'string' ? options : (opts.type || 'base64')),
+            size = opts.size || 'viewport',
+            format = opts.format,
+            quality = opts.quality,
+            backgroundColor = opts.backgroundColor,
+            circle = typeof opts.circle === 'boolean' ? opts.circle : (self.options.viewport.type === 'circle'),
+            vpRect = self.elements.viewport.getBoundingClientRect(),
+            ratio = vpRect.width / vpRect.height,
+            prom;
+
+        if (size === 'viewport') {
+            data.outputWidth = vpRect.width;
+            data.outputHeight = vpRect.height;
+        } else if (typeof size === 'object') {
+            if (size.width && size.height) {
+                data.outputWidth = size.width;
+                data.outputHeight = size.height;
+            } else if (size.width) {
+                data.outputWidth = size.width;
+                data.outputHeight = size.width / ratio;
+            } else if (size.height) {
+                data.outputWidth = size.height * ratio;
+                data.outputHeight = size.height;
+            }
+        }
+
+        if (RESULT_FORMATS.indexOf(format) > -1) {
+            data.format = 'image/' + format;
+            data.quality = quality;
+        }
+
+        data.circle = circle;
+        data.url = self.data.url;
+        data.backgroundColor = backgroundColor;
+
+        prom = new Promise(function (resolve) {
+            switch(resultType.toLowerCase())
+            {
+                case 'rawcanvas':
+                    resolve(_getCanvas.call(self, data));
                     break;
-                case "canvas":
-                case "base64":
-                    e(function (e) {
-                        return A.call(this, e).toDataURL(e.format, e.quality)
-                    }.call(t, i));
+                case 'canvas':
+                case 'base64':
+                    resolve(_getBase64Result.call(self, data));
                     break;
-                case "blob":
-                    (function (e) {
-                        var t = this;
-                        return new Promise((function (i, n) {
-                            A.call(t, e).toBlob((function (e) {
-                                i(e)
-                            }), e.format, e.quality)
-                        }))
-                    }).call(t, i).then(e);
+                case 'blob':
+                    _getBlobResult.call(self, data).then(resolve);
                     break;
                 default:
-                    e(function (e) {
-                        var t = e.points,
-                            i = document.createElement("div"),
-                            n = document.createElement("img"),
-                            o = t[2] - t[0],
-                            r = t[3] - t[1];
-                        return d(i, "croppie-result"), i.appendChild(n), p(n, {
-                            left: -1 * t[0] + "px",
-                            top: -1 * t[1] + "px"
-                        }), n.src = e.url, p(i, {
-                            width: o + "px",
-                            height: r + "px"
-                        }), i
-                    }.call(t, i))
+                    resolve(_getHtmlResult.call(self, data));
+                    break;
             }
-        }))
+        });
+        return prom;
     }
 
-    function D(e) {
-        if (!this.options.useCanvas || !this.options.enableOrientation) throw "Croppie: Cannot rotate without enableOrientation && EXIF.js included";
-        var t, i, n, o, r, l = this.elements.canvas;
-        this.data.orientation = (t = this.data.orientation, i = e, o = (n = a.indexOf(t) > -1 ? a : s).indexOf(t), r = i / 90 % n.length, n[(n.length + o + r % n.length) % n.length]), x(l, this.elements.img, this.data.orientation), k.call(this), _.call(this), copy = null
+    function _refresh() {
+        _updatePropertiesFromImage.call(this);
     }
+
+    function _rotate(deg) {
+        if (!this.options.useCanvas || !this.options.enableOrientation) {
+            throw 'Croppie: Cannot rotate without enableOrientation && EXIF.js included';
+        }
+
+        var self = this,
+            canvas = self.elements.canvas;
+
+        self.data.orientation = getExifOffset(self.data.orientation, deg);
+        drawCanvas(canvas, self.elements.img, self.data.orientation);
+        _updateCenterPoint.call(self, true);
+        _updateZoomLimits.call(self);
+    }
+
+    function _destroy() {
+        var self = this;
+        self.element.removeChild(self.elements.boundary);
+        removeClass(self.element, 'croppie-container');
+        if (self.options.enableZoom) {
+            self.element.removeChild(self.elements.zoomerWrap);
+        }
+        delete self.elements;
+    }
+
     if (window.jQuery) {
-        var T = window.jQuery;
-        T.fn.croppie = function (e) {
-            if ("string" == typeof e) {
-                var t = Array.prototype.slice.call(arguments, 1),
-                    i = T(this).data("croppie");
-                return "get" === e ? i.get() : "result" === e ? i.result.apply(i, t) : "bind" === e ? i.bind.apply(i, t) : this.each((function () {
-                    var i = T(this).data("croppie");
-                    if (i) {
-                        var n = i[e];
-                        if (!T.isFunction(n)) throw "Croppie " + e + " method not found";
-                        n.apply(i, t), "destroy" === e && T(this).removeData("croppie")
+        var $ = window.jQuery;
+        $.fn.croppie = function (opts) {
+            var ot = typeof opts;
+
+            if (ot === 'string') {
+                var args = Array.prototype.slice.call(arguments, 1);
+                var singleInst = $(this).data('croppie');
+
+                if (opts === 'get') {
+                    return singleInst.get();
+                }
+                else if (opts === 'result') {
+                    return singleInst.result.apply(singleInst, args);
+                }
+                else if (opts === 'bind') {
+                    return singleInst.bind.apply(singleInst, args);
+                }
+
+                return this.each(function () {
+                    var i = $(this).data('croppie');
+                    if (!i) return;
+
+                    var method = i[opts];
+                    if ($.isFunction(method)) {
+                        method.apply(i, args);
+                        if (opts === 'destroy') {
+                            $(this).removeData('croppie');
+                        }
                     }
-                }))
+                    else {
+                        throw 'Croppie ' + opts + ' method not found';
+                    }
+                });
             }
-            return this.each((function () {
-                var t = new q(this, e);
-                t.$ = T, T(this).data("croppie", t)
-            }))
-        }
+            else {
+                return this.each(function () {
+                    var i = new Croppie(this, opts);
+                    i.$ = $;
+                    $(this).data('croppie', i);
+                });
+            }
+        };
     }
 
-    function q(e, t) {
-        if (e.className.indexOf("croppie-container") > -1) throw new Error("Croppie: Can't initialize croppie more than once");
-        if (this.element = e, this.options = h(u(q.defaults), t), "img" === this.element.tagName.toLowerCase()) {
-            var i = this.element;
-            d(i, "cr-original-image"), m(i, {
-                "aria-hidden": "true",
-                alt: ""
-            });
-            var n = document.createElement("div");
-            this.element.parentNode.appendChild(n), n.appendChild(i), this.element = n, this.options.url = this.options.url || i.src
+    function Croppie(element, opts) {
+        if (element.className.indexOf('croppie-container') > -1) {
+            throw new Error("Croppie: Can't initialize croppie more than once");
         }
-        if (C.call(this), this.options.url) {
-            var o = {
+        this.element = element;
+        this.options = deepExtend(clone(Croppie.defaults), opts);
+
+        if (this.element.tagName.toLowerCase() === 'img') {
+            var origImage = this.element;
+            addClass(origImage, 'cr-original-image');
+            setAttributes(origImage, {'aria-hidden' : 'true', 'alt' : '' });
+            var replacementDiv = document.createElement('div');
+            this.element.parentNode.appendChild(replacementDiv);
+            replacementDiv.appendChild(origImage);
+            this.element = replacementDiv;
+            this.options.url = this.options.url || origImage.src;
+        }
+
+        _create.call(this);
+        if (this.options.url) {
+            var bindOpts = {
                 url: this.options.url,
                 points: this.options.points
             };
-            delete this.options.url, delete this.options.points, O.call(this, o)
+            delete this.options['url'];
+            delete this.options['points'];
+            _bind.call(this, bindOpts);
         }
     }
-    q.defaults = {
+
+    Croppie.defaults = {
         viewport: {
             width: 100,
             height: 100,
-            type: "square"
+            type: 'square'
         },
-        boundary: {},
+        boundary: { },
         orientationControls: {
-            enabled: !0,
-            leftClass: "",
-            rightClass: ""
+            enabled: true,
+            leftClass: '',
+            rightClass: ''
         },
         resizeControls: {
-            width: !0,
-            height: !0
+            width: true,
+            height: true
         },
-        customClass: "",
-        showZoomer: !0,
-        enableZoom: !0,
-        enableResize: !1,
-        mouseWheelZoom: !0,
-        enableExif: !1,
-        enforceBoundary: !0,
-        enableOrientation: !1,
-        enableKeyMovement: !0,
-        update: function () {}
-    }, q.globals = {
-        translate: "translate3d"
-    }, h(q.prototype, {
-        bind: function (e, t) {
-            return O.call(this, e, t)
+        customClass: '',
+        showZoomer: true,
+        enableZoom: true,
+        enableResize: false,
+        mouseWheelZoom: true,
+        enableExif: false,
+        enforceBoundary: true,
+        enableOrientation: false,
+        enableKeyMovement: true,
+        update: function () { }
+    };
+
+    Croppie.globals = {
+        translate: 'translate3d'
+    };
+
+    deepExtend(Croppie.prototype, {
+        bind: function (options, cb) {
+            return _bind.call(this, options, cb);
         },
         get: function () {
-            var e = H.call(this),
-                t = e.points;
-            return this.options.relative && (t[0] /= this.elements.img.naturalWidth / 100, t[1] /= this.elements.img.naturalHeight / 100, t[2] /= this.elements.img.naturalWidth / 100, t[3] /= this.elements.img.naturalHeight / 100), e
+            var data = _get.call(this);
+            var points = data.points;
+            if (this.options.relative) {
+                points[0] /= this.elements.img.naturalWidth / 100;
+                points[1] /= this.elements.img.naturalHeight / 100;
+                points[2] /= this.elements.img.naturalWidth / 100;
+                points[3] /= this.elements.img.naturalHeight / 100;
+            }
+            return data;
         },
-        result: function (e) {
-            return P.call(this, e)
+        result: function (type) {
+            return _result.call(this, type);
         },
         refresh: function () {
-            return function () {
-                W.call(this)
-            }.call(this)
+            return _refresh.call(this);
         },
-        setZoom: function (e) {
-            L.call(this, e), c(this.elements.zoomer)
+        setZoom: function (v) {
+            _setZoomerVal.call(this, v);
+            dispatchChange(this.elements.zoomer);
         },
-        rotate: function (e) {
-            D.call(this, e)
+        rotate: function (deg) {
+            _rotate.call(this, deg);
         },
         destroy: function () {
-            return function () {
-                var e, t;
-                this.element.removeChild(this.elements.boundary), t = "croppie-container", (e = this.element).classList ? e.classList.remove(t) : e.className = e.className.replace(t, ""), this.options.enableZoom && this.element.removeChild(this.elements.zoomerWrap), delete this.elements
-            }.call(this)
+            return _destroy.call(this);
         }
-    }), e.Croppie = window.Croppie = q
+    });
+    return Croppie;
 }));
