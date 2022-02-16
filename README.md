@@ -7,7 +7,7 @@ A simple and powerful New Tab Page with goal of speed and customization.
 Bring your favorites in the homepage with a customizable Kanban style
 
 ## Preview
-<img src="src/preview1.png" alt="b2ntp"
+<img src="src/assets/png/preview1.png" alt="b2ntp"
 	title="b2ntp"  />
 ## Features
 - Powerful search bar that look for your bookmarks or directly search on the web with shortcuts !
