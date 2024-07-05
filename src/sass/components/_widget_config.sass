@@ -1,0 +1,129 @@
+
+/* --------------- Widget Config -------------- */
+
+.wdg_ntp
+    background: #00000050
+    padding: 0.5rem
+    border-radius: 10px
+
+#wdg_0
+    margin-top: var(--tms0)
+    background: var(--c2)
+
+#wdg_1
+    margin-top: var(--tms1)
+    background: var(--c6)
+
+#wdg_2
+    margin-top: var(--tms2)
+    background: var(--c16)
+
+/* -------------- Weather Widget -------------- */
+#wt_status:checked~.grid
+    opacity: .3
+
+.wth
+    border-radius: var(--radius)
+    display: var(--wt)
+    margin: auto
+    margin-top: 10px
+    max-width: 600px
+    border-radius: 8px
+    overflow: hidden
+    width: 100%
+    height: 120px
+    position: relative
+    background: var(--c0)
+
+#wth_s
+    position: relative
+    text-align: center
+    color: #fff
+    width: 100%
+    line-height: 32px !important
+    background: #00000094
+    border-radius: 8px
+    opacity: 0
+    transition: all 1.5s ease-in
+
+#wth_top
+    position: relative
+    margin: auto
+    color: var(--c1)
+    width: 100%
+    max-width: 400px
+    padding-top: 10px
+    height: 80px
+    opacity: 0
+    transition: all 1.5s ease-in
+
+#wth_i,
+#wth_t,
+#wth_d
+    float: left
+    width: 33%
+    height: 50px
+
+#wth_i svg
+    height: 50px
+    width: 50px
+
+#wth_d
+    text-align: right
+
+#wth_t
+    text-align: center
+    font-size: 40px
+    line-height: 40px !important
+
+#wth_l
+    position: absolute
+    width: 100%
+    text-align: center
+    display: block
+    height: 25px
+    top: 50%
+    font-weight: 600
+    margin-top: -12.5px
+
+#wth_btm
+    font-weight: 600
+    opacity: 0
+    width: 100%
+    margin-top: 10px
+    text-align: center
+    bottom: 0
+    border-radius: 8px
+    color: var(--c3)
+    transition: all 1.5s ease-in
+
+#wth_c
+    background: var(--c2)
+    padding: .5rem
+    line-height: 10px
+
+#wth_h svg
+    width: 20px
+    height: 20px
+    display: inline-block
+    vertical-align: middle
+
+@media (min-width : 80rem)
+    .wth
+        position: absolute
+        top: 1rem
+        margin-left: 50.5rem
+        max-width: 12rem
+        padding: .4rem
+
+    .wth,
+    #wth_top
+        height: auto
+
+    #wth_i,
+    #wth_t,
+    #wth_d
+        text-align: center
+        float: none
+        width: 100%
+        height: auto

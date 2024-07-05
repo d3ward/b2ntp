@@ -21,6 +21,7 @@ input[type="file"]::file-selector-button,
 	min-width: 100px
 	cursor: pointer
 	padding: .4rem .7rem
+	margin: .4rem
 	outline-color: var(--primary)
 	box-shadow: 0 0 0 var(--btn-hs) var(--btn-f)
 	transition: all 145ms ease
@@ -51,10 +52,6 @@ input[type="reset"],
 	&:focus-visible
 		outline: .1rem solid var(--btn-brd)
 		outline-offset: .1rem
-	&:not(active):hover
-		--btn-bg: var(--btn-bg-h)
-		--btn-brd: var(--btn-bg-h)
-		
 	&.mw-auto
 		min-width: unset
 	&[disabled]
@@ -67,11 +64,16 @@ input[type="reset"],
 		--btn-bg: transparent
 		color: var(--btn-brd)
 		border: 2px solid var(--focus)
-	&.outline:hover
+	&.outline:hover,
+	&.outline.active
 		color: var(--btn-txt)
 	&.fill:hover
 		background: var(--btn-bg)
 		color: var(--btn-txt)!important
+	&:not(active):hover,
+	&.active
+		--btn-bg: var(--btn-bg-h)
+		--btn-brd: var(--btn-bg-h)
 	&>svg
 		display: block
 		height: 1.5rem
@@ -85,14 +87,18 @@ input[type="reset"],
 	>*
 		margin: 0
 		border-radius: 0
+		border-right-width: 1px!important
+		border-left-width: 1px!important
 		&:first-child
 			border-top-left-radius: var(--btn-radius)
 			border-bottom-left-radius: var(--btn-radius)
-			border-right: 1px
+			border-right-width: 1px!important
+			border-left-width: 2px!important
 		&:last-child
 			border-top-right-radius: var(--btn-radius)
 			border-bottom-right-radius: var(--btn-radius)
-			border-left: 1px
+			border-left-width: 1px!important
+			border-right-width: 2px!important
 .btn-transparent,._btn_t
 	--btn-f: var(--primary-l)
 	--btn-bg-h: transparent

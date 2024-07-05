@@ -1,0 +1,102 @@
+
+aside
+	position: relative
+	width: 4rem
+	background: var(--txt)
+	padding: 3rem 0 .5rem .5rem
+	border-radius:  var(--radius-b)
+	overflow: hidden
+	transition: .5s
+	&.active
+		width: 12.5rem
+	ul
+		positon: absolute
+		top: 0
+		left: 0
+		width: 100%
+		list-style: none
+		padding: 0
+		margin: 0
+		li
+			position: relative
+			width: 100%
+			
+			a:hover,a.active
+				background: var(--bg)
+				color: var(--txt)
+				&:before
+					content: ''
+					position: absolute
+					top: -20px
+					right: 0
+					width: 20px
+					height: 20px
+					background: transparent
+					border-bottom-right-radius: var(--radius-b)
+					box-shadow: 7.5px 7.5px 0 7.5px var(--bg)
+				&:after
+					content: ''
+					position: absolute
+					bottom: -20px
+					right: 0
+					width: 20px
+					height: 20px
+					background: transparent
+					border-top-right-radius: var(--radius-b)
+					box-shadow: 7.5px -7.5px 0 7.5px var(--bg)
+
+		a
+			display: flex
+			width: 100%
+			text-decoration: none
+			gap: 1rem
+			padding: .4rem
+			border-top-left-radius: var(--radius-b)
+			border-bottom-left-radius: var(--radius-b)
+			color: var(--txt-r)
+			.a-icon
+				min-width: 2rem
+				height: 2rem
+				display: flex
+				align-items: center
+				justify-content: center
+			.a-title
+				white-space: nowrap
+				display: flex
+				align-items: center
+	.a-toggle
+		width: 2rem
+		height: 2rem
+		position: absolute
+		background: var(--txt)
+		bottom: .4rem
+		right: .8rem
+		border-radius: 50%
+		cursor: pointer
+		display: flex
+		align-items: center
+		justify-content: center
+		&:before
+			content: ''
+			position: absolute
+			height: 3px
+			width: 1.5rem
+			border-radius: 3px
+			background: var(--bg)
+			transform: translateY(-5px)
+			transition: 1s
+		&:after
+			content: ''
+			position: absolute
+			height: 3px
+			width: 1.5rem
+			border-radius: 3px
+			background: var(--bg)
+			transform: translateY(5px)
+			transition: 1s
+
+	&.active .a-toggle::before
+		transform: translateY(0px) rotate(-405deg)
+
+	&.active .a-toggle::after
+		transform: translateY(0px) rotate(225deg)

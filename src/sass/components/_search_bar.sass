@@ -1,0 +1,44 @@
+
+/* ---------- Toolbar and Search Bar ---------- */
+.tool_search
+    display: flex
+    flex-direction: column
+    align-items: center
+    gap: .5rem
+.toolbar,
+#sb_input
+    border: none
+    border-radius: var(--radius)
+    width: calc(100% - 10px)
+    &:hover
+        border-color: var(--c9)
+
+.toolbar
+    background-color: var(--c4)
+    color: var(--c5)
+    margin: auto
+    padding: .4rem
+    text-align: right
+    font-size: 18px
+    height: 2.5rem
+    margin-top: 5rem
+    display: flex
+    align-items: center
+    justify-content: space-between
+
+span#clock
+    margin-right: 15px
+
+div.toolbar span 
+    color: var(--c6)
+#action,#sb_input,.toolbar
+    width: 100%
+    max-width: 40rem
+#sb_input
+    background-color: var(--c7)
+    color: var(--c8)
+    padding: .5rem
+    font-size: 1.8rem
+    height: 3rem
+    &:hover
+        border-color: var(--c9) !important
