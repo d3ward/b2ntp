@@ -1,0 +1,29 @@
+<div id="main_left">
+    <div id="qnote" class="quick-note">
+        <div class="header">
+          <p> A simple note taking app </p>
+        </div>
+        <textarea rows="15" cols="50" id="myInput" placeholder="Enter your note here ..."></textarea>
+        <p> Select a background color </p>
+        <select id="color-select" onchange="addColorToTextArea()">
+          <option value="">--Please choose a background color for your note--</option>
+          <option value="lightBlue">Light Blue</option>
+          <option value="lightGreen">Light Green</option>
+          <option value="grey">Grey</option>
+          <option value="orange">Orange</option>
+          <option value="purple">Purple</option>
+    
+        </select>
+        <button class="addNote" onclick="addNewNote()" id="submitNote">
+          <p>Submit Note</p>
+        </button>
+    
+        <div class="singleNote lightGreen">
+          <p class='sampleText'>Sample note 1 here</p>
+        </div>
+        <div class="singleNote grey">
+          <p class='sampleText'>Sample note 2 here</p>
+        </div>
+        <div id="oldNotes"></div>
+    </div>
+  </div>

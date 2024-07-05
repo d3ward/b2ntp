@@ -1,0 +1,80 @@
+
+/* ----------------- Bookmarks ---------------- */
+@keyframes expand
+	from
+		transform: scale(0.1)
+		opacity: 0
+
+#bookmarks
+	display: -webkit-box
+	display: flex
+	flex-wrap: var(--grid-wrap)
+	overflow-x: auto
+	max-width: 900px
+	margin: auto
+	margin-top: 30px
+	padding-bottom: 20px
+	font-size: 16px
+	border-radius: var(--radius)
+	animation: expand 1.3s
+	a
+		border: none !important
+	.section
+		background-color: var(--c10)
+		-webkit-box-flex: 0
+		position: relative
+		flex: 0 0 auto
+		margin-top: 10px
+		margin-left: 10px
+		width: calc(var(--grid-width) - 10px)
+		border-radius: var(--radius)
+		overflow: hidden
+		color: var(--c11)
+		.title
+			margin: 0
+			padding: 8px
+		div
+			overflow-y: auto
+			overflow-x: hidden
+			max-height: 50vh
+			margin-bottom: 10px
+			padding: 15px
+			background-color: transparent
+			a
+				text-decoration: none
+				padding: 10px
+				border-radius: var(--radius)
+				background-color: var(--c12)
+				color: var(--c13)
+				overflow-wrap: break-word
+				display: block
+				&:hover,&.selected
+					background-color: var(--c14)
+					color: var(--c15)
+					transition: all .1s ease-in
+	
+		/* ---------------- Scrollbars ---------------- */
+
+	::-webkit-scrollbar
+		width: 12px
+		background: var(--c16)
+
+	::-webkit-scrollbar-track
+		-webkit-border-radius: 10px
+		background: var(--c16)
+		border-radius: var(--radius)
+
+	::-webkit-scrollbar-thumb
+		-webkit-border-radius: 10px
+		border-radius: var(--radius)
+		background: var(--c17)
+
+@media screen and (max-width: 480px)
+	#bookmarks>.section 
+		margin: 10px
+		width: calc(100% - 20px)
+
+div#bookmarks>div.section>div>a+a 
+	margin-top: 5px
+
+

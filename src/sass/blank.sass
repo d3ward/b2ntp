@@ -1,0 +1,53 @@
+@charset "utf-8"
+@import "./settings/_variables"
+
+@import "./base/ntp"
+@import "./base/settings"
+
+@import "./layout/grid"
+//@import "./layout/footer"
+
+@import "./elements/button_new"
+@import "./elements/picker"
+@import "./elements/code"
+//@import "./components/card"
+@import "./elements/form"
+@import "./elements/link_ntp"
+@import "./components/dialog_ntp"
+@import "./components/bookmarks"
+@import "./components/qnote"
+@import "./components/toast"
+@import "./components/search_bar"
+@import "./components/widget_config"
+@import "./components/gotop_link"
+@import "./layout/aside_ntp"
+
+
+@import "./extra/_pages"
+
+
+@import "./utilities/alignment"
+@import "./utilities/background"
+@import "./utilities/position"
+@import "./utilities/border"
+@import "./utilities/display"
+@import "./utilities/margin"
+@import "./utilities/general"
+@import "./utilities/padding"
+@import "./utilities/spacer"
+@import "./utilities/text"
+
+
+
+.blur_bg,
+.dark_bg
+    height: 100%
+    width: 100%
+    position: fixed
+    z-index: -100
+
+.blur_bg
+    backdrop-filter: blur(var(--bg-blur))
+
+.dark_bg
+    backdrop-filter: brightness(var(--bg-dark))

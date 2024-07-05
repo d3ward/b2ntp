@@ -15,5 +15,5 @@ document.addEventListener("DOMContentLoaded", ()=>{
   new aos();
   new modal("#mdl1");
   new pagesRoute();
-  new carousel();
+
 });
