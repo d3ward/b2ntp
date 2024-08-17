@@ -12,14 +12,16 @@
 </head>
 
 <body>
-  <%- include('partials/support_me.ejs') %>
+  
   <%- include('partials/settings.ejs') %>
-  <!-- ------------- Toast Message ------------- -->
-  <div class="notify-container _top _center" id="nt1">
+  <%- include('partials/changelog.ejs', { changelog: changelogContent }) %>
+  <%- include('partials/support_me.ejs') %>
+  <div id="background_overlay">
+    <div id="background-light"></div>
+    <div id="background-dark"></div>
   </div>
- 
-  <main>
-    <!-- ------------- Context Menu -------------- -->
+  
+ <!-- ------------- Context Menu -------------- -->
     <div class="context" hidden>
       <div class="context_item">
         <div class="inner_item">Copy Link</div>
@@ -37,36 +39,43 @@
       </div>
     </div>
     <!-- ---------- Color Picker Modal ----------- -->
-	<div class="dialog" id="dlg_clvn" aria-labelledby="dlg_clvn-title" aria-hidden="true">
-		<div class="dialog-overlay" data-a11y-dialog-hide></div>
-		<div class="dialog-content">
-			<header>
-				<h3 id="dlg_clvn-title"> Color Picker </h3>
-				<button data-a11y-dialog-hide>
-					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor"
-						stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
-						<path stroke="none" d="M0 0h24v24H0z" />
-						<path d="M18 6 6 18M6 6l12 12" />
-					</svg>
-				</button>
-			</header>
-			<section>
-				<div id="cp_v"></div>
-			</section>
-			<footer class="_f-center">
-				<button data-a11y-dialog-hide>Cancel</button>
-				<button id="cp_ok">OK</button>
-			</footer>
-		</div>
-	</div>
+    <div class="dialog" id="dlg_clvn" aria-labelledby="dlg_clvn-title" aria-hidden="true">
+      <div class="dialog-overlay" data-a11y-dialog-hide></div>
+      <div class="dialog-content">
+        <header>
+          <h3 id="dlg_clvn-title"> Color Picker </h3>
+          <button data-a11y-dialog-hide>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor"
+              stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+              <path stroke="none" d="M0 0h24v24H0z" />
+              <path d="M18 6 6 18M6 6l12 12" />
+            </svg>
+          </button>
+        </header>
+        <section>
+          <div id="cp_v"></div>
+        </section>
+        <footer class="_f-center">
+          <button data-a11y-dialog-hide>Cancel</button>
+          <button id="cp_ok">OK</button>
+        </footer>
+      </div>
+    </div>
 
-    <!-- --------------- Main NTP ---------------- -->
-   
-    <div id="main">
+
+ <!-- ------------- Toast Message ------------- -->
+ <div class="toast" id="nt1" toast-pos="top">
+</div>
+  <!-- --------------- Main NTP ---------------- -->
+  <main>
       <!-- --------- Toolbar & Search Bar ---------- -->
       <div class="tool_search" class="_aos-top">
+        
         <div class="toolbar">
-          <span id="clock">18:06:20</span>
+          <div class="clock_date">
+            <span id="clock">18:06:20</span>
+            <span id="date">01/01/2024</span>
+          </div>
           <svg  xmlns="http://www.w3.org/2000/svg"  data-a11y-dialog-show="dlg_settings" width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-settings-2"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M19.875 6.27a2.225 2.225 0 0 1 1.125 1.948v7.284c0 .809 -.443 1.555 -1.158 1.948l-6.75 4.27a2.269 2.269 0 0 1 -2.184 0l-6.75 -4.27a2.225 2.225 0 0 1 -1.158 -1.948v-7.285c0 -.809 .443 -1.554 1.158 -1.947l6.75 -3.98a2.33 2.33 0 0 1 2.25 0l6.75 3.98h-.033z" /><path d="M12 12m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" /></svg>
         </div>
         <form method="GET" id="action" action="https://duckduckgo.com/" class="_ta-center">
@@ -74,26 +83,23 @@
         </form>
       </div>
         <!-- ------------ Weather Widget ------------- -->
-      <div id="wth" class="wth _aos-right">
-        <div id="wth_s">Missing OpenWeatherMap Key</div>
-        <div id="wth_top">
-          <div id="wth_i"></div>
-          <div id="wth_t"></div>
-          <div id="wth_d">
-            <div id="wth_mm"></div>
-            <div id="wth_w"></div>
-            <div id="wth_h"></div>
-          </div><br style="clear: left;" />
-          <div id="wth_d1"></div>
+      <div class="wth _aos-right" id="wth_ntp">
+        <div class="wth_s">Missing OpenWeatherMap Key</div>
+        <div class="wth_main">
+            <div class="wth_i"></div>
+            <div class="wth_t"></div>
+            <div class="wth_d">
+                <div class="wth_mm"></div>
+                <div class="wth_w"></div>
+                <div class="wth_h"></div>
+            </div>
+            <div class="wth_d1"></div>
+            <div class="wth_c"></div>
         </div>
-        <div id="wth_btm">
-          <div id="wth_c"></div>
-        </div>
-        <div id="wth_l">Loading...</div>
+        <div class="wth_l">Loading...</div>
       </div>
       <div id="bookmarks">
       </div>
-    </div>
   </main>
   <%- include('partials/gotop.ejs') %>
 </body>
