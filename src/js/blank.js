@@ -623,33 +623,46 @@ function f_save_bdy() {
   }
 }
 
-/* ---- Function to save search bar config ---- */
 function f_save_sb() {
   var tlen = f_trim(document.getElementById("sb_txt").value) + "\n";
-  var error = false;
-  var lines = tlen.split("\n");
-  lines.splice(-1, 1);
-  lines = lines.filter(function (e) {
-    return e.replace(/(\r\n|\n|\r)/gm, "");
-  });
+  var lines = tlen.split("\n").filter(line => line.trim() !== "");
   var sKc = {};
+  var errors = [];
+
   for (var i = 0; i < lines.length; i++) {
-    var zlen = lines[i].split("->");
-    if (zlen.length != 2) {
-      i = lines.length;
-      error = true;
+    var line = lines[i].trim();
+    if (line.startsWith("placeholder")) {
+      sKc["placeholder"] = line.substring(line.indexOf("->") + 2).trim();
     } else {
-      sKc[f_trim(zlen[0])] = f_trim(zlen[1]);
+      var parts = line.split("->");
+      if (parts.length !== 2) {
+        errors.push(`Invalid syntax on line ${i + 1}: ${line}`);
+      } else {
+        sKc[f_trim(parts[0])] = f_trim(parts[1]);
+      }
     }
   }
-  error = error || !sKc["default"] || !sKc["bang"] || !sKc["placeholder"];
-  if (error) {
-    alert(
-      "Looks like you removed important keywords like \n-placeholder\n-key\n-default\n-bang\n Make sure to follow the syntax too :'k' -> 'value'"
-    );
+
+  // Check for required fields
+  if (!sKc.hasOwnProperty("default")) {
+    errors.push("Missing required field: default");
+  }
+  if (!sKc.hasOwnProperty("bang")) {
+    errors.push("Missing required field: bang");
+  }
+
+  // Handle placeholder
+  if (!sKc.hasOwnProperty("placeholder")) {
+    sKc["placeholder"] = ""; // Set to empty string if not provided
+  }
+
+  if (errors.length > 0) {
+    alert("Errors in search bar configuration:\n" + errors.join("\n") + "\n\nMake sure to follow the syntax:\nplaceholder -> [value]\nkey -> value");
   } else {
     sb_data = sKc;
     ls_set("sb_data", sb_data);
+    sb_input.placeholder = sb_data["placeholder"];
+    console.log("Search bar configuration saved successfully:", sb_data);
   }
 }
 
