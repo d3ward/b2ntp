@@ -1,14 +1,16 @@
 
 aside
-	position: relative
+	position: sticky
+	left: 0
+	top: 0
 	width: 4rem
 	background: var(--txt)
 	padding: 3rem 0 .5rem .5rem
-	border-radius:  var(--radius-b)
+	border-radius: var(--radius-b)
 	overflow: hidden
 	transition: .5s
 	&.active
-		width: 12.5rem
+		width: 13.5rem
 	ul
 		positon: absolute
 		top: 0
@@ -20,7 +22,7 @@ aside
 		li
 			position: relative
 			width: 100%
-			
+
 			a:hover,a.active
 				background: var(--bg)
 				color: var(--txt)

@@ -199,3 +199,40 @@ fieldset
 
 	input[type="radio"]:checked
 		--s: 0.8
+
+.group-radio
+	display: flex
+	justify-content: center
+	gap: 0.5rem
+	width: 100%
+
+	&>div
+		flex-grow: 1
+
+	& svg
+		height: 40px
+
+	& label
+		display: flex !important
+		flex-direction: column
+		margin: 0 !important
+		justify-content: center
+		align-items: center
+		text-align: center
+		border-radius: var(--radius)
+		border: 1px solid #000
+		padding: .5rem
+		opacity: .5
+		transition: all 0.5s ease-in-out
+
+	& input
+		display: none
+
+	& input[type=radio]:active~label
+		opacity: 1
+
+	& input[type=radio]:checked~label
+		background: var(--primary)
+		color: var(--txt-on-p)
+		opacity: 1
+		border: 1px solid var(--primary)

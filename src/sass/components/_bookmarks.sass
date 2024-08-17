@@ -10,11 +10,7 @@
 	display: flex
 	flex-wrap: var(--grid-wrap)
 	overflow-x: auto
-	max-width: 900px
-	margin: auto
-	margin-top: 30px
-	padding-bottom: 20px
-	font-size: 16px
+	width: 100%
 	border-radius: var(--radius)
 	animation: expand 1.3s
 	a
@@ -24,7 +20,7 @@
 		-webkit-box-flex: 0
 		position: relative
 		flex: 0 0 auto
-		margin-top: 10px
+		margin-top: .5rem
 		margin-left: 10px
 		width: calc(var(--grid-width) - 10px)
 		border-radius: var(--radius)
@@ -32,7 +28,7 @@
 		color: var(--c11)
 		.title
 			margin: 0
-			padding: 8px
+			padding: .5rem
 		div
 			overflow-y: auto
 			overflow-x: hidden
@@ -52,7 +48,7 @@
 					background-color: var(--c14)
 					color: var(--c15)
 					transition: all .1s ease-in
-	
+
 		/* ---------------- Scrollbars ---------------- */
 
 	::-webkit-scrollbar
@@ -70,11 +66,9 @@
 		background: var(--c17)
 
 @media screen and (max-width: 480px)
-	#bookmarks>.section 
+	#bookmarks>.section
 		margin: 10px
 		width: calc(100% - 20px)
 
-div#bookmarks>div.section>div>a+a 
+div#bookmarks>div.section>div>a+a
 	margin-top: 5px
-
-
