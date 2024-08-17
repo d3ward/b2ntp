@@ -15,6 +15,9 @@ import {
   getJSON,
   ls_get,
   ls_set,
+  formatTime,
+  jsoncat,
+  dataURItoBlob
 } from "./components/utilities";
 import icons from '../data/weatherIcons.json'
 import "../sass/blank.sass";
@@ -23,15 +26,13 @@ import "../sass/blank.sass";
 const DB_NAME = "b2ntp_DB";
 const STORE_NAME = "images";
 const DB_VERSION = 1;
-
 const DEFAULT_THEME = {
   value: "",
-  autoSwitch: true,
+  autoSwitch: false,
   autoSwitchType: "system",
   darkModeStart: 20,
   darkModeEnd: 6
 };
-
 const SAFE_DATA = [
   "sb_data",
   "tlb_data",
@@ -40,10 +41,8 @@ const SAFE_DATA = [
   "ntp_bdy",
   "ntp_mtc"
 ];
-
 const SAFE_DATA_THEME = ["ntp_theme", "ntp_bdy", "ntp_mtc"];
 const SAFE_DB_THEME = ["bg_custom_d", "bg_custom_l"];
-
 
 function openDB() {
   return new Promise((resolve, reject) => {
@@ -74,14 +73,12 @@ async function saveBackgroundImage(key, imageBlob) {
     throw error; // Re-throw the error to be caught by the caller
   }
 }
-
 async function getBackgroundImage(key) {
   const db = await openDB();
   return new Promise((resolve, reject) => {
     const transaction = db.transaction(STORE_NAME, "readonly");
     const store = transaction.objectStore(STORE_NAME);
     const request = store.get(key);
-
     request.onerror = () => reject(request.error);
     request.onsuccess = () => {
       if (request.result instanceof Blob) {
@@ -156,7 +153,7 @@ function getBookmarks() {
     const time = new Date();
     ls_set("bk_time", time);
     document.getElementById("last_sync").innerText = ls_get("bk_time");
-    matchbookmarks();
+    handleSearch();
     console.log("getBookmarks - > Completed");
   });
 }
@@ -244,13 +241,13 @@ async function applyBackground() {
   bg_d_value = bg_d_value.replace(/^url\(['"]?|['"]?\)$/g, "");
 
   if (bg_l_value === "-" || bg_l_value === "") {
-    bg_l_value = "../assets/b2ntp_bg.svg";
+    bg_l_value = "../assets/svg/b2ntp_bg.svg";
   } else if (bg_l_value.startsWith("bg_custom_")) {
     bg_l_value = await getBackgroundImage(bg_l_value);
   }
 
   if (bg_d_value === "-" || bg_d_value === "") {
-    bg_d_value = "../assets/b2ntp_bg_d.svg";
+    bg_d_value = "../assets/svg/b2ntp_bg_d.svg";
   } else if (bg_d_value.startsWith("bg_custom_")) {
     bg_d_value = await getBackgroundImage(bg_d_value);
   }
@@ -261,13 +258,11 @@ async function applyBackground() {
   imgBackground(bg_l_value, bg_d_value);
 }
 
-// Call this function when the page loads
-applyBackground();
-
 if (!sb_data) {
   sb_data = {
     placeholder: "Search with ddg..",
     default: "d",
+    bang: "!",
     b: "https://bing.com/search?q=",
     g: "https://google.com/search?q=",
     d: "https://duckduckgo.com/?q=",
@@ -276,7 +271,10 @@ if (!sb_data) {
   };
   ls_set("sb_data", sb_data);
 }
-
+if(!sb_data.bang){
+  sb_data.bang = "!"
+  ls_set("sb_data", sb_data);
+}
 if (!bk_data || !bk_time || diff_hours(bk_time) > 60) {
   bk_data = {};
   getBookmarks();
@@ -289,7 +287,6 @@ if (!bk_data || !bk_time || diff_hours(bk_time) > 60) {
     ntoast.success(message);
   }
 }
-
 if (!wth_data) {
   wth_data = {
     status: false,
@@ -302,20 +299,15 @@ if (!tlb_data) {
   tlb_data = {
     dateFormat: "auto",
     timeFormat: "24",
+    seconds: false
   };
 }
-if (!tlb_data) {
-  tlb_data = {
-    dateFormat: "auto",
-    timeFormat: "24",
-  };
-}
-
 if (!ntp_theme || typeof ntp_theme !== 'object' || ntp_theme === null) {
   ntp_theme = DEFAULT_THEME;
 } else {
   ntp_theme = { ...DEFAULT_THEME, ...ntp_theme };
 }
+
 function toggleTheme(theme) {
   var tTheme;
   if (theme) {
@@ -411,16 +403,9 @@ function initializeThemeSettings() {
     ntp_theme.autoSwitchType === "time" ? "block" : "none";
   updateTheme();
 }
-
 function updateTimeRangeDisplay() {
   startTimeDisplay.textContent = tlb_data.timeFormat == 24 ? `${startTimeSlider.value.padStart(2, '0')}:00`: formatTime(startTimeSlider.value);
   endTimeDisplay.textContent = tlb_data.timeFormat == 24 ? `${endTimeSlider.value.padStart(2, '0')}:00`: formatTime(endTimeSlider.value);
-}
-
-function formatTime(hour) {
-  const period = hour >= 12 ? "PM" : "AM";
-  const formattedHour = hour % 12 || 12;
-  return `${formattedHour}:00 ${period}`;
 }
 
 function updateTheme() {
@@ -432,7 +417,6 @@ function updateTheme() {
     }
   }
 }
-
 function checkSystemPreference() {
   if (
     window.matchMedia &&
@@ -443,7 +427,6 @@ function checkSystemPreference() {
    toggleTheme("light");
   }
 }
-
 function checkTimeBased() {
   const currentHour = new Date().getHours();
   if (ntp_theme.darkModeStart < ntp_theme.darkModeEnd) {
@@ -461,6 +444,7 @@ function checkTimeBased() {
   }
 }
 
+applyBackground();
 // Listen for system theme changes
 window.matchMedia("(prefers-color-scheme: dark)").addListener(updateTheme);
 // Check theme every minute for time-based switching
@@ -470,14 +454,20 @@ document.addEventListener("DOMContentLoaded", initializeThemeSettings);
 // General - Time&Data settings
 const tlb_dateF = document.getElementById("dateFormat");
 const tlb_timeF = document.getElementById("timeFormat");
+const tlb_timeS = document.getElementById("timeSeconds");
 tlb_dateF.value = tlb_data.dateFormat;
 tlb_timeF.value = tlb_data.timeFormat;
-tlb_dateF.addEventListener("change", (value) => {
+tlb_timeS.checked = tlb_data.seconds;
+tlb_dateF.addEventListener("change", () => {
   tlb_data.dateFormat = tlb_dateF.value;
   ls_set("tlb_data", tlb_data);
 });
-tlb_timeF.addEventListener("change", (value) => {
+tlb_timeF.addEventListener("change", () => {
   tlb_data.timeFormat = tlb_timeF.value;
+  ls_set("tlb_data", tlb_data);
+});
+tlb_timeS.addEventListener("change", () => {
+  tlb_data.seconds = tlb_timeS.checked;
   ls_set("tlb_data", tlb_data);
 });
 
@@ -516,7 +506,6 @@ function f_save_wth() {
   f_setup_wth();
   ntoast.success("Weather widget configuration done");
 }
-
 function f_get_ll() {
   try {
     navigator.geolocation.getCurrentPosition(showPosition);
@@ -524,7 +513,6 @@ function f_get_ll() {
     ntoast.error(e);
   }
 }
-
 function showPosition(position) {
   document.getElementById("wt_ila").value = position.coords.latitude;
   document.getElementById("wt_iln").value = position.coords.longitude;
@@ -654,10 +642,10 @@ function f_save_sb() {
       sKc[f_trim(zlen[0])] = f_trim(zlen[1]);
     }
   }
-  error = error || !sKc["default"];
+  error = error || !sKc["default"] || !sKc["bang"] || !sKc["placeholder"];
   if (error) {
     alert(
-      "Looks like you removed important keywords like \n-placeholder\n-key\n-default\n Make sure to follow the syntax too :'k' -> 'value'"
+      "Looks like you removed important keywords like \n-placeholder\n-key\n-default\n-bang\n Make sure to follow the syntax too :'k' -> 'value'"
     );
   } else {
     sb_data = sKc;
@@ -670,11 +658,6 @@ function f_save_sb() {
 var pivotmatch = 0;
 var totalbookmarks = 0;
 var prevregexp = "";
-//Concatenate 2 json objects
-function jsoncat(o1, o2) {
-  for (var key in o2) o1[key] = o2[key];
-  return o1;
-}
 
 //Recursive function for folders
 function processFolder(item) {
@@ -687,88 +670,75 @@ function processFolder(item) {
   if (Object.keys(urls).length > 0) bk_data[fldk] = [urls, item.id];
 }
 
-function fuzzyMatch(pattern, str) {
-  pattern = pattern.toLowerCase();
-  str = str.toLowerCase();
-  let patternIdx = 0;
-  let strIdx = 0;
-  let score = 0;
-  let lastMatchingCharIdx = -1;
-
-  while (patternIdx < pattern.length && strIdx < str.length) {
-    if (pattern[patternIdx] === str[strIdx]) {
-      score += 1;
-      if (lastMatchingCharIdx === strIdx - 1) {
-        score += 2; // Bonus for consecutive matches
-      }
-      lastMatchingCharIdx = strIdx;
-      patternIdx++;
-    }
-    strIdx++;
-  }
-
-  // If we matched all characters in the pattern
-  if (patternIdx === pattern.length) {
-    // Calculate how close the matches were to the start of the string
-    const percentageMatched = patternIdx / strIdx;
-    return (score / pattern.length) * percentageMatched;
-  } else {
-    return 0; // Return 0 if not all pattern characters were found
-  }
-}
-
-function matchbookmarks(regex = prevregexp) {
+function handleSearch(query = '') {
   const p = document.getElementById("bookmarks");
   const actionElement = document.getElementById("action");
   const actionInput = actionElement.children[0];
+
+  // Check if the query ends with double space (search on default engine)
+  if (query.endsWith('  ')) {
+    p.innerHTML = ''; // Clear bookmarks
+    query = query.trim();
+    actionElement.action = sb_data[sb_data.default] + encodeURIComponent(query);
+    actionInput.name = "q";
+    return;
+  }
+
+  query = query.trim();
+
+  // Check for custom search engine shortcuts
+  for (const [shortcut, url] of Object.entries(sb_data)) {
+    if (shortcut !== 'placeholder' && shortcut !== 'default' && shortcut !== 'bang' && query.startsWith(sb_data.bang + shortcut + ' ')) {
+      const searchQuery = query.slice(sb_data.bang.length + shortcut.length + 1);
+      p.innerHTML = ''; // Clear bookmarks
+      actionElement.action = url + encodeURIComponent(searchQuery);
+      actionInput.name = "q";
+      return;
+    }
+  }
 
   // Reset bookmarks container
   p.innerHTML = '';
   
   // Reset counters and update regexp
   totalbookmarks = 0;
-  pivotmatch = regex === prevregexp ? pivotmatch : 0;
-  prevregexp = regex;
-
-  // Improved shortcut detection
-  const shortcutMatch = regex.match(/^(\S+)\s{2,}(.*)$/);
-  if (shortcutMatch && sb_data.hasOwnProperty(shortcutMatch[1])) {
-    actionElement.action = sb_data[shortcutMatch[1]];
-    actionInput.name = "q";
-    return; // Exit early as we've handled the shortcut case
-  }
-
-  if (!regex) {
-    // If no search term, don't display any results
-    return;
-  }
+  pivotmatch = query === prevregexp ? pivotmatch : 0;
+  prevregexp = query;
 
   const fragment = document.createDocumentFragment();
   const folderSections = {};
 
-  // Perform fuzzy search
-  const matches = [];
-  Object.entries(bk_data).forEach(([folderName, [urls, folderId]]) => {
-    Object.entries(urls).forEach(([title, [url, id]]) => {
-      const score = fuzzyMatch(regex, title) + fuzzyMatch(regex, folderName) * 0.5;
-      if (score > 0) {
-        matches.push({ folderName, title, url, id, folderId, score });
-      }
+  // If no search term, display all bookmarks
+  if (!query) {
+    Object.entries(bk_data).forEach(([folderName, [urls, folderId]]) => {
+      folderSections[folderName] = createSection(folderName, folderId);
+      Object.entries(urls).forEach(([title, [url, id]], index) => {
+        const link = createBookmarkLink({ folderName, title, url, id, folderId }, index === 0);
+        folderSections[folderName].querySelector('div:not(.title)').appendChild(link);
+        totalbookmarks++;
+      });
     });
-  });
+  } else {
+    // Perform simple substring search
+    const matches = [];
+    Object.entries(bk_data).forEach(([folderName, [urls, folderId]]) => {
+      Object.entries(urls).forEach(([title, [url, id]]) => {
+        if (title.toLowerCase().includes(query.toLowerCase()) || folderName.toLowerCase().includes(query.toLowerCase())) {
+          matches.push({ folderName, title, url, id, folderId });
+        }
+      });
+    });
 
-  // Sort matches by score
-  matches.sort((a, b) => b.score - a.score);
-
-  matches.forEach((item, index) => {
-    if (!folderSections[item.folderName]) {
-      folderSections[item.folderName] = createSection(item.folderName, item.folderId);
-    }
-    
-    const link = createBookmarkLink(item, index === 0);
-    folderSections[item.folderName].querySelector('div:not(.title)').appendChild(link);
-    totalbookmarks++;
-  });
+    matches.forEach((item, index) => {
+      if (!folderSections[item.folderName]) {
+        folderSections[item.folderName] = createSection(item.folderName, item.folderId);
+      }
+      
+      const link = createBookmarkLink(item, index === 0);
+      folderSections[item.folderName].querySelector('div:not(.title)').appendChild(link);
+      totalbookmarks++;
+    });
+  }
 
   Object.values(folderSections).forEach(section => {
     if (section.querySelectorAll('a').length > 0) {
@@ -820,24 +790,75 @@ function createBookmarkLink(item, isFirstResult) {
 
   return link;
 }
+document.getElementById("sb_input").addEventListener("input", (event) => {
+  handleSearch(event.target.value);
+});
+document.getElementById("action").addEventListener("submit", (event) => {
+  const query = document.getElementById("sb_input").value;
+  if (!query.endsWith('  ') && document.querySelector('#bookmarks a.selected')) {
+    event.preventDefault();
+    window.location.href = document.querySelector('#bookmarks a.selected').href;
+  }
+});
 
 document.getElementById("sb_input").onkeydown = function (e) {
+  const bookmarks = document.getElementById("bookmarks");
+  const sections = bookmarks.querySelectorAll('.section');
+  const currentSelected = bookmarks.querySelector('.selected');
+  let newSelected;
+
   switch (e.keyCode) {
-    case 38:
-      pivotmatch = pivotmatch >= 0 ? 0 : pivotmatch + 1;
-      matchbookmarks();
+    case 38: // Up arrow
+      if (currentSelected) {
+        newSelected = currentSelected.previousElementSibling || 
+                      currentSelected.parentElement.lastElementChild;
+        if (!newSelected || newSelected.classList.contains('title')) {
+          const prevSection = currentSelected.closest('.section').previousElementSibling || 
+                              sections[sections.length - 1];
+          newSelected = prevSection.querySelector('a:last-child');
+        }
+      } else {
+        newSelected = bookmarks.querySelector('a:last-child');
+      }
       break;
-    case 40:
-      pivotmatch =
-        pivotmatch <= -totalbookmarks + 1
-          ? -totalbookmarks + 1
-          : pivotmatch - 1;
-      matchbookmarks();
+    case 40: // Down arrow
+      if (currentSelected) {
+        newSelected = currentSelected.nextElementSibling;
+        if (!newSelected || newSelected.classList.contains('title')) {
+          const nextSection = currentSelected.closest('.section').nextElementSibling || 
+                              sections[0];
+          newSelected = nextSection.querySelector('a:first-child');
+        }
+      } else {
+        newSelected = bookmarks.querySelector('a:first-child');
+      }
+      break;
+    case 37: // Left arrow
+      if (currentSelected) {
+        const prevSection = currentSelected.closest('.section').previousElementSibling || 
+                            sections[sections.length - 1];
+        newSelected = prevSection.querySelector('a:first-child');
+      }
+      break;
+    case 39: // Right arrow
+      if (currentSelected) {
+        const nextSection = currentSelected.closest('.section').nextElementSibling || 
+                            sections[0];
+        newSelected = nextSection.querySelector('a:first-child');
+      }
       break;
     default:
-      break;
+      return; // Exit for other keys
   }
-  document.getElementById("action").children[0].focus();
+
+  if (newSelected) {
+    e.preventDefault();
+    currentSelected?.classList.remove('selected');
+    newSelected.classList.add('selected');
+    newSelected.scrollIntoView({ block: "center" });
+    document.getElementById("action").action = newSelected.href;
+    document.getElementById("action").children[0].removeAttribute("name");
+  }
 };
 
 document.getElementById("action").children[0].onkeypress = function (e) {
@@ -887,7 +908,7 @@ function displayClock() {
   const formattedTime = now.toLocaleTimeString(userLocale, {
     hour: "2-digit",
     minute: "2-digit",
-    second: "2-digit",
+    second: tlb_data.seconds ? "2-digit" : undefined,
     hour12: tlb_data.timeFormat === "12",
   });
 
@@ -895,15 +916,15 @@ function displayClock() {
   document.getElementById("date").textContent = formattedDate;
 }
 
-//window.onload = matchbookmarks();
+window.addEventListener('load', () => handleSearch());
 var sb_input = document.getElementById("sb_input");
 if (sb_data["placeholder"].length > 1) {
   sb_input.placeholder = sb_data["placeholder"];
 }
 sb_input.addEventListener("input", () => {
-  matchbookmarks(sb_input.value);
+  handleSearch(sb_input.value);
 });
-ntp_bdy.onresize = matchbookmarks();
+ntp_bdy.onresize = handleSearch();
 document.getElementById("action").onsubmit = function () {
   var svalue = this.children[0].value;
   if (svalue.charAt(1) == " " && sb_data.hasOwnProperty(svalue.charAt(0))) {
@@ -951,16 +972,7 @@ wllp_value.value =
     ? getComputedStyle(ntp_bdy).getPropertyValue("--bg-img-d")
     : getComputedStyle(ntp_bdy).getPropertyValue("--bg-img-l");
 // Helper function to convert data URI to Blob
-function dataURItoBlob(dataURI) {
-  const byteString = atob(dataURI.split(",")[1]);
-  const mimeString = dataURI.split(",")[0].split(":")[1].split(";")[0];
-  const ab = new ArrayBuffer(byteString.length);
-  const ia = new Uint8Array(ab);
-  for (let i = 0; i < byteString.length; i++) {
-    ia[i] = byteString.charCodeAt(i);
-  }
-  return new Blob([ab], { type: mimeString });
-}
+
 function revokeBackgroundUrls() {
   const bglight = document.getElementById("background-light");
   const bgdark = document.getElementById("background-dark");
@@ -1218,7 +1230,6 @@ var picker = new Picker({
 });
 
 /* ------------ CONTEXT MENU CONFIG ----------- */
-
 /*
   const menu = document.querySelector(".context");
   const menuOption = document.querySelector(".context_item");
@@ -1234,8 +1245,7 @@ var picker = new Picker({
     menu.style.top = `${top}px`;
     toggleMenu("show");
   };
-  
-   
+
   window.addEventListener("click", e => {
     if (menuVisible) toggleMenu("hide");
   });
@@ -1256,7 +1266,6 @@ var picker = new Picker({
 */
 
 /* -------------- Config Croppie -------------- */
-
 function f_cp_bg() {
   cp_type = "bgc" + (ntp_theme.value == "dark" ? "d" : "l");
   let color = getComputedStyle(ntp_bdy).getPropertyValue(
@@ -1340,8 +1349,6 @@ stt_cl.forEach((el) => {
     else f_cp_mtc(s1[1]);
   });
 });
-
-
 
 async function exportIndexedDB() {
   const indexedDBData = {};
@@ -1440,6 +1447,21 @@ async function base64ToBlob(base64) {
   return await response.blob();
 }
 
+document.getElementById("default-theme").onclick = function () {
+  var r = confirm(
+    "Your bookmarks will be preserved, but the theme will revert to the default. b2ntp will reload.\n Are you sure you want to reset to the default b2ntp theme?"
+  );
+  if (r == true) {
+    ntp_theme = DEFAULT_THEME
+    ls_set("ntp_theme",ntp_theme)
+    ntp_bdy.setAttribute("style", "");
+    f_save_bdy()
+    ntoast.success("Default b2ntp theme set.");
+    setTimeout(() => {
+      location.reload();
+    }, 2000);
+  }
+};
 document.getElementById("export-theme").onclick = function () {
   var dataStr = {};
   Object.keys(localStorage).forEach((key) => {
@@ -1488,18 +1510,6 @@ document.getElementById("import-theme").onchange = function () {
   reader.readAsText(file);
 };
 
-window.addEventListener("DOMContentLoaded", function () {
-  aos();
-  themeManager_ntp();
-  pagesRoute();
-
-  let aside = document.querySelector("aside");
-  let toggle = document.querySelector(".a-toggle");
-  toggle.addEventListener("click", () => {
-    aside.classList.toggle("active");
-  });
-});
-
 var ls_size = ls_get("ls_size");
 const size_p = document.getElementById("size_progress");
 
@@ -1542,17 +1552,6 @@ function get_usedSize() {
   document.getElementById("size_used").innerHTML = total;
   size_p.setAttribute("value", total);
 }
-if (ls_size == undefined) {
-  get_usedSize();
-  set_maxSize();
-} else {
-  document.getElementById("size").innerHTML = ls_get("ls_size");
-  get_usedSize();
-}
-document.getElementById("size_calc").onclick = () => {
-  get_usedSize();
-  set_maxSize();
-};
 
 document.addEventListener("keydown", (event) => {
   if (event.key === "s" && event.ctrlKey) {
@@ -1563,3 +1562,27 @@ document.addEventListener("keydown", (event) => {
     toggleTheme();
   }
 });
+window.addEventListener("DOMContentLoaded", function () {
+  aos();
+  themeManager_ntp();
+  pagesRoute();
+
+  let aside = document.querySelector("aside");
+  let toggle = document.querySelector(".a-toggle");
+  toggle.addEventListener("click", () => {
+    aside.classList.toggle("active");
+  });
+
+  if (ls_size == undefined) {
+    get_usedSize();
+    set_maxSize();
+  } else {
+    document.getElementById("size").innerHTML = ls_get("ls_size");
+    get_usedSize();
+  }
+  document.getElementById("size_calc").onclick = () => {
+    get_usedSize();
+    set_maxSize();
+  };
+});
+
