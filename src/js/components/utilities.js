@@ -1,3 +1,4 @@
+//Return list of available events
 export function getEventListeners() {
   const isTouchDevice = "ontouchstart" in window;
 
@@ -9,10 +10,10 @@ export function getEventListeners() {
 
   return events;
 }
+//Geenrate random ID string
 export function generateID() {
   return "_" + Math.random().toString(36).substr(2, 5);
 }
-
 //Function to generate gradient color
 export function random_gradient() {
   var colorOne = {
@@ -33,13 +34,22 @@ export function random_gradient() {
     "radial-gradient(at top left, " + colorOne.rgb + ", " + colorTwo.rgb + ")"
   );
 }
-
-//Functions for localstorage store and get
-function localStore(key, obj) {
+//Functions for localstorage set and get
+export function ls_set(key, obj) {
   return window.localStorage.setItem(key, JSON.stringify(obj));
 }
-function localGet(key) {
-  return JSON.parse(window.localStorage.getItem(key));
+export function ls_get(key) {
+  const value = window.localStorage.getItem(key);
+
+  try {
+    return JSON.parse(value);
+  } catch (error) {
+    if (value && typeof value === "string") {
+      return value;
+    }
+    console.error("Error parsing value from local storage:", error);
+    return null; // or some other default/fallback value
+  }
 }
 //Get elapsed minutes to date
 export function diff_hours(dt) {
@@ -73,4 +83,24 @@ export function getJSON(url) {
 export function selectElement(id, valueToSelect) {
   let el = document.getElementById(id);
   el.value = valueToSelect;
+}
+
+export function formatTime(hour) {
+  const period = hour >= 12 ? "PM" : "AM";
+  const formattedHour = hour % 12 || 12;
+  return `${formattedHour}:00 ${period}`;
+}
+export function dataURItoBlob(dataURI) {
+  const byteString = atob(dataURI.split(",")[1]);
+  const mimeString = dataURI.split(",")[0].split(":")[1].split(";")[0];
+  const ab = new ArrayBuffer(byteString.length);
+  const ia = new Uint8Array(ab);
+  for (let i = 0; i < byteString.length; i++) {
+    ia[i] = byteString.charCodeAt(i);
+  }
+  return new Blob([ab], { type: mimeString });
+}
+export function jsoncat(o1, o2) {
+  for (var key in o2) o1[key] = o2[key];
+  return o1;
 }

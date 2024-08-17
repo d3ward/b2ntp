@@ -1,0 +1,25 @@
+<div class="dialog" id="dlg_changelog" aria-labelledby="dlg_changelog-title" aria-hidden="true">
+	<div class="dialog-overlay" data-a11y-dialog-hide></div>
+	<div class="dialog-content">
+		<header>
+			<h3 id="dlg_changelog-title">#Changelog - b2ntp</h3>
+			<button data-a11y-dialog-hide>
+				<svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-x"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M18 6l-12 12" /><path d="M6 6l12 12" /></svg>
+			</button>
+		</header>
+		<section>
+			<div class="grid better_r">
+				<div>
+					<div class="card _mt-1 _p-1 _bg3 _shadowless">
+						<%- changelog %>
+					</div>
+				</div>
+			</div>
+		</section>
+		<footer>
+			<button data-a11y-dialog-hide>
+				Close
+			</button>
+		</footer>
+	</div>
+</div>

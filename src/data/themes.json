@@ -1,8 +1,20 @@
 {
+    "b2ntp": {
+        "title": "b2ntp",
+        "author": "d3ward",
+        "description": "Default theme for b2ntp",
+        "palette": [
+            "#4ca3e2",
+            "#f2f4f7ff",
+            "#dde2eaff",
+            "#14191fff",
+            "#242e37ff"
+        ]
+    },
     "nextntp": {
         "title": "NextNTP",
         "author": "d3ward",
-        "description": "Kiwi inspired theme. Default for NextNTP ",
+        "description": "NextNTP inspired theme",
         "palette": [
             "#4ca3e2",
             "#f2f4f7ff",
