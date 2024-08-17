@@ -2,6 +2,8 @@ const path = require('path')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const HTMLWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const { marked }  = require('marked');
+const fs = require('fs');
 const webpack = require('webpack')
 const { src, extBuild, extJS, extV3JS, extPages, type, mv } = require('./config')
 const packageJson = require('../package.json')
@@ -57,6 +59,9 @@ module.exports = {
 					chunks: [page],
 					minify: false,
 					sources: false,
+					templateParameters: {
+						changelogContent: processChangelog()
+					  }
 				}),
 		),
 		new webpack.DefinePlugin({
@@ -78,7 +83,16 @@ module.exports = {
 			},
 			{
                 test: /\.ejs$/i,
-                use: ['html-loader', 'template-ejs-loader']
+                use: ['html-loader',
+					{
+						loader: 'template-ejs-loader',
+							options: {
+								data: {
+									changelogContent: processChangelog()
+								}
+							}
+					}
+				]
             },
 			{
 				test: /\.(sa|sc)ss$/,
@@ -106,3 +120,9 @@ module.exports = {
 		],
 	},
 }
+
+function processChangelog() {
+	const changelogPath = path.resolve(__dirname, '../CHANGELOG.md');
+	const changelogContent = fs.readFileSync(changelogPath, 'utf-8');
+	return marked(changelogContent);
+  }
