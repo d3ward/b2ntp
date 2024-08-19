@@ -3,6 +3,10 @@
         "title": "b2ntp",
         "author": "d3ward",
         "description": "Default theme for b2ntp",
+        "images":[
+            "default-p-l.jpg",
+            "default-p-d.jpg"
+        ],
         "palette": [
             "#4ca3e2",
             "#f2f4f7ff",
@@ -15,6 +19,10 @@
         "title": "NextNTP",
         "author": "d3ward",
         "description": "NextNTP inspired theme",
+        "images":[
+            "nextntp-p-l.jpg",
+            "nextntp-p-d.jpg"
+        ],
         "palette": [
             "#4ca3e2",
             "#f2f4f7ff",
@@ -34,6 +42,9 @@
         "author": "d3ward",
         "credits": "https://draculatheme.com",
         "description": "Dracula inspired theme ",
+        "images":[
+            "dracula-purple-p.jpg"
+        ],
         "palette": ["#282a36", "#44475a", "#44475a", "#f8f8f2", "#bd93f9"],
         "onetheme": true
     },
@@ -42,6 +53,10 @@
         "author": "d3ward",
         "credits": "https://nordtheme.com",
         "description": "Nord inspired theme ",
+        "images":[
+            "nord-frost-p-l.jpg",
+            "nord-frost-p-d.jpg"
+        ],
         "palette": [
             "#2E3440",
             "#3B4252",

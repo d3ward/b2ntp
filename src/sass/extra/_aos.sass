@@ -12,6 +12,12 @@
     transform: translate3d(0,-100px, 0)
 ._aos-bottom
     transform: translate3d(0,100px, 0)
+/* New custom flip animation */
+._aos-flip
+    transform: perspective(1000px) rotateX(30deg)
+    transform-origin: center bottom
 ._aos-done
     opacity: 1
     transform: translateZ(0) scale(1)
+._aos-flip._aos-done
+    transform: perspective(1000px) rotateX(0deg)

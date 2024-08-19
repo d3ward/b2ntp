@@ -3,9 +3,7 @@
 	title="b2ntp" width="160" height="160" />
 	<img src="https://img.shields.io/badge/v2.0.0-8A2BE2">
 </p>
-
-A simple and powerful New Tab Page with goal of speed and customization.
-Bring your favorites in the homepage with a customizable Kanban style
+Bring your bookmarks to the homepage with a customizable Kanban style board, tailor your browsing experience to fit your flow
 
 <p style="display:flex;flex-direction:column;gap:.5rem;">
 
@@ -24,15 +22,16 @@ Bring your favorites in the homepage with a customizable Kanban style
 
 ## Preview
 
-<img src="src/assets/png/preview1.png" alt="b2ntp"
+<img src="src/assets/jpg/CWS_1.jpg" alt="b2ntp"
 	title="b2ntp"  />
 
 ## Features
-
-- Powerful search bar that look for your bookmarks or directly search on the web with shortcuts !
-- Customizable colors, background and layout
-- Sidebar Weather Widget with OpenWeatherMap API
-- Sidebar Quick Note Widget
+- Bookmarks: Transform your browser bookmarks into an intuitive, Kanban-style dashboard 
+- Smart Search Bar: Quickly find bookmarks or search the web with customizable shortcuts
+- Customizable: Edit everything to fit your style. Layouts, colors, and backgrounds
+- Weather: Optional sidebar weather widget with OpenWeatherMap API
+- Privacy: Local data storage only - zero tracking, zero analytics, zero compromises
+- Open Source: Free to use and modify - available on GitHub
 
 ## Installing
 
@@ -40,6 +39,10 @@ Bring your favorites in the homepage with a customizable Kanban style
 - On your Chromium based Browser go on Extensions page and enable dev mode
 - Load the zip file or the unzipped folder
 - Enjoy !
+
+## Privacy
+
+<b>b2ntp</b> is designed with your privacy in mind. It does not collect or use your personal or browser data in any way. The extension only requires bookmarks permission for read-only access and cannot edit or delete your bookmarks.
 
 ## Contributing
 
@@ -55,5 +58,7 @@ If you have a suggestion or want to report a bug feel free to share it by openin
 ## License
 
 Licensed under [NC-SA-4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)
+
 Copyright 2024
+
 _**Made with <3 by Eduard Ursu**_

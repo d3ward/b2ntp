@@ -4,16 +4,89 @@ import { themeManager } from './components/themeManager'
 import { navbar } from './components/navbar'
 import { aos } from './components/aos'
 import { gotop } from './components/gotop'
-import { BottomSheet } from './components/bottomsheet'
-import { getEventListeners } from './components/utilities'
+import EmblaCarousel from 'embla-carousel'
+import { addDotBtnsAndClickHandlers } from './components/embla_utils'
+import Autoplay from 'embla-carousel-autoplay'
 import data from '../data/themes.json'
-var ev_li = getEventListeners()
-const bottomSheet = new BottomSheet('#pt', {
-    threshold: 50,
-    eventMap: ev_li
-})
+
+const dialog_preview = new A11yDialog(
+    document.querySelector('#dlg_preview')
+)
+
+const OPTIONS = { loop: true }
+
+const emblaNode = document.querySelector('.embla')
+const viewportNode = emblaNode.querySelector('.embla__viewport')
+const containerNode = emblaNode.querySelector('.embla__container')
+const dotsNode = emblaNode.querySelector('.embla__dots')
+
+let emblaApi = EmblaCarousel(viewportNode, OPTIONS, [Autoplay()])
+
+const onNavButtonClick = (emblaApi) => {
+  const autoplay = emblaApi?.plugins()?.autoplay
+  if (!autoplay) return
+
+  const resetOrStop =
+    autoplay.options.stopOnInteraction === false
+      ? autoplay.reset
+      : autoplay.stop
+
+  resetOrStop()
+}
+
+let removeDotBtnsAndClickHandlers = addDotBtnsAndClickHandlers(
+  emblaApi,
+  dotsNode,
+  onNavButtonClick
+)
+
+function updateCarousel(themeId) {
+    /*
+     if (item.onetheme) ot += '<div><span>Light & Dark Theme</span></div>'
+        else ot += '<div><span>Light Theme</span><span>Dark Theme</span></div>'
+    */
+    const theme = data[themeId]
+    if (!theme || !theme.images || theme.images.length === 0) return
+
+    // Clear existing slides
+    containerNode.innerHTML = ''
+
+    // Add new slides
+    theme.images.forEach(imageSrc => {
+        const slide = document.createElement('div')
+        slide.className = 'embla__slide'
+        
+        const content = document.createElement('div')
+        content.className = 'embla__slide_content'
+        
+        const img = document.createElement('img')
+        img.src = "./assets/jpg/"+imageSrc
+        img.alt = `${theme.title} preview`
+        
+        content.appendChild(img)
+        slide.appendChild(content)
+        containerNode.appendChild(slide)
+    })
+
+    // Destroy existing Embla instance
+    if (emblaApi) {
+        removeDotBtnsAndClickHandlers()
+        emblaApi.destroy()
+    }
+
+    // Reinitialize Embla
+    emblaApi = EmblaCarousel(viewportNode, OPTIONS, [Autoplay()])
+    removeDotBtnsAndClickHandlers = addDotBtnsAndClickHandlers(
+        emblaApi,
+        dotsNode,
+        onNavButtonClick
+    )
+
+    emblaApi.reInit()
+}
 
 function getPreview(id) {
+    const title = document.getElementById("dlg_preview-title")
     const cnt = document.getElementById('pt_cnt')
     var html = ''
 
@@ -28,15 +101,8 @@ function getPreview(id) {
                 item.credits +
                 '</a></div>'
         var ot = ''
-        if (item.onetheme) ot += '<div><span>Light & Dark Theme</span></div>'
-        else ot += '<div><span>Light Theme</span><span>Dark Theme</span></div>'
+       
         html +=
-            '<div class="card _aos-bottom">' +
-            '<div class="pi"><img src="./themes/' +
-            id +
-            '-p.png">' +
-            ot +
-            '</div>' +
             '<div><span><b>' +
             item.title +
             '</b></span><span> by ' +
@@ -46,27 +112,27 @@ function getPreview(id) {
             item.description +
             '</p>' +
             cr +
-            '<div class="col-2">' +
-            '<a class="btn btn-p" href="./themes/' +
-            id +
-            '.json" download="' +
-            id +
-            '.json"' +
-            '"><svg class="_icon" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg> Download</a>' +
-            '</div></div>'
+            '<div class="col-2">'
+             +
+            '</div>'
+        title.textContent = "Theme Preview - "+item.title
     }
-
+    const download_btn= document.getElementById("download-theme")
+    download_btn.setAttribute("href","./themes/"+id +".json")
+    download_btn.setAttribute("download",id +".json")
     cnt.innerHTML = html
+
+    // Update carousel with theme images
+    updateCarousel(id)
 }
+
 function previewListener() {
     document.querySelectorAll('.preview-btn').forEach((p) => {
         p.addEventListener('click', () => {
             getPreview(p.getAttribute('data-id'))
-            bottomSheet.show()
+            dialog_preview.show()
         })
     })
-    //
-    //var img = '<img class="_fit-cover" src="./src/img/' +item.preview + '">'
 }
 
 // Call the function when the DOM is loaded

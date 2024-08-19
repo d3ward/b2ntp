@@ -9,18 +9,18 @@ export function themeManager() {
                 ? 'dark'
                 : 'light')
         if (storedTheme)
-            document.documentElement.setAttribute('data-theme', storedTheme)
+            document.body.setAttribute('data-theme', storedTheme)
         for (var i = 0; i < toggles.length; i++) {
             toggles[i].onclick = function () {
                 var currentTheme =
-                    document.documentElement.getAttribute('data-theme')
+                    document.body.getAttribute('data-theme')
                 var targetTheme = 'light'
 
                 if (currentTheme === 'light') {
                     targetTheme = 'dark'
                 }
 
-                document.documentElement.setAttribute('data-theme', targetTheme)
+                document.body.setAttribute('data-theme', targetTheme)
                 localStorage.setItem('theme', targetTheme)
             }
         }
