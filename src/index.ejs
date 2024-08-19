@@ -16,7 +16,7 @@
                 <stop offset="100%" style="stop-color:var(--primary);" />
             </linearGradient>
         </defs>
-        <path fill="url(#gradient1)"
+        <path fill="var(--primary)"
             d="M0,224L26.7,208C53.3,192,107,160,160,144C213.3,128,267,128,320,133.3C373.3,139,427,149,480,170.7C533.3,192,587,224,640,208C693.3,192,747,128,800,133.3C853.3,139,907,213,960,229.3C1013.3,245,1067,203,1120,192C1173.3,181,1227,203,1280,213.3C1333.3,224,1387,224,1413,224L1440,224L1440,0L1413.3,0C1386.7,0,1333,0,1280,0C1226.7,0,1173,0,1120,0C1066.7,0,1013,0,960,0C906.7,0,853,0,800,0C746.7,0,693,0,640,0C586.7,0,533,0,480,0C426.7,0,373,0,320,0C266.7,0,213,0,160,0C106.7,0,53,0,27,0L0,0Z">
         </path>
     </svg>
@@ -25,7 +25,7 @@
     <main>
         <!-- Header -->
         <div class="hero">
-            <div class="_aos-top">
+            <div class="_aos-top _text">
                 <svg xmlns="http://www.w3.org/2000/svg" width="264.833" height="257.164" viewBox="0 0 70.07 68.041">
                     <g fill="currentColor">
                         <path
@@ -35,7 +35,7 @@
                     </g>
                 </svg>
                 <h3><strong>Simple. Productive. Fast.</strong></h3>
-                <p>Kanban style homepage with your bookmarks and powerful search </p>
+                <p>Bring your bookmarks to the homepage with a customizable Kanban style board,<br> tailor your browsing experience to fit your flow</p>
             </div>
             <div class="_mb-3">
                 <a href="https://chrome.google.com/webstore/detail/b2ntp/bgiigakflpaegcgpmhohneffdfcefinl"
@@ -51,48 +51,23 @@
                         <path
                             d="M8.824 7.287c.008 0 .004 0 0 0zm-2.8-1.4c.006 0 .003 0 0 0zm16.754 2.161c-.505-1.215-1.53-2.528-2.333-2.943.654 1.283 1.033 2.57 1.177 3.53l.002.02c-1.314-3.278-3.544-4.6-5.366-7.477-.091-.147-.184-.292-.273-.446a3.545 3.545 0 01-.13-.24 2.118 2.118 0 01-.172-.46.03.03 0 00-.027-.03.038.038 0 00-.021 0l-.006.001a.037.037 0 00-.01.005L15.624 0c-2.585 1.515-3.657 4.168-3.932 5.856a6.197 6.197 0 00-2.305.587.297.297 0 00-.147.37c.057.162.24.24.396.17a5.622 5.622 0 012.008-.523l.067-.005a5.847 5.847 0 011.957.222l.095.03a5.816 5.816 0 01.616.228c.08.036.16.073.238.112l.107.055a5.835 5.835 0 01.368.211 5.953 5.953 0 012.034 2.104c-.62-.437-1.733-.868-2.803-.681 4.183 2.09 3.06 9.292-2.737 9.02a5.164 5.164 0 01-1.513-.292 4.42 4.42 0 01-.538-.232c-1.42-.735-2.593-2.121-2.74-3.806 0 0 .537-2 3.845-2 .357 0 1.38-.998 1.398-1.287-.005-.095-2.029-.9-2.817-1.677-.422-.416-.622-.616-.8-.767a3.47 3.47 0 00-.301-.227 5.388 5.388 0 01-.032-2.842c-1.195.544-2.124 1.403-2.8 2.163h-.006c-.46-.584-.428-2.51-.402-2.913-.006-.025-.343.176-.389.206-.406.29-.787.616-1.136.974-.397.403-.76.839-1.085 1.303a9.816 9.816 0 00-1.562 3.52c-.003.013-.11.487-.19 1.073-.013.09-.026.181-.037.272a7.8 7.8 0 00-.069.667l-.002.034-.023.387-.001.06C.386 18.795 5.593 24 12.016 24c5.752 0 10.527-4.176 11.463-9.661.02-.149.035-.298.052-.448.232-1.994-.025-4.09-.753-5.844z" />
                     </svg>Firefox</a>
-                <a href="https://github.com/d3ward/b2ntp" class="btn btn-p" target="_blank"><svg fill="currentColor" role="img"
+                <a href="https://github.com/d3ward/b2ntp/releases" class="btn btn-p" target="_blank"><svg fill="currentColor" role="img"
                         viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <title>GitHub</title>
+                        <title>GitHub Releases</title>
                         <path
                             d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" />
-                    </svg>Github</a>
+                    </svg>Github Releases</a>
             </div>
-            <div class="embla">
-                <div class="embla__viewport">
-                    <div class="embla__container">
-                        <div class="embla__slide">
-                            <div class="embla__slide_content">
-                                <img src="./themes/default-l.png" alt="">
-                            </div>
-                        </div>
-                        <div class="embla__slide">
-                            <div class="embla__slide_content">
-                                <img src="./themes/default-d.png" alt="">
-                            </div>
-                        </div>
-                        <div class="embla__slide">
-                            <div class="embla__slide_content">
-                                <img src="./themes/nextntp-p-d.png" alt="">
-                            </div>
-                        </div>
-                        <div class="embla__slide">
-    
-                            <div class="embla__slide_content">
-                                <img src="./themes/nextntp-p-l.png" alt="">
-                            </div>
-                        </div>
-    
-                    </div>
-                </div>
-    
-                <div class="embla__controls">
-                    <div class="embla__dots"></div>
-                </div>
+            <div>
+                <img class="theme-icon light-icon _radius _aos-flip" src="./assets/jpg/default-p-l.png" alt="">
+                <img class="theme-icon dark-icon _radius _aos-flip" src="./assets/jpg/default-p-d.png" alt="">
             </div>
-    
+            
         </div>
         <section>
+            <div class="_mt-2">
+                <h3>Features</h3>
+            </div>
             <div class="grid">
                 <div class="col-6">
                     <div class="card _aos-left">
@@ -107,7 +82,7 @@
                         </div>
                         <h5>Bookmarks</h5>
                         <hr>
-                        <p>Visualize your bookmarks as a Kanban Board</p>
+                        <p>Transform your browser bookmarks into an intuitive, Kanban-style dashboard </p>
                     </div>
                 </div>
                 <div class="col-6">
@@ -126,7 +101,20 @@
                         </div>
                         <h5>Customizable</h5>
                         <hr>
-                        <p>Edit everything to fit your style and colors</p>
+                        <p>Edit everything to fit your style. Layouts, colors, and backgrounds</p>
+                        <a href="./themes.html" class="btn btn-p">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                <path
+                                    d="M12 21a9 9 0 0 1 0 -18c4.97 0 9 3.582 9 8c0 1.06 -.474 2.078 -1.318 2.828c-.844 .75 -1.989 1.172 -3.182 1.172h-2.5a2 2 0 0 0 -1 3.75a1.3 1.3 0 0 1 -1 2.25" />
+                                <path d="M8.5 10.5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+                                <path d="M12.5 7.5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+                                <path d="M16.5 10.5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+                            </svg>
+                            Explore b2ntp Themes
+                        </a>
                     </div>
                 </div>
                 <div class="col-6">
@@ -141,10 +129,9 @@
                                 <path d="M20.2 20.2l1.8 1.8" />
                             </svg>
                         </div>
-                        <h5>Powerful Search bar </h5>
+                        <h5>Smart Search Bar </h5>
                         <hr>
-                        <p>Search quickly among your bookmarks or on the internet</p>
-    
+                        <p>Quickly find bookmarks or search the web with customizable shortcuts</p>
                     </div>
                 </div>
                 <div class="col-6">
@@ -152,31 +139,28 @@
                         <div class="_f-center">
                             <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24" fill="none"
                                 stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
-                                class="icon icon-tabler icons-tabler-outline icon-tabler-umbrella">
+                                >
                                 <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                 <path d="M4 12a8 8 0 0 1 16 0z" />
                                 <path d="M12 12v6a2 2 0 0 0 4 0" />
                             </svg>
                         </div>
-                        <h5>Weather Sidebar Widget</h5>
-                        <hr> Optional simple and clean weather info
+                        <h5>Weather Widget</h5>
+                        <hr>
+                        <p>Optional weather widget with OpenWeatherMap API</p>
+                        
                     </div>
                 </div>
                 <div class="col-6">
                     <div class="card _aos-right">
                         <div class="_f-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24" fill="none"
-                                stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
-                                class="icon icon-tabler icons-tabler-outline icon-tabler-notes">
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                <path d="M5 3m0 2a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v14a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2z" />
-                                <path d="M9 7l6 0" />
-                                <path d="M9 11l6 0" />
-                                <path d="M9 15l4 0" />
-                            </svg>
+                            <svg  xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="currentColor"  stroke-width="1.5"  stroke-linecap="round"  stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 13a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v6a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-6z" /><path d="M11 16a1 1 0 1 0 2 0a1 1 0 0 0 -2 0" /><path d="M8 11v-4a4 4 0 1 1 8 0v4" /></svg>
                         </div>
-                        <h5>Quick Notes</h5>
-                        <hr> Optional simple and clean quick note
+                        <h5>Privacy</h5>
+                        <hr> 
+                        <p>
+                            Local data storage only - zero tracking, zero analytics, zero compromises
+                        </p>
                     </div>
                 </div>
                 <div class="col-6">
@@ -184,15 +168,63 @@
                         <div class="_f-center">
                             <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24" fill="none"
                                 stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
-                                class="icon icon-tabler icons-tabler-outline icon-tabler-brand-github">
+                                >
                                 <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                 <path
                                     d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
                             </svg>
                         </div>
-                        <h5>Available on Github</h5>
-                        <hr>Privacy friendly , free and open source !
+                        <h5>Open Source</h5>
+                        <hr>Free to use and modify - available on GitHub
+                        <a href="https://github.com/d3ward/b2ntp" class="btn btn-p" target="_blank"><svg fill="currentColor" role="img"
+                            viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <title>GitHub</title>
+                            <path
+                                d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" />
+                        </svg>Github Code</a>
                     </div>
+                </div>
+            </div>
+        </section>
+        <section>
+            <div class="_mt-2">
+                <h3>Screenshots</h3>
+            </div>
+            <div class="embla">
+                <div class="embla__viewport">
+                    <div class="embla__container">
+                        <div class="embla__slide">
+                            <div class="embla__slide_content">
+                                <img src="./assets/jpg/CWS_1.jpg" alt="">
+                            </div>
+                        </div>
+                        <div class="embla__slide">
+                            <div class="embla__slide_content">
+                                <img src="./assets/jpg/CWS_2.jpg" alt="">
+                            </div>
+                        </div>
+                        <div class="embla__slide">
+                            <div class="embla__slide_content">
+                                <img src="./assets/jpg/CWS_3.jpg" alt="">
+                            </div>
+                        </div>
+                        <div class="embla__slide">
+                            <div class="embla__slide_content">
+                                <img src="./assets/jpg/nextntp-p-d.png" alt="">
+                            </div>
+                        </div>
+                        <div class="embla__slide">
+    
+                            <div class="embla__slide_content">
+                                <img src="./assets/jpg/nextntp-p-l.png" alt="">
+                            </div>
+                        </div>
+    
+                    </div>
+                </div>
+    
+                <div class="embla__controls">
+                    <div class="embla__dots"></div>
                 </div>
             </div>
         </section>
@@ -204,7 +236,7 @@
                 <stop offset="100%" style="stop-color:var(--primary);" />
             </linearGradient>
         </defs>
-        <path fill="url(#gradient2)"
+        <path fill="var(--primary)"
             d="M0,256L26.7,245.3C53.3,235,107,213,160,197.3C213.3,181,267,171,320,186.7C373.3,203,427,245,480,234.7C533.3,224,587,160,640,133.3C693.3,107,747,117,800,144C853.3,171,907,213,960,202.7C1013.3,192,1067,128,1120,101.3C1173.3,75,1227,85,1280,101.3C1333.3,117,1387,139,1413,149.3L1440,160L1440,320L1413.3,320C1386.7,320,1333,320,1280,320C1226.7,320,1173,320,1120,320C1066.7,320,1013,320,960,320C906.7,320,853,320,800,320C746.7,320,693,320,640,320C586.7,320,533,320,480,320C426.7,320,373,320,320,320C266.7,320,213,320,160,320C106.7,320,53,320,27,320L0,320Z">
         </path>
     </svg>

@@ -17,9 +17,9 @@ import {
   ls_set,
   formatTime,
   jsoncat,
-  dataURItoBlob
+  dataURItoBlob,
 } from "./components/utilities";
-import icons from '../data/weatherIcons.json'
+import icons from "../data/weatherIcons.json";
 import "../sass/blank.sass";
 
 // Constants
@@ -28,10 +28,10 @@ const STORE_NAME = "images";
 const DB_VERSION = 1;
 const DEFAULT_THEME = {
   value: "",
-  autoSwitch: false,
+  autoSwitch: true,
   autoSwitchType: "system",
   darkModeStart: 20,
-  darkModeEnd: 6
+  darkModeEnd: 6,
 };
 const SAFE_DATA = [
   "sb_data",
@@ -39,7 +39,7 @@ const SAFE_DATA = [
   "wth_data",
   "ntp_theme",
   "ntp_bdy",
-  "ntp_mtc"
+  "ntp_mtc",
 ];
 const SAFE_DATA_THEME = ["ntp_theme", "ntp_bdy", "ntp_mtc"];
 const SAFE_DB_THEME = ["bg_custom_d", "bg_custom_l"];
@@ -123,12 +123,13 @@ const dialog_changelog = new A11yDialog(
 
 const ntp_bdy = document.body;
 var ntp_theme = ls_get("ntp_theme");
+
 const ntp_version = packageJSON.version;
 var bzversion = ls_get("ntp_version");
 console.log(bzversion, ntp_version);
 if (bzversion !== ntp_version) {
   //Show changelog
-  dialog_changelog.show()
+  dialog_changelog.show();
   //Set ntp_version
   ls_set("ntp_version", ntp_version);
 }
@@ -179,7 +180,8 @@ async function imgBackground(lightUrl, darkUrl) {
       const img = await new Promise((resolve, reject) => {
         const imgElement = new Image();
         imgElement.onload = () => resolve(imgElement);
-        imgElement.onerror = () => reject(new Error(`Failed to load image: ${url}`));
+        imgElement.onerror = () =>
+          reject(new Error(`Failed to load image: ${url}`));
         imgElement.src = url;
       });
       return { img, url };
@@ -199,9 +201,12 @@ async function imgBackground(lightUrl, darkUrl) {
   };
 
   try {
-    const [{ img: lightImg, url: updatedLightUrl }, { img: darkImg, url: updatedDarkUrl }] = await Promise.all([
-      loadImage(lightUrl, 'bg_custom_l'),
-      loadImage(darkUrl, 'bg_custom_d')
+    const [
+      { img: lightImg, url: updatedLightUrl },
+      { img: darkImg, url: updatedDarkUrl },
+    ] = await Promise.all([
+      loadImage(lightUrl, "bg_custom_l"),
+      loadImage(darkUrl, "bg_custom_d"),
     ]);
 
     const bgoverlay = document.getElementById("background_overlay");
@@ -271,8 +276,8 @@ if (!sb_data) {
   };
   ls_set("sb_data", sb_data);
 }
-if(!sb_data.bang){
-  sb_data.bang = "!"
+if (!sb_data.bang) {
+  sb_data.bang = "!";
   ls_set("sb_data", sb_data);
 }
 if (!bk_data || !bk_time || diff_hours(bk_time) > 60) {
@@ -299,65 +304,52 @@ if (!tlb_data) {
   tlb_data = {
     dateFormat: "auto",
     timeFormat: "24",
-    seconds: false
+    seconds: false,
   };
 }
-if (!ntp_theme || typeof ntp_theme !== 'object' || ntp_theme === null) {
-  ntp_theme = DEFAULT_THEME;
-} else {
-  ntp_theme = { ...DEFAULT_THEME, ...ntp_theme };
+
+function updateNtpTheme(updates) {
+  ntp_theme = { ...ntp_theme, ...updates };
+  const themeString = JSON.stringify(ntp_theme);
+  ls_set("ntp_theme", ntp_theme);
+  logWithTimestamp(`ntp_theme updated: ${themeString}`);
 }
 
-function toggleTheme(theme) {
-  var tTheme;
-  if (theme) {
-    tTheme = theme;
-  } else {
-    var cTheme = ntp_bdy.getAttribute("data-theme");
-    if (cTheme === "light") {
-      tTheme = "dark";
-      wllp_value.value =
-        getComputedStyle(ntp_bdy).getPropertyValue("--bg-img-d");
-    } else {
-      tTheme = "light";
-      wllp_value.value =
-        getComputedStyle(ntp_bdy).getPropertyValue("--bg-img-l");
-    }
-  }
-  ntp_theme.value = tTheme;
-  ntp_bdy.setAttribute("data-theme", tTheme);
+if (!ntp_theme || typeof ntp_theme !== "object" || ntp_theme === null) {
+  console.log("ntp_theme invalid, resetting to default");
+  ntp_theme = DEFAULT_THEME;
   ls_set("ntp_theme", ntp_theme);
-  document.getElementById("background-light").style.opacity =
-    tTheme === "light" ? "1" : "0";
-  document.getElementById("background-dark").style.opacity =
-    tTheme === "dark" ? "1" : "0";
 }
-function themeManager_ntp() {
-  var toggles = document.getElementsByClassName("theme-toggle");
-  if (window.CSS && CSS.supports("color", "var(--bg)") && toggles) {
-    var storedTheme =
-      ls_get("ntp_theme") ||
-      (window.matchMedia("(prefers-color-scheme: dark)").matches
-        ? "dark"
-        : "light");
-    if (storedTheme) ntp_bdy.setAttribute("data-theme", storedTheme.value);
-    ntp_theme.value = storedTheme;
-    for (var i = 0; i < toggles.length; i++) {
-      toggles[i].onclick = function () {
-        toggleTheme();
-      };
-    }
+
+function logWithTimestamp(message) {
+  console.log(`[${new Date().toISOString()}] ${message}`);
+}
+function toggleTheme(theme) {
+  logWithTimestamp(`toggleTheme called with theme: ${theme}`);
+  var newTheme;
+  if (theme) {
+    newTheme = theme;
+  } else {
+    newTheme =
+      ntp_bdy.getAttribute("data-theme") === "light" ? "dark" : "light";
   }
+  logWithTimestamp(`Setting theme to: ${newTheme}`);
+  updateNtpTheme({ value: newTheme });
+  ntp_bdy.setAttribute("data-theme", newTheme);
 }
-const startTimeDisplay = document.getElementById('startTime');
-const endTimeDisplay = document.getElementById('endTime');
+
+const startTimeDisplay = document.getElementById("startTime");
+const endTimeDisplay = document.getElementById("endTime");
 const autoSwitchCheckbox = document.getElementById("auto-switch");
 const autoSwitchTypeSelect = document.getElementById("auto-switch-type");
 const timeRangeContainer = document.getElementById("time-range-container");
 const startTimeSlider = document.getElementById("start-time");
 const endTimeSlider = document.getElementById("end-time");
 
+// Initialize theme settings
 function initializeThemeSettings() {
+  logWithTimestamp(`Initializing theme settings -> ntp_theme: ${JSON.stringify(ntp_theme)}`);
+
   autoSwitchCheckbox.checked = ntp_theme.autoSwitch;
   autoSwitchTypeSelect.value = ntp_theme.autoSwitchType;
   startTimeSlider.value = ntp_theme.darkModeStart;
@@ -365,24 +357,22 @@ function initializeThemeSettings() {
 
   updateTimeRangeDisplay();
 
+  // Event listeners
   autoSwitchCheckbox.addEventListener("change", () => {
-    ntp_theme.autoSwitch = autoSwitchCheckbox.checked;
-    ls_set("ntp_theme", ntp_theme);
+    logWithTimestamp(`Auto switch changed to: ${autoSwitchCheckbox.checked}`);
+    updateNtpTheme({ autoSwitch: autoSwitchCheckbox.checked });
     updateTheme();
   });
 
   autoSwitchTypeSelect.addEventListener("change", () => {
-    ntp_theme.autoSwitchType = autoSwitchTypeSelect.value;
-    ls_set("ntp_theme", ntp_theme);
-    timeRangeContainer.style.display = ntp_theme.autoSwitchType === "time" ? "block" : "none";
+    updateNtpTheme({ autoSwitchType: autoSwitchTypeSelect.value });
+    timeRangeContainer.style.display =
+      ntp_theme.autoSwitchType === "time" ? "block" : "none";
     updateTheme();
   });
-  startTimeSlider.value = ntp_theme.darkModeStart;
-  endTimeSlider.value = ntp_theme.darkModeEnd;
 
   startTimeSlider.addEventListener("input", () => {
-    ntp_theme.darkModeStart = parseInt(startTimeSlider.value);
-    ls_set("ntp_theme", ntp_theme);
+    updateNtpTheme({ darkModeStart: parseInt(startTimeSlider.value) });
     updateTimeRangeDisplay();
     if (ntp_theme.autoSwitch && ntp_theme.autoSwitchType === "time") {
       checkTimeBased();
@@ -390,8 +380,7 @@ function initializeThemeSettings() {
   });
 
   endTimeSlider.addEventListener("input", () => {
-    ntp_theme.darkModeEnd = parseInt(endTimeSlider.value);
-    ls_set("ntp_theme", ntp_theme);
+    updateNtpTheme({ darkModeEnd: parseInt(endTimeSlider.value) });
     updateTimeRangeDisplay();
     if (ntp_theme.autoSwitch && ntp_theme.autoSwitchType === "time") {
       checkTimeBased();
@@ -402,55 +391,73 @@ function initializeThemeSettings() {
   timeRangeContainer.style.display =
     ntp_theme.autoSwitchType === "time" ? "block" : "none";
   updateTheme();
+
+  // Listen for system theme changes
+  window.matchMedia("(prefers-color-scheme: dark)").addListener(updateTheme);
+
+  // Check theme every minute for time-based switching
+  setInterval(updateTheme, 60000);
+  var toggles = document.getElementsByClassName("theme-toggle");
+
+  // Add click event listeners to theme toggles
+  for (var i = 0; i < toggles.length; i++) {
+    toggles[i].onclick = function () {
+      toggleTheme();
+    };
+  }
 }
 function updateTimeRangeDisplay() {
-  startTimeDisplay.textContent = tlb_data.timeFormat == 24 ? `${startTimeSlider.value.padStart(2, '0')}:00`: formatTime(startTimeSlider.value);
-  endTimeDisplay.textContent = tlb_data.timeFormat == 24 ? `${endTimeSlider.value.padStart(2, '0')}:00`: formatTime(endTimeSlider.value);
+  startTimeDisplay.textContent =
+    tlb_data.timeFormat == 24
+      ? `${startTimeSlider.value.padStart(2, "0")}:00`
+      : formatTime(startTimeSlider.value);
+  endTimeDisplay.textContent =
+    tlb_data.timeFormat == 24
+      ? `${endTimeSlider.value.padStart(2, "0")}:00`
+      : formatTime(endTimeSlider.value);
 }
-
 function updateTheme() {
+  logWithTimestamp(
+    `updateTheme called, ntp_theme: ${JSON.stringify(ntp_theme)}`
+  );
+  logWithTimestamp(
+    `localStorage ntp_theme: ${JSON.stringify(ls_get("ntp_theme"))}`
+  );
+
   if (ntp_theme.autoSwitch) {
+    logWithTimestamp("autoSwitch is true");
     if (ntp_theme.autoSwitchType === "system") {
+      logWithTimestamp("autoSwitchType is system");
       checkSystemPreference();
     } else {
+      logWithTimestamp("autoSwitchType is time");
       checkTimeBased();
     }
+  } else {
+    logWithTimestamp("autoSwitch is false");
   }
 }
 function checkSystemPreference() {
-  if (
-    window.matchMedia &&
-    window.matchMedia("(prefers-color-scheme: dark)").matches
-  ) {
-   toggleTheme("dark");
-  } else {
-   toggleTheme("light");
-  }
+  const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+  toggleTheme(prefersDark ? "dark" : "light");
 }
 function checkTimeBased() {
+  logWithTimestamp(
+    `checkTimeBased called, ntp_theme: ${JSON.stringify(ntp_theme)}`
+  );
   const currentHour = new Date().getHours();
-  if (ntp_theme.darkModeStart < ntp_theme.darkModeEnd) {
-    if (currentHour >= ntp_theme.darkModeStart && currentHour < ntp_theme.darkModeEnd) {
-     toggleTheme("dark");
-    } else {
-     toggleTheme("light");
-    }
-  } else {
-    if (currentHour >= ntp_theme.darkModeStart || currentHour < ntp_theme.darkModeEnd) {
-     toggleTheme("dark");
-    } else {
-     toggleTheme("light");
-    }
-  }
+  const isDarkTime =
+    ntp_theme.darkModeStart < ntp_theme.darkModeEnd
+      ? currentHour >= ntp_theme.darkModeStart &&
+        currentHour < ntp_theme.darkModeEnd
+      : currentHour >= ntp_theme.darkModeStart ||
+        currentHour < ntp_theme.darkModeEnd;
+
+  toggleTheme(isDarkTime ? "dark" : "light");
 }
 
 applyBackground();
-// Listen for system theme changes
-window.matchMedia("(prefers-color-scheme: dark)").addListener(updateTheme);
-// Check theme every minute for time-based switching
-setInterval(updateTheme, 60000);
-// Initialize theme settings when the page loads
-document.addEventListener("DOMContentLoaded", initializeThemeSettings);
+
 // General - Time&Data settings
 const tlb_dateF = document.getElementById("dateFormat");
 const tlb_timeF = document.getElementById("timeFormat");
@@ -473,9 +480,9 @@ tlb_timeS.addEventListener("change", () => {
 
 /* ---------- Weather Settings Config --------- */
 const wt_checkbox = document.getElementById("wt_status");
-const wt_ik = document.getElementById("wt_ik")
-const wt_ila = document.getElementById("wt_ila")
-const wt_iln = document.getElementById("wt_iln")
+const wt_ik = document.getElementById("wt_ik");
+const wt_ila = document.getElementById("wt_ila");
+const wt_iln = document.getElementById("wt_iln");
 var wth_status = wth_data.status;
 wt_checkbox.checked = wth_status;
 ntp_bdy.style.setProperty("--wt", wth_status ? "block" : "none");
@@ -485,11 +492,17 @@ wt_iln.value = wth_data.lon;
 wt_checkbox.onclick = () => {
   var wth_status = wt_checkbox.checked;
   ntp_bdy.style.setProperty("--wt", wth_status ? "block" : "none");
-  f_save_wth()
+  f_save_wth();
 };
-wt_ik.addEventListener("blur",()=>{f_save_wth()})
-wt_ila.addEventListener("blur",()=>{f_save_wth()})
-wt_iln.addEventListener("blur",()=>{f_save_wth()})
+wt_ik.addEventListener("blur", () => {
+  f_save_wth();
+});
+wt_ila.addEventListener("blur", () => {
+  f_save_wth();
+});
+wt_iln.addEventListener("blur", () => {
+  f_save_wth();
+});
 
 function f_save_wth() {
   const status = document.getElementById("wt_status").checked;
@@ -497,11 +510,9 @@ function f_save_wth() {
   const lat = document.getElementById("wt_ila").value;
   const lon = document.getElementById("wt_iln").value;
   wth_data.status = status;
-  if (api && lat && lon) {
-    wth_data.api = api;
-    wth_data.lon = lon;
-    wth_data.lat = lat;
-  }
+  if (api) wth_data.api = api;
+  if (lon) wth_data.lon = lon;
+  if (lat) wth_data.lat = lat;
   ls_set("wth_data", wth_data);
   f_setup_wth();
   ntoast.success("Weather widget configuration done");
@@ -531,8 +542,10 @@ async function f_setup_wth() {
   }
 
   if (
-    typeof localStorage.cachedWeatherUpdate === "undefined" ||
-    Date.now() / 1000 - localStorage.cachedWeatherUpdate > 600
+    (typeof localStorage.cachedWeatherUpdate === "undefined" ||
+      Date.now() / 1000 - localStorage.cachedWeatherUpdate > 600) &&
+    wth_data.lat != "" &&
+    wth_data.lon != ""
   ) {
     document.querySelectorAll(".wth_s").forEach((element) => {
       element.style.display = "none";
@@ -605,9 +618,9 @@ for (var key in sk) {
   sb_len_v += key + " -> " + sk[key] + "\n";
 }
 sb_len.value = sb_len_v;
-sb_len.addEventListener("blur", ()=>{
-  f_save_sb()
-})
+sb_len.addEventListener("blur", () => {
+  f_save_sb();
+});
 function f_trim(s) {
   s = s.replace(/(^\s*)|(\s*$)/gi, "");
   s = s.replace(/[ ]{2,}/gi, " ");
@@ -625,7 +638,7 @@ function f_save_bdy() {
 
 function f_save_sb() {
   var tlen = f_trim(document.getElementById("sb_txt").value) + "\n";
-  var lines = tlen.split("\n").filter(line => line.trim() !== "");
+  var lines = tlen.split("\n").filter((line) => line.trim() !== "");
   var sKc = {};
   var errors = [];
 
@@ -657,7 +670,11 @@ function f_save_sb() {
   }
 
   if (errors.length > 0) {
-    alert("Errors in search bar configuration:\n" + errors.join("\n") + "\n\nMake sure to follow the syntax:\nplaceholder -> [value]\nkey -> value");
+    alert(
+      "Errors in search bar configuration:\n" +
+        errors.join("\n") +
+        "\n\nMake sure to follow the syntax:\nplaceholder -> [value]\nkey -> value"
+    );
   } else {
     sb_data = sKc;
     ls_set("sb_data", sb_data);
@@ -665,7 +682,6 @@ function f_save_sb() {
     console.log("Search bar configuration saved successfully:", sb_data);
   }
 }
-
 
 // ---------- BUILD PAGE ----------
 var pivotmatch = 0;
@@ -683,14 +699,14 @@ function processFolder(item) {
   if (Object.keys(urls).length > 0) bk_data[fldk] = [urls, item.id];
 }
 
-function handleSearch(query = '') {
+function handleSearch(query = "") {
   const p = document.getElementById("bookmarks");
   const actionElement = document.getElementById("action");
   const actionInput = actionElement.children[0];
 
   // Check if the query ends with double space (search on default engine)
-  if (query.endsWith('  ')) {
-    p.innerHTML = ''; // Clear bookmarks
+  if (query.endsWith("  ")) {
+    p.innerHTML = ""; // Clear bookmarks
     query = query.trim();
     actionElement.action = sb_data[sb_data.default] + encodeURIComponent(query);
     actionInput.name = "q";
@@ -701,9 +717,16 @@ function handleSearch(query = '') {
 
   // Check for custom search engine shortcuts
   for (const [shortcut, url] of Object.entries(sb_data)) {
-    if (shortcut !== 'placeholder' && shortcut !== 'default' && shortcut !== 'bang' && query.startsWith(sb_data.bang + shortcut + ' ')) {
-      const searchQuery = query.slice(sb_data.bang.length + shortcut.length + 1);
-      p.innerHTML = ''; // Clear bookmarks
+    if (
+      shortcut !== "placeholder" &&
+      shortcut !== "default" &&
+      shortcut !== "bang" &&
+      query.startsWith(sb_data.bang + shortcut + " ")
+    ) {
+      const searchQuery = query.slice(
+        sb_data.bang.length + shortcut.length + 1
+      );
+      p.innerHTML = ""; // Clear bookmarks
       actionElement.action = url + encodeURIComponent(searchQuery);
       actionInput.name = "q";
       return;
@@ -711,8 +734,8 @@ function handleSearch(query = '') {
   }
 
   // Reset bookmarks container
-  p.innerHTML = '';
-  
+  p.innerHTML = "";
+
   // Reset counters and update regexp
   totalbookmarks = 0;
   pivotmatch = query === prevregexp ? pivotmatch : 0;
@@ -726,8 +749,13 @@ function handleSearch(query = '') {
     Object.entries(bk_data).forEach(([folderName, [urls, folderId]]) => {
       folderSections[folderName] = createSection(folderName, folderId);
       Object.entries(urls).forEach(([title, [url, id]], index) => {
-        const link = createBookmarkLink({ folderName, title, url, id, folderId }, index === 0);
-        folderSections[folderName].querySelector('div:not(.title)').appendChild(link);
+        const link = createBookmarkLink(
+          { folderName, title, url, id, folderId },
+          index === 0
+        );
+        folderSections[folderName]
+          .querySelector("div:not(.title)")
+          .appendChild(link);
         totalbookmarks++;
       });
     });
@@ -736,7 +764,10 @@ function handleSearch(query = '') {
     const matches = [];
     Object.entries(bk_data).forEach(([folderName, [urls, folderId]]) => {
       Object.entries(urls).forEach(([title, [url, id]]) => {
-        if (title.toLowerCase().includes(query.toLowerCase()) || folderName.toLowerCase().includes(query.toLowerCase())) {
+        if (
+          title.toLowerCase().includes(query.toLowerCase()) ||
+          folderName.toLowerCase().includes(query.toLowerCase())
+        ) {
           matches.push({ folderName, title, url, id, folderId });
         }
       });
@@ -744,17 +775,22 @@ function handleSearch(query = '') {
 
     matches.forEach((item, index) => {
       if (!folderSections[item.folderName]) {
-        folderSections[item.folderName] = createSection(item.folderName, item.folderId);
+        folderSections[item.folderName] = createSection(
+          item.folderName,
+          item.folderId
+        );
       }
-      
+
       const link = createBookmarkLink(item, index === 0);
-      folderSections[item.folderName].querySelector('div:not(.title)').appendChild(link);
+      folderSections[item.folderName]
+        .querySelector("div:not(.title)")
+        .appendChild(link);
       totalbookmarks++;
     });
   }
 
-  Object.values(folderSections).forEach(section => {
-    if (section.querySelectorAll('a').length > 0) {
+  Object.values(folderSections).forEach((section) => {
+    if (section.querySelectorAll("a").length > 0) {
       fragment.appendChild(section);
     }
   });
@@ -767,7 +803,7 @@ function handleSearch(query = '') {
   }
 
   // Scroll to selected element if exists
-  const selectedElement = p.querySelector('.selected');
+  const selectedElement = p.querySelector(".selected");
   if (selectedElement) {
     selectedElement.scrollIntoView({ block: "center" });
   }
@@ -808,56 +844,63 @@ document.getElementById("sb_input").addEventListener("input", (event) => {
 });
 document.getElementById("action").addEventListener("submit", (event) => {
   const query = document.getElementById("sb_input").value;
-  if (!query.endsWith('  ') && document.querySelector('#bookmarks a.selected')) {
+  if (
+    !query.endsWith("  ") &&
+    document.querySelector("#bookmarks a.selected")
+  ) {
     event.preventDefault();
-    window.location.href = document.querySelector('#bookmarks a.selected').href;
+    window.location.href = document.querySelector("#bookmarks a.selected").href;
   }
 });
 
 document.getElementById("sb_input").onkeydown = function (e) {
   const bookmarks = document.getElementById("bookmarks");
-  const sections = bookmarks.querySelectorAll('.section');
-  const currentSelected = bookmarks.querySelector('.selected');
+  const sections = bookmarks.querySelectorAll(".section");
+  const currentSelected = bookmarks.querySelector(".selected");
   let newSelected;
 
   switch (e.keyCode) {
     case 38: // Up arrow
       if (currentSelected) {
-        newSelected = currentSelected.previousElementSibling || 
-                      currentSelected.parentElement.lastElementChild;
-        if (!newSelected || newSelected.classList.contains('title')) {
-          const prevSection = currentSelected.closest('.section').previousElementSibling || 
-                              sections[sections.length - 1];
-          newSelected = prevSection.querySelector('a:last-child');
+        newSelected =
+          currentSelected.previousElementSibling ||
+          currentSelected.parentElement.lastElementChild;
+        if (!newSelected || newSelected.classList.contains("title")) {
+          const prevSection =
+            currentSelected.closest(".section").previousElementSibling ||
+            sections[sections.length - 1];
+          newSelected = prevSection.querySelector("a:last-child");
         }
       } else {
-        newSelected = bookmarks.querySelector('a:last-child');
+        newSelected = bookmarks.querySelector("a:last-child");
       }
       break;
     case 40: // Down arrow
       if (currentSelected) {
         newSelected = currentSelected.nextElementSibling;
-        if (!newSelected || newSelected.classList.contains('title')) {
-          const nextSection = currentSelected.closest('.section').nextElementSibling || 
-                              sections[0];
-          newSelected = nextSection.querySelector('a:first-child');
+        if (!newSelected || newSelected.classList.contains("title")) {
+          const nextSection =
+            currentSelected.closest(".section").nextElementSibling ||
+            sections[0];
+          newSelected = nextSection.querySelector("a:first-child");
         }
       } else {
-        newSelected = bookmarks.querySelector('a:first-child');
+        newSelected = bookmarks.querySelector("a:first-child");
       }
       break;
     case 37: // Left arrow
       if (currentSelected) {
-        const prevSection = currentSelected.closest('.section').previousElementSibling || 
-                            sections[sections.length - 1];
-        newSelected = prevSection.querySelector('a:first-child');
+        const prevSection =
+          currentSelected.closest(".section").previousElementSibling ||
+          sections[sections.length - 1];
+        newSelected = prevSection.querySelector("a:first-child");
       }
       break;
     case 39: // Right arrow
       if (currentSelected) {
-        const nextSection = currentSelected.closest('.section').nextElementSibling || 
-                            sections[0];
-        newSelected = nextSection.querySelector('a:first-child');
+        const nextSection =
+          currentSelected.closest(".section").nextElementSibling || sections[0];
+        newSelected = nextSection.querySelector("a:first-child");
       }
       break;
     default:
@@ -866,8 +909,8 @@ document.getElementById("sb_input").onkeydown = function (e) {
 
   if (newSelected) {
     e.preventDefault();
-    currentSelected?.classList.remove('selected');
-    newSelected.classList.add('selected');
+    currentSelected?.classList.remove("selected");
+    newSelected.classList.add("selected");
     newSelected.scrollIntoView({ block: "center" });
     document.getElementById("action").action = newSelected.href;
     document.getElementById("action").children[0].removeAttribute("name");
@@ -929,7 +972,7 @@ function displayClock() {
   document.getElementById("date").textContent = formattedDate;
 }
 
-window.addEventListener('load', () => handleSearch());
+window.addEventListener("load", () => handleSearch());
 var sb_input = document.getElementById("sb_input");
 if (sb_data["placeholder"].length > 1) {
   sb_input.placeholder = sb_data["placeholder"];
@@ -1080,19 +1123,28 @@ function isValidColor(color) {
 }
 function f_wallp4() {
   var v = wllp_value.value;
-  ntp_bdy.style.setProperty("--bg-img-" + (ntp_theme.value == "dark" ? "d" : "l"), v);
+  ntp_bdy.style.setProperty(
+    "--bg-img-" + (ntp_theme.value == "dark" ? "d" : "l"),
+    v
+  );
   if (isValidColor(v))
-    ntp_bdy.style.setProperty("--bg-c" + (ntp_theme.value == "dark" ? "d" : "l"), v);
+    ntp_bdy.style.setProperty(
+      "--bg-c" + (ntp_theme.value == "dark" ? "d" : "l"),
+      v
+    );
   f_save_bdy();
   ntoast.success("Background custom value saved");
 }
 function f_wallp5() {
   var v =
     ntp_theme.value == "dark"
-      ? "url('../assets/b2ntp_bg_d.svg')"
-      : "url('../assets/b2ntp_bg.svg')";
+      ? "url('../assets/svg/b2ntp_bg_d.svg')"
+      : "url('../assets/svg/b2ntp_bg.svg')";
   wllp_value.value = v;
-  ntp_bdy.style.setProperty("--bg-img-" + (ntp_theme.value == "dark" ? "d" : "l"), v);
+  ntp_bdy.style.setProperty(
+    "--bg-img-" + (ntp_theme.value == "dark" ? "d" : "l"),
+    v
+  );
   f_save_bdy();
   ntoast.success("Default background saved");
 }
@@ -1465,10 +1517,9 @@ document.getElementById("default-theme").onclick = function () {
     "Your bookmarks will be preserved, but the theme will revert to the default. b2ntp will reload.\n Are you sure you want to reset to the default b2ntp theme?"
   );
   if (r == true) {
-    ntp_theme = DEFAULT_THEME
-    ls_set("ntp_theme",ntp_theme)
+    updateNtpTheme(DEFAULT_THEME)
     ntp_bdy.setAttribute("style", "");
-    f_save_bdy()
+    f_save_bdy();
     ntoast.success("Default b2ntp theme set.");
     setTimeout(() => {
       location.reload();
@@ -1577,7 +1628,7 @@ document.addEventListener("keydown", (event) => {
 });
 window.addEventListener("DOMContentLoaded", function () {
   aos();
-  themeManager_ntp();
+  initializeThemeSettings();
   pagesRoute();
 
   let aside = document.querySelector("aside");
@@ -1598,4 +1649,3 @@ window.addEventListener("DOMContentLoaded", function () {
     set_maxSize();
   };
 });
-
