@@ -1,6 +1,8 @@
+@use "../settings/variables"
+
 /* -------------- Padding Utility ------------- */
 
-@each $size, $value in $sizes
+@each $size, $value in variables.$sizes
 	._p-#{$size}
 		padding: $value
 	._pt-#{$size}

@@ -1,5 +1,7 @@
+@use "../settings/variables"
+
 /* -------------- Margin Utility ------------- */
-@each $size, $value in $sizes
+@each $size, $value in variables.$sizes
 	._m-#{$size}
 		margin: $value
 	._mt-#{$size}
