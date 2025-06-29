@@ -1,0 +1,275 @@
+// Variables
+$primary-blue: #3b82f6
+$primary-purple: #8b5cf6
+$primary-green: #10b981
+$primary-orange: #f59e0b
+$primary-red: #ef4444
+$primary-gray: #374151
+
+$text-primary: #111827
+$text-secondary: #6b7280
+$text-muted: #9ca3af
+
+$border-radius: 1rem
+$border-radius-lg: 1.5rem
+$border-radius-xl: 2rem
+
+$shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05)
+$shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)
+$shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)
+
+$transition-base: all 0.3s cubic-bezier(0.4, 0, 0.2, 1)
+$transition-transform: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)
+
+// Mixins
+@mixin gradient-bg($from, $to)
+  background: linear-gradient(135deg, $from 0%, $to 100%)
+
+@mixin card-hover
+  &:hover
+    transform: translateY(-2px)
+    box-shadow: $shadow-lg
+
+    .feature-card__icon
+      transform: scale(1.1)
+
+@mixin responsive($breakpoint)
+  @if $breakpoint == mobile
+    @media (max-width: 767px)
+      @content
+  @if $breakpoint == tablet
+    @media (min-width: 768px) and (max-width: 1023px)
+      @content
+  @if $breakpoint == desktop
+    @media (min-width: 1024px)
+      @content
+
+// Features section
+.features-section
+  padding: 4rem 0
+
+  @include responsive(desktop)
+    padding: 6rem 0
+
+.features-header
+  text-align: center
+  margin-bottom: 3rem
+
+  @include responsive(desktop)
+    margin-bottom: 4rem
+
+.features-title
+  font-size: 2.5rem
+  font-weight: 700
+  margin-bottom: 1rem
+
+  @include responsive(desktop)
+    font-size: 3rem
+
+.features-subtitle
+  font-size: 1.125rem
+  color: $text-secondary
+  max-width: 600px
+  margin: 0 auto
+
+  @include responsive(desktop)
+    font-size: 1.25rem
+
+// Bento grid
+.bento-grid
+  display: grid
+  grid-template-columns: 1fr
+  gap: 1.5rem
+
+  @include responsive(tablet)
+    grid-template-columns: repeat(2, 1fr)
+
+  @include responsive(desktop)
+    grid-template-columns: repeat(4, 1fr)
+    gap: 2rem
+
+// Feature cards
+.feature-card
+  border-radius: $border-radius-lg
+  padding: 2rem
+  transition: $transition-base
+  border: 1px solid rgba(255, 255, 255, 0.2)
+  backdrop-filter: blur(10px)
+  position: relative
+  overflow: hidden
+
+  @include card-hover
+
+  &::before
+    content: ''
+    position: absolute
+    top: 0
+    left: 0
+    right: 0
+    bottom: 0
+    background: inherit
+    z-index: -1
+
+  // Large card (Bookmarks)
+  &--large
+    @include responsive(desktop)
+      grid-column: span 2
+      grid-row: span 2
+
+  // Wide card (Weather)
+  &--wide
+    @include responsive(tablet)
+      grid-column: span 2
+
+    @include responsive(desktop)
+      grid-column: span 2
+
+  // Theme-specific backgrounds
+  &--bookmarks
+    @include gradient-bg(#dbeafe, #c7d2fe)
+
+  &--customizable
+    @include gradient-bg(#fae8ff, #fbcfe8)
+
+  &--search
+    @include gradient-bg(#d1fae5, #a7f3d0)
+
+  &--weather
+    @include gradient-bg(#fed7aa, #fef3c7)
+
+  &--privacy
+    @include gradient-bg(#fecaca, #fda4af)
+
+  &--opensource
+    @include gradient-bg(#f3f4f6, #e5e7eb)
+
+.feature-card__content
+  height: 100%
+  display: flex
+  flex-direction: column
+
+  &--horizontal
+    @include responsive(tablet)
+      flex-direction: row
+      align-items: center
+      gap: 2rem
+
+.feature-card__icon
+  width: 3rem
+  height: 3rem
+  border-radius: $border-radius
+  display: flex
+  align-items: center
+  justify-content: center
+  margin-bottom: 1.5rem
+  transition: $transition-transform
+
+  svg
+    width: 1.5rem
+    height: 1.5rem
+    color: white
+
+  &--large
+    width: 4rem
+    height: 4rem
+    border-radius: $border-radius-xl
+    margin-bottom: 0
+
+    @include responsive(tablet)
+      margin-bottom: 0
+
+    svg
+      width: 2rem
+      height: 2rem
+
+  // Theme-specific icon backgrounds
+  .feature-card--bookmarks &
+    background-color: $primary-blue
+
+  .feature-card--customizable &
+    background-color: $primary-purple
+
+  .feature-card--search &
+    background-color: $primary-green
+
+  .feature-card--weather &
+    background-color: $primary-orange
+
+  .feature-card--privacy &
+    background-color: $primary-red
+
+  .feature-card--opensource &
+    background-color: $primary-gray
+
+.feature-card__info
+  flex: 1
+
+.feature-card__title
+  font-size: 1.5rem
+  font-weight: 700
+  margin-bottom: 0.75rem
+
+  .feature-card--large &
+    font-size: 2rem
+    margin-bottom: 1rem
+
+.feature-card__description
+  color: $text-secondary
+  margin-bottom: 1.5rem
+  flex-grow: 1
+
+  .feature-card--large &
+    font-size: 1.125rem
+    line-height: 1.7
+
+.feature-card__badge
+  display: flex
+  align-items: center
+  gap: 0.5rem
+  font-size: 0.875rem
+  color: $text-secondary
+  margin-top: auto
+
+  &--success
+    color: $primary-green
+    font-weight: 600
+
+.feature-card__shortcuts
+  display: flex
+  align-items: center
+  gap: 0.5rem
+  font-size: 0.875rem
+  color: $text-secondary
+  margin-top: auto
+
+  kbd
+    padding: 0.25rem 0.5rem
+    background: rgba(255, 255, 255, 0.8)
+    border-radius: 0.25rem
+    font-size: 0.75rem
+    font-family: inherit
+    border: 1px solid rgba(0, 0, 0, 0.1)
+
+.feature-card__features
+  display: flex
+  flex-wrap: wrap
+  gap: 1rem
+  margin-top: 1rem
+
+.feature-item
+  display: flex
+  align-items: center
+  gap: 0.5rem
+  font-size: 0.875rem
+  color: $text-secondary
+
+.status-dot
+  width: 0.5rem
+  height: 0.5rem
+  border-radius: 50%
+
+  &--green
+    background-color: $primary-green
+
+  &--blue
+    background-color: $primary-blue
