@@ -5,7 +5,7 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const { marked } = require("marked");
 const fs = require("fs");
 const webpack = require("webpack");
-const { src, extBuild, extJS, extPages, type } = require("./config");
+const { src, extBuild, extJS, extPages } = require("./config");
 const packageJson = require("../package.json");
 
 var ext_entries, manifest_file;
@@ -13,7 +13,7 @@ var ext_entries, manifest_file;
 ext_entries = extJS;
 manifest_file = {
   from: path.join(src, "manifest.json"),
-  to: path.join(extBuild, `${type}`, "manifest.json"),
+  to: path.join(extBuild, "manifest.json"),
 };
 
 module.exports = {
@@ -27,7 +27,7 @@ module.exports = {
   output: {
     clean: false,
     assetModuleFilename: "[path][name][ext]",
-    path: path.join(extBuild, `${type}`),
+    path: extBuild,
     filename: "./js/[name].js",
   },
   plugins: [
@@ -35,7 +35,7 @@ module.exports = {
       patterns: [
         {
           from: path.join(src, "assets"),
-          to: path.join(extBuild, `${type}`, "assets"),
+          to: path.join(extBuild, "assets"),
         },
         manifest_file,
       ],
