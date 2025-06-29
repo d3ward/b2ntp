@@ -75,7 +75,10 @@ module.exports = {
             {
                 test: /\.js$/,
                 exclude: /node_modules/,
-                use: 'babel-loader'
+                loader: 'esbuild-loader',
+                options: {
+                    target: 'es2015' // Specify your target environment
+                }
             },
             {
                 test: /\.(sa|sc|c)ss$/,

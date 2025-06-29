@@ -66,13 +66,10 @@ module.exports = {
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        use: {
-          loader: "babel-loader",
-          options: {
-            presets: ["@babel/preset-env"],
-            plugins: ["@babel/plugin-transform-runtime"],
-          },
-        },
+        loader: 'esbuild-loader',
+        options: {
+            target: 'es2015' // Specify your target environment
+        }
       },
       {
         test: /\.ejs$/i,

@@ -28,8 +28,9 @@ Bring your bookmarks to the homepage with a customizable Kanban style board, tai
 ## Features
 - Bookmarks: Transform your browser bookmarks into an intuitive, Kanban-style dashboard 
 - Smart Search Bar: Quickly find bookmarks or search the web with customizable shortcuts
-- Customizable: Edit everything to fit your style. Layouts, colors, and backgrounds
+- Themes & Customization: Edit everything to fit your style. Layouts, colors, backgrounds, and browse community themes
 - Weather: Optional sidebar weather widget with OpenWeatherMap API
+- Quick Notes: A simple, persistent notepad for jotting down quick thoughts
 - Privacy: Local data storage only - zero tracking, zero analytics, zero compromises
 - Open Source: Free to use and modify - available on GitHub
 
