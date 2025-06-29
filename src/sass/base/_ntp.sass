@@ -73,6 +73,13 @@ main
 	overflow-x: hidden
 	gap: .5rem
 
+[data-grid-layout="bento"] #bookmarks
+	display: grid
+	grid-template-columns: repeat(auto-fit, minmax(250px, 1fr))
+	gap: 1rem
+	padding: 1rem
+
+
 .no-animations *,
 .no-animations *::before,
 .no-animations *::after
@@ -117,10 +124,10 @@ main
 #background-dark
 	opacity: 0
 
-[data-theme="dark"] #background-light 
+[data-theme="dark"] #background-light
 	opacity: 0
 
-[data-theme="dark"] #background-dark 
+[data-theme="dark"] #background-dark
 	opacity: 1
 
 code
@@ -153,7 +160,7 @@ code
 
 	input[type='range']:hover::-moz-range-thumb
 		box-shadow: 0 0 0 1px var(--primary), 0 0 0 4px var(--primary)
-	
+
 	.double-slider
 		margin: 20px auto !important
 		position: relative

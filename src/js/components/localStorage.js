@@ -21,7 +21,9 @@ export class LocalStorageManager {
 			if (this.LS[name]) {
 				this.data = JSON.parse(this.LS[name])
 			} else {
-				this.data = {}
+				this.data = {
+                    grid_layout: 'kanban'
+                }
 			}
 		}
 	}
@@ -39,4 +41,15 @@ export class LocalStorageManager {
 		}
 		return false
 	}
+
+    setGridLayout(layout) {
+        this.data.grid_layout = layout;
+        if (this.LS) {
+            this.LS[this.name] = JSON.stringify(this.data);
+        }
+    }
+
+    getGridLayout() {
+        return this.data.grid_layout || 'kanban';
+    }
 }

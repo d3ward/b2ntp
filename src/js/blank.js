@@ -135,6 +135,13 @@ if (bzversion !== ntp_version) {
 }
 
 //Get bk_data from browser
+import { LocalStorageManager } from './components/localStorage'
+
+const ls = new LocalStorageManager('b2ntp')
+
+// Set initial grid layout from localStorage
+document.body.setAttribute('data-grid-layout', ls.getGridLayout())
+
 function getBookmarks() {
   chrome.bookmarks.getTree(function (itemTree) {
     var fldh = itemTree.title;
