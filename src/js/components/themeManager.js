@@ -1,7 +1,4 @@
-import { LocalStorageManager } from './localStorage'
-
 export function themeManager() {
-    const ls = new LocalStorageManager('b2ntp')
     //Theme Switcher
     var toggles = document.getElementsByClassName('theme-toggle')
 
@@ -28,23 +25,4 @@ export function themeManager() {
             }
         }
     }
-
-    // Grid Layout Switcher
-    const gridRadios = document.querySelectorAll('input[name="t-style"]')
-    const currentLayout = ls.getGridLayout()
-    if (currentLayout) {
-        document.body.setAttribute('data-grid-layout', currentLayout)
-        const checkedRadio = document.querySelector(`input[name="t-style"][value="${currentLayout}"]`)
-        if (checkedRadio) {
-            checkedRadio.checked = true
-        }
-    }
-
-    gridRadios.forEach(radio => {
-        radio.addEventListener('change', (event) => {
-            const selectedLayout = event.target.value
-            document.body.setAttribute('data-grid-layout', selectedLayout)
-            ls.setGridLayout(selectedLayout)
-        })
-    })
 }
