@@ -1,0 +1,210 @@
+
+/* --------- Widget Settings UI (Options Page) --------- */
+
+.widget-cards-grid
+    display: flex
+    flex-direction: column
+    gap: .4rem
+
+.widget-settings-card
+    display: flex
+    align-items: center
+    gap: .6rem
+    padding: .45rem .75rem
+    background: var(--c4)
+    border-radius: var(--radius)
+
+    .widget-settings-icon
+        display: flex
+        align-items: center
+        color: var(--txt)
+        min-width: 1.5rem
+        flex-shrink: 0
+
+    .widget-settings-label
+        flex: 1
+        font-size: .9rem
+        font-weight: 500
+
+    .widget-settings-side
+        display: flex
+        gap: .6rem
+        font-size: .8rem
+
+        label
+            display: flex
+            align-items: center
+            gap: .2rem
+            cursor: pointer
+            white-space: nowrap
+
+.widget-sidebar-columns
+    display: grid
+    grid-template-columns: 1fr 1fr
+    gap: 1rem
+
+    h5
+        font-size: .85rem
+        font-weight: 600
+        margin-bottom: .4rem
+
+.widget-sidebar-col > div
+    display: flex
+    align-items: center
+    justify-content: space-between
+    margin-bottom: .3rem
+
+.wdg-order-list
+    list-style: none
+    padding: 0
+    margin: 0
+    min-height: 2.5rem
+    border: 1px dashed var(--c0)
+    border-radius: var(--radius)
+
+    &:empty::after
+        content: 'No widgets'
+        display: block
+        text-align: center
+        padding: .6rem
+        font-size: .78rem
+        opacity: .4
+
+.wdg-order-item
+    display: flex
+    align-items: center
+    gap: .45rem
+    padding: .3rem .5rem
+    cursor: grab
+    font-size: .82rem
+    border-radius: var(--radius)
+    transition: background .1s
+
+    &:hover
+        background: var(--hover)
+
+    &.dragging
+        opacity: .35
+        cursor: grabbing
+
+    .wdg-drag-handle
+        color: var(--txt)
+        opacity: .35
+        display: flex
+        align-items: center
+        flex-shrink: 0
+
+    svg
+        flex-shrink: 0
+        width: 14px
+        height: 14px
+
+/* --------------- Widget Config -------------- */
+
+.wdg_ntp
+    background: #00000050
+    padding: 0.5rem
+    border-radius: 10px
+
+#wdg_0
+    margin-top: var(--tms0)
+    background: var(--c2)
+
+#wdg_1
+    margin-top: var(--tms1)
+    background: var(--c6)
+
+#wdg_2
+    margin-top: var(--tms2)
+    background: var(--c16)
+
+/* -------------- Weather Widget -------------- */
+#wt_status:checked~.grid
+    opacity: .3
+
+.wth_main
+    display: grid
+    grid-template-columns: 1fr 1fr
+    grid-template-rows: 1fr 1.4fr 1fr 1.4fr
+    gap: .5rem
+    color: var(--c1)
+    grid-auto-flow: row
+    justify-content: center
+    align-content: center
+    justify-items: center
+    align-items: center
+    grid-template-areas: "icon description" "icon temp" "icon city" "details details"
+    opacity: 0
+    transition: all 1.5s ease-in
+
+.wth_c
+    grid-area: city
+    background: var(--c2)
+    padding: .2rem .5rem
+    border-radius: var(--radius)
+    color: var(--c3)
+
+.wth_i
+    grid-area: icon
+    width: 5rem
+    height: 5rem
+
+.wth_t,
+.wth_d
+    float: left
+    width: 33%
+    height: 50px
+.wth_i svg
+    height: 5rem
+    width: 5rem
+.wth_d1
+    grid-area: description
+.wth_d
+    grid-area: details
+    display: flex
+    align-items: center
+    justify-content: center
+    > *
+        display: flex
+        width: 100%
+        align-items: center
+        justify-content: center
+.wth_t
+    grid-area: temp
+    text-align: center
+    font-size: 40px
+    line-height: 40px !important
+
+.wth_s
+    text-align: center
+    color: var(--c1)
+    width: 100%
+    padding: .5rem
+    background: #00000094
+    border-radius: 8px
+    opacity: 0
+    transition: all 1.5s ease-in
+
+.wth_l
+    text-align: center
+    padding: .5rem
+    display: block
+    font-weight: 600
+
+.wth_btm
+    font-weight: 600
+    opacity: 0
+    width: 100%
+    margin-top: 10px
+    text-align: center
+    bottom: 0
+    border-radius: 8px
+    color: var(--c3)
+    transition: all 1.5s ease-in
+
+.wth_t,
+.wth_d
+    text-align: center
+    float: none
+    width: 100%
+    height: auto

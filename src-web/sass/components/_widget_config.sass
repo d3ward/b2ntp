@@ -1,0 +1,159 @@
+
+/* --------------- Widget Config -------------- */
+
+.wdg_ntp
+    background: #00000050
+    padding: 0.5rem
+    border-radius: 10px
+
+#wdg_0
+    margin-top: var(--tms0)
+    background: var(--c2)
+
+#wdg_1
+    margin-top: var(--tms1)
+    background: var(--c6)
+
+#wdg_2
+    margin-top: var(--tms2)
+    background: var(--c16)
+
+/* -------------- Weather Widget -------------- */
+#wt_status:checked~.grid
+    opacity: .3
+
+.wth
+    position: absolute
+    top: 1rem
+    right: 1rem
+    max-width: 20rem
+    padding: .4rem
+    height: auto
+    border-radius: var(--radius)
+    display: var(--wt)
+    margin: auto
+    margin-top: 10px
+    border-radius: 8px
+    overflow: hidden
+    width: 100%
+    background: var(--c0)
+    color: var(--c1)
+
+#wth_s
+    position: relative
+    text-align: center
+    color: #fff
+    width: 100%
+    line-height: 32px !important
+    background: #00000094
+    border-radius: 8px
+    opacity: 0
+    transition: all 1.5s ease-in
+
+.wth_main
+    display: grid
+    grid-template-columns: 1fr 1fr
+    grid-template-rows: 1fr 1.4fr 1fr 1.4fr
+    gap: .5rem
+    color: var(--c1)
+    grid-auto-flow: row
+    justify-content: center
+    align-content: center
+    justify-items: center
+    align-items: center
+    grid-template-areas: "icon description" "icon temp" "icon city" "details details"
+    opacity: 0
+    transition: all 1.5s ease-in
+
+.wth_c
+    grid-area: city
+    background: var(--c2)
+    padding: .2rem .5rem
+    border-radius: var(--radius)
+    color: var(--c3)
+
+.wth_i
+    grid-area: icon
+    width: 5rem
+    height: 5rem
+
+.wth_t,
+.wth_d
+    float: left
+    width: 33%
+    height: 50px
+.wth_i svg
+    height: 5rem
+    width: 5rem
+.wth_d1
+    grid-area: description
+.wth_d
+    grid-area: details
+    display: flex
+    align-items: center
+    justify-content: center
+    > *
+        display: flex
+        width: 100%
+        align-items: center
+        justify-content: center
+.wth_t
+    grid-area: temp
+    text-align: center
+    font-size: 40px
+    line-height: 40px !important
+
+.wth_l
+    position: absolute
+    width: 100%
+    text-align: center
+    display: block
+    height: 25px
+    top: 50%
+    font-weight: 600
+    margin-top: -12.5px
+
+.wth_btm
+    font-weight: 600
+    opacity: 0
+    width: 100%
+    margin-top: 10px
+    text-align: center
+    bottom: 0
+    border-radius: 8px
+    color: var(--c3)
+    transition: all 1.5s ease-in
+
+.wth_t,
+.wth_d
+    text-align: center
+    float: none
+    width: 100%
+    height: auto
+@media (max-width:30em)
+    .wth
+        position: relative
+        top: unset
+        right: unset
+        width: 100%
+        max-width: 40rem
+@media (max-width:100em) and (min-width:30em)
+    #wth_ntp
+        position: relative
+        top: unset
+        right: unset
+        width: 100%
+        max-width: 40rem
+    #wth_ntp .wth_main
+        grid-template-columns: 1fr 1fr 1fr 1fr
+        grid-template-rows: 1fr 1fr
+        grid-template-areas: "icon temp city city" "description description details details"
+    #wth_ntp .wth_i,#wth_ntp .wth_i svg
+        width: 2.4rem
+        height: 2.4rem
+#wth_stt
+    position: relative
+    top: unset
+    right: unset
+    margin: auto
+    margin-top: 1rem

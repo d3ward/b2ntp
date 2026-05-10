@@ -1,0 +1,51 @@
+@use "reset"
+
+html
+	color: var(--txt)
+	background: var(--bg)
+body
+	min-height: 100vh
+	display: flex
+	flex-flow: wrap column
+	gap: .5rem
+	align-items: center
+	justify-content: center
+	color: var(--txt)
+	background: var(--bg)
+
+	@media (prefers-reduced-motion: no-preference)
+		scroll-behavior: smooth
+
+header>*,main>*,footer>*
+	max-width: 60rem
+
+ol, ul
+	list-style: none
+	display: flex
+	flex-direction: column
+	gap: .3rem
+.keep-ls
+	list-style: unset
+img
+	max-width: 100%
+
+table
+	border-collapse: collapse
+
+textarea
+	white-space: revert
+
+hr
+	border: 0
+	border-top: .1rem solid var(--brd)
+
+section
+	overflow-x: hidden
+	display: flex
+	flex-direction: column
+
+._mh-100-5
+	min-height: calc(100vh - 15em + 3rem)
+
+.no-js
+	display: none

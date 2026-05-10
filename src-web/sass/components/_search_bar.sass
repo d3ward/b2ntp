@@ -1,0 +1,64 @@
+
+/* ---------- Toolbar and Search Bar ---------- */
+.tool_search
+    display: flex
+    flex-direction: column
+    align-items: center
+    gap: .8rem
+    width: 100%
+.toolbar,
+#sb_input
+    border: none
+    border-radius: var(--radius)
+    width: calc(100% - 10px)
+
+.toolbar
+    background-color: var(--c4)
+    color: var(--c5)
+    padding: 0.4rem
+    height: 2.5rem
+    display: flex
+    align-items: center
+    justify-content: space-between
+
+.clock_date
+    display: flex
+    align-items: center
+    >*
+        margin: 0
+        padding: 0
+
+span#clock
+    margin-right: 15px
+    color: var(--c6)
+#action,#sb_input,.toolbar
+    width: 100%
+    max-width: 40rem
+#sb_input
+    background-color: var(--c7)
+    color: var(--c8)
+    padding: .5rem
+    font-size: 1.4rem
+    height: 3rem
+    caret-color: var(--c19)
+    &:focus,&:hover
+        box-shadow: 0 0 0 4px var(--c9)
+#sb_input::placeholder
+    color: var(--c18) !important
+
+#sb_input::-webkit-input-placeholder
+    color: var(--c18) !important
+
+#sb_input::-moz-placeholder
+    color: var(--c18) !important
+    opacity: 1
+
+#sb_input:-ms-input-placeholder
+    color: var(--c18) !important
+
+#sb_input::-ms-input-placeholder
+    color: var(--c18) !important
+
+#sb_txt
+    min-height: 200px
+    resize: vertical
