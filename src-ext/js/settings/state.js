@@ -8,7 +8,7 @@ export const DEFAULTS = {
     left:  { enabled: true, collapsed: false, order: ['tabs'],    panels: {} },
     right: { enabled: true, collapsed: false, order: ['weather'], panels: {} },
   },
-  weatherConfig: { status: false, api: "", lon: "", lat: "" },
+  weatherConfig: { status: false, location: "" },
   backgroundConfig: null,
 };
 
@@ -48,6 +48,13 @@ export const settingsState = {
     const migratedSidebar = migrateSidebarConfig(storedSidebar);
     if (migratedSidebar !== storedSidebar) {
       _adapter.set(STORAGE_KEYS.sidebarConfig, migratedSidebar);
+    }
+    const storedWeather = _adapter.get(STORAGE_KEYS.weatherConfig);
+    if (storedWeather && typeof storedWeather === "object" && "lat" in storedWeather && !("location" in storedWeather)) {
+      _adapter.set(STORAGE_KEYS.weatherConfig, {
+        status: storedWeather.status || false,
+        location: storedWeather.lat && storedWeather.lon ? `${storedWeather.lat},${storedWeather.lon}` : "",
+      });
     }
   },
 

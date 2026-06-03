@@ -2,7 +2,7 @@
   <aside class="active">
     <ul>
       <li>
-        <a topage="#p-general" class="active">
+        <a topage="#p-theme" class="active">
           <span class="a-icon">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -16,18 +16,11 @@
               stroke-linejoin="round"
             >
               <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-              <path d="M4 10a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
-              <path d="M6 4v4" />
-              <path d="M6 12v8" />
-              <path d="M10 16a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
-              <path d="M12 4v10" />
-              <path d="M12 18v2" />
-              <path d="M16 7a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
-              <path d="M18 4v1" />
-              <path d="M18 9v11" />
+              <path d="M3 21v-4a4 4 0 1 1 4 4h-4" />
+              <path d="M21 3a16 16 0 0 0 -12.5 12.5" />
             </svg>
           </span>
-          <span class="a-title">General</span>
+          <span class="a-title">Theme</span>
         </a>
       </li>
       <li>
@@ -132,60 +125,7 @@
             </svg>
           </span>
 
-          <span class="a-title">Search Bar</span>
-        </a>
-      </li>
-      <li>
-        <a topage="#p-grid">
-          <span class="a-icon">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.5"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-              <path d="M4 4l6 0" />
-              <path d="M14 4l6 0" />
-              <path
-                d="M4 8m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v8a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z"
-              />
-              <path
-                d="M14 8m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v2a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z"
-              />
-            </svg>
-          </span>
-
-          <span class="a-title">Grid</span>
-        </a>
-      </li>
-      <li>
-        <a topage="#p-sidebar">
-          <span class="a-icon">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.5"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-              <path
-                d="M4 4m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z"
-              />
-              <path d="M9 4v16" />
-            </svg>
-          </span>
-          <span class="a-title">Sidebar</span>
+          <span class="a-title">Search &amp; Toolbar</span>
         </a>
       </li>
       <li>
@@ -241,7 +181,7 @@
   </aside>
   <div class="modal-main">
     <div class="pages">
-      <section class="page-active" id="p-general">
+      <section class="page-active" id="p-theme">
         <div class="row flex-column flex-sb">
           <h4><label>Theme</label></h4>
           <div>
@@ -286,6 +226,584 @@
               />
             </div>
           </div>
+        </div>
+      </section>
+      <section id="p-bookmarks">
+        <div class="_ta-center">
+          <button id="sync-bk" class="btn-p">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+              <path d="M20 11a8.1 8.1 0 0 0 -15.5 -2m-.5 -4v4h4" />
+              <path d="M4 13a8.1 8.1 0 0 0 15.5 2m.5 4v-4h-4" />
+              <path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+            </svg>
+            Sync Bookmarks to b2ntp
+          </button>
+          <p>Last sync: <code id="last_sync"></code></p>
+          <div class="card _mt-2">
+            <p>
+              By default Bookmarks are updated every hour<br />
+              A few key points to understand how <code>b2ntp</code> works and
+              safeguards your bookmarks:
+            </p>
+            <ul class="_ta-left">
+              <li>
+                All data stays on your device. No information is sent to
+                external servers
+              </li>
+              <li>
+                Your bookmarks remain untouched and secure as uses an offline
+                local copy (clone) of your actual bookmarks
+              </li>
+              <li>
+                The extension cannot delete or edit your original bookmarks
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="row flex-column flex-sb">
+          <h4><label>Grid Layout</label></h4>
+          <div>
+            <div class="group-radio">
+              <div>
+                <input type="radio" name="t-style" id="t-style1" value="h" />
+                <label for="t-style1">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 36 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="1.5"
+                    version="1.1"
+                  >
+                    <path fill="none" stroke="none" d="M9.578 0h24v24h-24Z" />
+                    <path
+                      d="M4.922 3.2h26.156zm2 2.7a2 2 0 0 0-2 2V16a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2V7.9a2 2 0 0 0-2-2zm10.156 12.082a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2zm10-12a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2zM4.936 20.8h26.156z"
+                    />
+                  </svg>
+                  Horizontal
+                </label>
+              </div>
+              <div>
+                <input
+                  type="radio"
+                  name="t-style"
+                  id="t-style2"
+                  value="v3"
+                  checked
+                />
+                <label for="t-style2">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 36 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="1.5"
+                    version="1.1"
+                  >
+                    <path fill="none" stroke="none" d="M9.578 0h24v24h-24Z" />
+                    <path
+                      d="M4.922 3.918h6zM15.078 4h6zm10 0h6zM6.922 7.918a2 2 0 0 0-2 2v5.6a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2v-5.6a2 2 0 0 0-2-2zM17.078 8a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2zm10 0a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2v-4a2 2 0 0 0-2-2z"
+                    />
+                  </svg>
+                  Vertical 3 Columns
+                </label>
+              </div>
+              <div>
+                <input type="radio" name="t-style" id="t-style3" value="v2" />
+                <label for="t-style3">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="1.5"
+                    version="1.1"
+                  >
+                    <path fill="none" stroke="none" d="M0 0h24v24H0z" />
+                    <path
+                      d="M4 4h6M14 4h6M4 10a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zM14 10a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2z"
+                    />
+                  </svg>
+                  Vertical 2 Columns
+                </label>
+              </div>
+            </div>
+          </div>
+          <h4>
+            <label> Grid Colors</label>
+            <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg">
+              <use href="#cl-icon"></use>
+            </svg>
+            <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg">
+              <use href="#cd-icon"></use>
+            </svg>
+          </h4>
+          <div>
+            <label> Folder Background</label>
+            <div class="stt_clfrt" id="stt_cl_10"></div>
+            <div class="stt_clfrt" id="stt_cld_10"></div>
+          </div>
+          <div>
+            <label> Folder Title</label>
+            <div class="stt_clfrt" id="stt_cl_11"></div>
+            <div class="stt_clfrt" id="stt_cld_11"></div>
+          </div>
+          <div>
+            <label> Link Background</label>
+            <div class="stt_clfrt" id="stt_cl_12"></div>
+            <div class="stt_clfrt" id="stt_cld_12"></div>
+          </div>
+          <div>
+            <label> Link Text</label>
+            <div class="stt_clfrt" id="stt_cl_13"></div>
+            <div class="stt_clfrt" id="stt_cld_13"></div>
+          </div>
+          <div>
+            <label> Hover Link background</label>
+            <div class="stt_clfrt" id="stt_cl_14"></div>
+            <div class="stt_clfrt" id="stt_cld_14"></div>
+          </div>
+          <div>
+            <label> Hover Link Text</label>
+            <div class="stt_clfrt" id="stt_cl_15"></div>
+            <div class="stt_clfrt" id="stt_cld_15"></div>
+          </div>
+          <div>
+            <label> Scrollbar Background</label>
+            <div class="stt_clfrt" id="stt_cl_16"></div>
+            <div class="stt_clfrt" id="stt_cld_16"></div>
+          </div>
+          <div>
+            <label> Scrollbar Thumb</label>
+            <div class="stt_clfrt" id="stt_cl_17"></div>
+            <div class="stt_clfrt" id="stt_cld_17"></div>
+          </div>
+        </div>
+      </section>
+      <section id="p-background">
+        <div class="row flex-column _p-1" id="bg_crop">
+          <h4><label>NTP Background</label></h4>
+          <div id="bg_pld">
+            <div class="block">
+              <div class="blur_bg"></div>
+              <div class="dark_bg"></div>
+            </div>
+            <div class="_max-500">
+              <span class="_txt"
+                ><small>
+                  Custom image from file/url will be the same for both theme and
+                  limited to 2MB
+                </small></span
+              >
+              <div class="row flex-column">
+                <div>
+                  <label for="wllp_value">Background Value Theme</label>
+                  <textarea type="text" id="wllp_value" style="width: 100%">
+                  </textarea>
+                </div>
+                <div>
+                  <button class="btn-p" id="wllp_custom">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="1.5"
+                    >
+                      <path stroke="none" d="M0 0h24v24H0z" />
+                      <path d="M3 12a9 9 0 1 0 18 0 9 9 0 1 0-18 0" />
+                      <path d="m9 12 2 2 4-4" /></svg
+                    >Save custom value
+                  </button>
+                </div>
+                <div>
+                  <div class="_2-col">
+                    <button class="btn-p" id="wllp_clearvalue">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="1.5"
+                      >
+                        <path stroke="none" d="M0 0h24v24H0z" />
+                        <path
+                          d="M20 6a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H9l-5-5a1.5 1.5 0 0 1 0-2l5-5zM12 10l4 4m0-4-4 4"
+                        /></svg
+                      >Clear
+                    </button>
+
+                    <button class="btn-p" id="wllp_bg">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="1.5"
+                      >
+                        <path stroke="none" d="M0 0h24v24H0z" />
+                        <path
+                          d="M19 3h-4a2 2 0 0 0-2 2v12a4 4 0 0 0 8 0V5a2 2 0 0 0-2-2"
+                        />
+                        <path
+                          d="m13 7.35-2-2a2 2 0 0 0-2.828 0L5.344 8.178a2 2 0 0 0 0 2.828l9 9"
+                        />
+                        <path
+                          d="M7.3 13H5a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h12M17 17v.01"
+                        />
+                      </svg>
+                      Color
+                    </button>
+                    <button class="btn-p" id="wllp_gradient">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="1.5"
+                      >
+                        <path stroke="none" d="M0 0h24v24H0z" />
+                        <path d="M22 17c0-5.523-4.477-10-10-10S2 11.477 2 17" />
+                        <path d="M18 17a6 6 0 1 0-12 0" />
+                        <path d="M14 17a2 2 0 1 0-4 0" />
+                      </svg>
+                      Gradient
+                    </button>
+                    <label class="btn btn-p" for="wllp_file"
+                      ><input
+                        type="file"
+                        id="wllp_file"
+                        style="opacity: 0; position: absolute; z-index: -1"
+                      />
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="1.5"
+                      >
+                        <path stroke="none" d="M0 0h24v24H0z" />
+                        <path
+                          d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2M7 9l5-5 5 5M12 4v12"
+                        />
+                      </svg>
+                      File
+                    </label>
+                    <button class="btn-p" id="wllp_url">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="1.5"
+                      >
+                        <path stroke="none" d="M0 0h24v24H0z" />
+                        <path
+                          d="m9 15 6-6M11 6l.463-.536a5 5 0 0 1 7.071 7.072L18 13M13 18l-.397.534a5.068 5.068 0 0 1-7.127 0 4.972 4.972 0 0 1 0-7.071L6 11"
+                        />
+                      </svg>
+                      Link
+                    </button>
+                    <button class="btn-p" id="wllp_default">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="1.5"
+                      >
+                        <path stroke="none" d="M0 0h24v24H0z" />
+                        <path d="m11 7-5 5 5 5M17 7l-5 5 5 5" /></svg
+                      >Default
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <hr />
+              <div>
+                <label for="tg_r77"
+                  >Background Blur Intensity: <span id="tg_r77v">4</span></label
+                >
+              </div>
+              <div>
+                <input
+                  type="range"
+                  min="0"
+                  max="50"
+                  value="0"
+                  class="slr_rng"
+                  id="tg_r77"
+                />
+              </div>
+              <div>
+                <label for="tg_r777"
+                  >Background Brightness: <span id="tg_r777v">4</span></label
+                >
+              </div>
+              <div>
+                <input
+                  type="range"
+                  min="50"
+                  max="150"
+                  value="100"
+                  class="slr_rng"
+                  id="tg_r777"
+                />
+              </div>
+            </div>
+          </div>
+          <div id="crop">
+            <div class="block">
+              <div class="stage">
+                <div id="croppie"></div>
+              </div>
+            </div>
+            <p class="_pt-4 _pb-1">
+              Move the image to fit the area you want to crop. <br />
+              Use the slider to zoom
+            </p>
+            <div class="_2-col">
+              <button id="b_cc">Cancel</button>
+              <button id="b_cr">Next</button>
+            </div>
+          </div>
+          <div id="result">
+            <div class="block">
+              <div class="stage">
+                <img id="imgRes" alt="Result Cropped Background" />
+              </div>
+            </div>
+            <div class="_2-col _pt-2">
+              <button id="b_cc2">Cancel</button>
+              <button id="b_sbgc">Save&Apply</button>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section id="p-widgets">
+        <nav class="wdg-tab-bar">
+          <button class="wdg-tab active" data-tab="wdg-panel-layout">Layout</button>
+          <button class="wdg-tab" data-tab="wdg-panel-weather">Weather</button>
+        </nav>
+
+        <div class="wdg-tab-panel" id="wdg-panel-layout">
+          <div class="row flex-column flex-sb">
+            <div class="widget-sidebar-columns">
+              <div class="widget-sidebar-col">
+                <h5>Left Sidebar</h5>
+                <ul id="wdg-order-left" class="wdg-order-list"></ul>
+              </div>
+              <div class="widget-sidebar-col">
+                <h5>Right Sidebar</h5>
+                <ul id="wdg-order-right" class="wdg-order-list"></ul>
+              </div>
+            </div>
+            <div>
+              <label for="sidebar-enabled">Show Sidebar</label>
+              <input
+                id="sidebar-enabled"
+                type="checkbox"
+                class="toggle"
+                aria-label="Toggle sidebar"
+              />
+            </div>
+            <h4>
+              <label>Sidebar Colors</label>
+              <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg">
+                <use href="#cl-icon"></use>
+              </svg>
+              <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg">
+                <use href="#cd-icon"></use>
+              </svg>
+            </h4>
+            <div>
+              <label>Left Sidebar</label>
+              <div class="stt_clfrt" id="stt_cl_25"></div>
+              <div class="stt_clfrt" id="stt_cld_25"></div>
+            </div>
+            <div>
+              <label>Right Sidebar</label>
+              <div class="stt_clfrt" id="stt_cl_26"></div>
+              <div class="stt_clfrt" id="stt_cld_26"></div>
+            </div>
+            <h4>
+              <label>Tabs Colors</label>
+              <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg">
+                <use href="#cl-icon"></use>
+              </svg>
+              <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg">
+                <use href="#cd-icon"></use>
+              </svg>
+            </h4>
+            <div>
+              <label>Background</label>
+              <div class="stt_clfrt" id="stt_cl_20"></div>
+              <div class="stt_clfrt" id="stt_cld_20"></div>
+            </div>
+            <div>
+              <label>Text &amp; Icons</label>
+              <div class="stt_clfrt" id="stt_cl_21"></div>
+              <div class="stt_clfrt" id="stt_cld_21"></div>
+            </div>
+            <div>
+              <label>Item Hover</label>
+              <div class="stt_clfrt" id="stt_cl_22"></div>
+              <div class="stt_clfrt" id="stt_cld_22"></div>
+            </div>
+            <div>
+              <label>Active Tab Background</label>
+              <div class="stt_clfrt" id="stt_cl_23"></div>
+              <div class="stt_clfrt" id="stt_cld_23"></div>
+            </div>
+            <div>
+              <label>Active Tab Text</label>
+              <div class="stt_clfrt" id="stt_cl_24"></div>
+              <div class="stt_clfrt" id="stt_cld_24"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="wdg-tab-panel" id="wdg-panel-weather" hidden>
+          <div class="row flex-column flex-sb">
+            <h4>
+              <label>Weather Configuration</label>
+              <input
+                id="wt_status"
+                type="checkbox"
+                class="toggle"
+                aria-label="Toggle Weather Widget"
+              />
+            </h4>
+            <div class="row">
+              <div>
+                <div class="grid" id="wt_grid">
+                  <div>
+                    Location
+                    <input
+                      id="wt_loc"
+                      type="text"
+                      placeholder="City name or coordinates"
+                      aria-label="Location"
+                    />
+                  </div>
+                  <div>
+                    <button id="get_ll">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                        <path d="M12 18.5l-3 -1.5l-6 3v-13l6 -3l6 3l6 -3v7.5" />
+                        <path d="M9 4v13" />
+                        <path d="M15 7v5.5" />
+                        <path
+                          d="M21.121 20.121a3 3 0 1 0 -4.242 0c.418 .419 1.125 1.045 2.121 1.879c1.051 -.89 1.759 -1.516 2.121 -1.879z"
+                        />
+                        <path d="M19 18v.01" />
+                      </svg>
+                      Use current location
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <h5 class="_ta-center">Preview</h5>
+                <div class="wth _brd-txt" id="wth_stt">
+                  <div class="wth_s">Set a location to enable weather</div>
+                  <div class="wth_main">
+                    <div class="wth_i"></div>
+                    <div class="wth_t"></div>
+                    <div class="wth_d">
+                      <div class="wth_mm"></div>
+                      <div class="wth_w"></div>
+                      <div class="wth_h"></div>
+                    </div>
+                    <div class="wth_d1"></div>
+                    <div class="wth_c"></div>
+                  </div>
+                  <div class="wth_l">Loading...</div>
+                </div>
+              </div>
+            </div>
+            <h4>
+              <label>Weather Colors</label>
+              <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg">
+                <use href="#cl-icon"></use>
+              </svg>
+              <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg">
+                <use href="#cd-icon"></use>
+              </svg>
+            </h4>
+            <div>
+              <label>Background</label>
+              <div class="stt_clfrt" id="stt_cl_0"></div>
+              <div class="stt_clfrt" id="stt_cld_0"></div>
+            </div>
+            <div>
+              <label>Text &amp; Icons</label>
+              <div class="stt_clfrt" id="stt_cl_1"></div>
+              <div class="stt_clfrt" id="stt_cld_1"></div>
+            </div>
+            <div>
+              <label>City Label Background</label>
+              <div class="stt_clfrt" id="stt_cl_2"></div>
+              <div class="stt_clfrt" id="stt_cld_2"></div>
+            </div>
+            <div>
+              <label>City Label Text</label>
+              <div class="stt_clfrt" id="stt_cl_3"></div>
+              <div class="stt_clfrt" id="stt_cld_3"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section id="p-search">
+        <div class="row flex-column flex-sb">
           <h4><label>Toolbar</label></h4>
           <div>
             <label for="timeFormat">Choose time format:</label>
@@ -355,7 +873,7 @@
             <div class="stt_clfrt" id="stt_cld_4"></div>
           </div>
           <div>
-            <label> Text & Icon </label>
+            <label> Text &amp; Icon </label>
             <div class="stt_clfrt" id="stt_cl_5"></div>
             <div class="stt_clfrt" id="stt_cld_5"></div>
           </div>
@@ -364,66 +882,42 @@
             <div class="stt_clfrt" id="stt_cl_6"></div>
             <div class="stt_clfrt" id="stt_cld_6"></div>
           </div>
-        </div>
-      </section>
-      <section id="p-bookmarks">
-        <div class="_ta-center">
-          <button id="sync-bk" class="btn-p">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.5"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-              <path d="M20 11a8.1 8.1 0 0 0 -15.5 -2m-.5 -4v4h4" />
-              <path d="M4 13a8.1 8.1 0 0 0 15.5 2m.5 4v-4h-4" />
-              <path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
-            </svg>
-            Sync Bookmarks to b2ntp
-          </button>
-          <p>Last sync: <code id="last_sync"></code></p>
-          <div class="card _mt-2">
-            <p>
-              By default Bookmarks are updated every hour<br />
-              A few key points to understand how <code>b2ntp</code> works and
-              safeguards your bookmarks:
-            </p>
-            <ul class="_ta-left">
-              <li>
-                All data stays on your device. No information is sent to
-                external servers
-              </li>
-              <li>
-                Your bookmarks remain untouched and secure as uses an offline
-                local copy (clone) of your actual bookmarks
-              </li>
-              <li>
-                The extension cannot delete or edit your original bookmarks
-              </li>
-            </ul>
-          </div>
-        </div>
-      </section>
-      <section id="p-sidebar">
-        <div class="row flex-column flex-sb">
-          <h4><label>Sidebar</label></h4>
+          <hr />
+          <h4><label>Search Bar</label></h4>
           <div>
-            <label for="sidebar-enabled">Show Sidebar</label>
-            <input
-              id="sidebar-enabled"
-              type="checkbox"
-              class="toggle"
-              aria-label="Toggle sidebar"
-            />
+            <textarea id="sb_txt" rows="10"></textarea>
+          </div>
+          <div>
+            <details class="_bg-bg3 _radius" open>
+              <summary>How it works</summary>
+              <div>
+                As you get familiar with these tips, your searches will become
+                quicker and more efficient!
+                <br />
+                <h6>Bookmarks Highlight</h6>
+                <p>
+                  If your search term matches a bookmark, it will be highlighted
+                  automatically
+                </p>
+                <br />
+                <h6>Search + Skip Bookmark</h6>
+                <p>
+                  If you don't want to open the highlighted bookmark, press the
+                  space bar twice, then Enter. This will perform a search using
+                  your default search engine.
+                </p>
+                <br />
+                <h6>Search with Shortcut</h6>
+                <p>
+                  To use a shortcut, start by typing the bang+shortcut letter,
+                  followed by a space, and then your search term. This will
+                  initiate a search using the specified shortcut.
+                </p>
+              </div>
+            </details>
           </div>
           <h4>
-            <label>Sidebar Colors</label>
+            <label> Search Bar Colors</label>
             <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg">
               <use href="#cl-icon"></use>
             </svg>
@@ -432,29 +926,29 @@
             </svg>
           </h4>
           <div>
-            <label>Background</label>
-            <div class="stt_clfrt" id="stt_cl_20"></div>
-            <div class="stt_clfrt" id="stt_cld_20"></div>
+            <label> Background</label>
+            <div class="stt_clfrt" id="stt_cl_7"></div>
+            <div class="stt_clfrt" id="stt_cld_7"></div>
           </div>
           <div>
-            <label>Text &amp; Icons</label>
-            <div class="stt_clfrt" id="stt_cl_21"></div>
-            <div class="stt_clfrt" id="stt_cld_21"></div>
+            <label> Text</label>
+            <div class="stt_clfrt" id="stt_cl_8"></div>
+            <div class="stt_clfrt" id="stt_cld_8"></div>
           </div>
           <div>
-            <label>Item Hover</label>
-            <div class="stt_clfrt" id="stt_cl_22"></div>
-            <div class="stt_clfrt" id="stt_cld_22"></div>
+            <label> Border on hover</label>
+            <div class="stt_clfrt" id="stt_cl_9"></div>
+            <div class="stt_clfrt" id="stt_cld_9"></div>
           </div>
           <div>
-            <label>Active Tab Background</label>
-            <div class="stt_clfrt" id="stt_cl_23"></div>
-            <div class="stt_clfrt" id="stt_cld_23"></div>
+            <label> Text Placeholder </label>
+            <div class="stt_clfrt" id="stt_cl_18"></div>
+            <div class="stt_clfrt" id="stt_cld_18"></div>
           </div>
           <div>
-            <label>Active Tab Text</label>
-            <div class="stt_clfrt" id="stt_cl_24"></div>
-            <div class="stt_clfrt" id="stt_cld_24"></div>
+            <label> Input Caret Color </label>
+            <div class="stt_clfrt" id="stt_cl_19"></div>
+            <div class="stt_clfrt" id="stt_cld_19"></div>
           </div>
         </div>
       </section>
@@ -712,566 +1206,6 @@
               >This enables theme sharing with other users! Import cool themes
               shared by others while keeping your data.</span
             >
-          </div>
-        </div>
-      </section>
-      <section id="p-background">
-        <div class="row flex-column _p-1" id="bg_crop">
-          <h4><label>NTP Background</label></h4>
-          <div id="bg_pld">
-            <div class="block">
-              <div class="blur_bg"></div>
-              <div class="dark_bg"></div>
-            </div>
-            <div class="_max-500">
-              <span class="_txt"
-                ><small>
-                  Custom image from file/url will be the same for both theme and
-                  limited to 2MB
-                </small></span
-              >
-              <div class="row flex-column">
-                <div>
-                  <label for="wllp_value">Background Value Theme</label>
-                  <textarea type="text" id="wllp_value" style="width: 100%">
-                  </textarea>
-                </div>
-                <div>
-                  <button class="btn-p" id="wllp_custom">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="1.5"
-                    >
-                      <path stroke="none" d="M0 0h24v24H0z" />
-                      <path d="M3 12a9 9 0 1 0 18 0 9 9 0 1 0-18 0" />
-                      <path d="m9 12 2 2 4-4" /></svg
-                    >Save custom value
-                  </button>
-                </div>
-                <div>
-                  <div class="_2-col">
-                    <button class="btn-p" id="wllp_clearvalue">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="1.5"
-                      >
-                        <path stroke="none" d="M0 0h24v24H0z" />
-                        <path
-                          d="M20 6a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H9l-5-5a1.5 1.5 0 0 1 0-2l5-5zM12 10l4 4m0-4-4 4"
-                        /></svg
-                      >Clear
-                    </button>
-
-                    <button class="btn-p" id="wllp_bg">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="1.5"
-                      >
-                        <path stroke="none" d="M0 0h24v24H0z" />
-                        <path
-                          d="M19 3h-4a2 2 0 0 0-2 2v12a4 4 0 0 0 8 0V5a2 2 0 0 0-2-2"
-                        />
-                        <path
-                          d="m13 7.35-2-2a2 2 0 0 0-2.828 0L5.344 8.178a2 2 0 0 0 0 2.828l9 9"
-                        />
-                        <path
-                          d="M7.3 13H5a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h12M17 17v.01"
-                        />
-                      </svg>
-                      Color
-                    </button>
-                    <button class="btn-p" id="wllp_gradient">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="1.5"
-                      >
-                        <path stroke="none" d="M0 0h24v24H0z" />
-                        <path d="M22 17c0-5.523-4.477-10-10-10S2 11.477 2 17" />
-                        <path d="M18 17a6 6 0 1 0-12 0" />
-                        <path d="M14 17a2 2 0 1 0-4 0" />
-                      </svg>
-                      Gradient
-                    </button>
-                    <label class="btn btn-p" for="wllp_file"
-                      ><input
-                        type="file"
-                        id="wllp_file"
-                        style="opacity: 0; position: absolute; z-index: -1"
-                      />
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="1.5"
-                      >
-                        <path stroke="none" d="M0 0h24v24H0z" />
-                        <path
-                          d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2M7 9l5-5 5 5M12 4v12"
-                        />
-                      </svg>
-                      File
-                    </label>
-                    <button class="btn-p" id="wllp_url">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="1.5"
-                      >
-                        <path stroke="none" d="M0 0h24v24H0z" />
-                        <path
-                          d="m9 15 6-6M11 6l.463-.536a5 5 0 0 1 7.071 7.072L18 13M13 18l-.397.534a5.068 5.068 0 0 1-7.127 0 4.972 4.972 0 0 1 0-7.071L6 11"
-                        />
-                      </svg>
-                      Link
-                    </button>
-                    <button class="btn-p" id="wllp_default">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="1.5"
-                      >
-                        <path stroke="none" d="M0 0h24v24H0z" />
-                        <path d="m11 7-5 5 5 5M17 7l-5 5 5 5" /></svg
-                      >Default
-                    </button>
-                  </div>
-                </div>
-              </div>
-              <hr />
-              <div>
-                <label for="tg_r77"
-                  >Background Blur Intensity: <span id="tg_r77v">4</span></label
-                >
-              </div>
-              <div>
-                <input
-                  type="range"
-                  min="0"
-                  max="50"
-                  value="0"
-                  class="slr_rng"
-                  id="tg_r77"
-                />
-              </div>
-              <div>
-                <label for="tg_r777"
-                  >Background Brightness: <span id="tg_r777v">4</span></label
-                >
-              </div>
-              <div>
-                <input
-                  type="range"
-                  min="50"
-                  max="150"
-                  value="100"
-                  class="slr_rng"
-                  id="tg_r777"
-                />
-              </div>
-            </div>
-          </div>
-          <div id="crop">
-            <div class="block">
-              <div class="stage">
-                <div id="croppie"></div>
-              </div>
-            </div>
-            <p class="_pt-4 _pb-1">
-              Move the image to fit the area you want to crop. <br />
-              Use the slider to zoom
-            </p>
-            <div class="_2-col">
-              <button id="b_cc">Cancel</button>
-              <button id="b_cr">Next</button>
-            </div>
-          </div>
-          <div id="result">
-            <div class="block">
-              <div class="stage">
-                <img id="imgRes" alt="Result Cropped Background" />
-              </div>
-            </div>
-            <div class="_2-col _pt-2">
-              <button id="b_cc2">Cancel</button>
-              <button id="b_sbgc">Save&Apply</button>
-            </div>
-          </div>
-        </div>
-      </section>
-      <section id="p-widgets">
-        <div class="row flex-column flex-sb">
-          <h4><label>Widget Assignment</label></h4>
-          <div id="widget-cards" class="widget-cards-grid"></div>
-
-          <h4><label>Sidebar Layout</label></h4>
-          <div class="widget-sidebar-columns">
-            <div class="widget-sidebar-col">
-              <h5>Left Sidebar</h5>
-              <div>
-                <label for="left-collapsed">Collapsed by default</label>
-                <input
-                  id="left-collapsed"
-                  type="checkbox"
-                  class="toggle"
-                  aria-label="Collapse left sidebar by default"
-                />
-              </div>
-              <ul id="wdg-order-left" class="wdg-order-list"></ul>
-            </div>
-            <div class="widget-sidebar-col">
-              <h5>Right Sidebar</h5>
-              <div>
-                <label for="right-collapsed">Collapsed by default</label>
-                <input
-                  id="right-collapsed"
-                  type="checkbox"
-                  class="toggle"
-                  aria-label="Collapse right sidebar by default"
-                />
-              </div>
-              <ul id="wdg-order-right" class="wdg-order-list"></ul>
-            </div>
-          </div>
-
-          <h4>
-            <label>Weather Configuration</label>
-            <input
-              id="wt_status"
-              type="checkbox"
-              class="toggle"
-              aria-label="Toggle Weather Widget"
-            />
-          </h4>
-          <div class="row">
-            <div>
-              <div class="grid" id="wt_grid">
-                <div>
-                  OpenWeatherMap API Key<input
-                    id="wt_ik"
-                    type="text"
-                    aria-label="OpenWeatherMap API Key"
-                  />
-                </div>
-                <div class="col-6">
-                  Latitude
-                  <input id="wt_ila" type="text" aria-label="Latitude" />
-                </div>
-                <div class="col-6">
-                  Longitude
-                  <input id="wt_iln" type="text" aria-label="Longitude" />
-                </div>
-                <div>
-                  <button id="get_ll">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="1.5"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    >
-                      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                      <path d="M12 18.5l-3 -1.5l-6 3v-13l6 -3l6 3l6 -3v7.5" />
-                      <path d="M9 4v13" />
-                      <path d="M15 7v5.5" />
-                      <path
-                        d="M21.121 20.121a3 3 0 1 0 -4.242 0c.418 .419 1.125 1.045 2.121 1.879c1.051 -.89 1.759 -1.516 2.121 -1.879z"
-                      />
-                      <path d="M19 18v.01" />
-                    </svg>
-                    Get longitude and latitude
-                  </button>
-                </div>
-              </div>
-            </div>
-            <div>
-              <h5 class="_ta-center">Preview</h5>
-              <div class="wth _brd-txt" id="wth_stt">
-                <div class="wth_s">Missing OpenWeatherMap Key</div>
-                <div class="wth_main">
-                  <div class="wth_i"></div>
-                  <div class="wth_t"></div>
-                  <div class="wth_d">
-                    <div class="wth_mm"></div>
-                    <div class="wth_w"></div>
-                    <div class="wth_h"></div>
-                  </div>
-                  <div class="wth_d1"></div>
-                  <div class="wth_c"></div>
-                </div>
-                <div class="wth_l">Loading...</div>
-              </div>
-            </div>
-          </div>
-          <h4>
-            <label>Weather Widget Colors</label>
-            <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg">
-              <use href="#cl-icon"></use>
-            </svg>
-            <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg">
-              <use href="#cd-icon"></use>
-            </svg>
-          </h4>
-          <div>
-            <label> Background</label>
-            <div class="stt_clfrt" id="stt_cl_0"></div>
-            <div class="stt_clfrt" id="stt_cld_0"></div>
-          </div>
-          <div>
-            <label> Text &amp; Icons</label>
-            <div class="stt_clfrt" id="stt_cl_1"></div>
-            <div class="stt_clfrt" id="stt_cld_1"></div>
-          </div>
-          <div>
-            <label> City Label Background</label>
-            <div class="stt_clfrt" id="stt_cl_2"></div>
-            <div class="stt_clfrt" id="stt_cld_2"></div>
-          </div>
-          <div>
-            <label> City Label Text</label>
-            <div class="stt_clfrt" id="stt_cl_3"></div>
-            <div class="stt_clfrt" id="stt_cld_3"></div>
-          </div>
-        </div>
-      </section>
-      <section id="p-search">
-        <div class="row flex-column flex-sb">
-          <div>
-            <textarea id="sb_txt" rows="10"></textarea>
-          </div>
-          <div>
-            <details class="_bg-bg3 _radius" open>
-              <summary>How it works</summary>
-              <div>
-                As you get familiar with these tips, your searches will become
-                quicker and more efficient!
-                <br />
-                <h6>Bookmarks Highlight</h6>
-                <p>
-                  If your search term matches a bookmark, it will be highlighted
-                  automatically
-                </p>
-                <br />
-                <h6>Search + Skip Bookmark</h6>
-                <p>
-                  If you don’t want to open the highlighted bookmark, press the
-                  space bar twice, then Enter. This will perform a search using
-                  your default search engine.
-                </p>
-                <br />
-                <h6>Search with Shortcut</h6>
-                <p>
-                  To use a shortcut, start by typing the bang+shortcut letter,
-                  followed by a space, and then your search term. This will
-                  initiate a search using the specified shortcut.
-                </p>
-              </div>
-            </details>
-          </div>
-          <h4>
-            <label> Search Bar Colors</label>
-            <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg">
-              <use href="#cl-icon"></use>
-            </svg>
-            <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg">
-              <use href="#cd-icon"></use>
-            </svg>
-          </h4>
-          <div>
-            <label> Background</label>
-            <div class="stt_clfrt" id="stt_cl_7"></div>
-            <div class="stt_clfrt" id="stt_cld_7"></div>
-          </div>
-          <div>
-            <label> Text</label>
-            <div class="stt_clfrt" id="stt_cl_8"></div>
-            <div class="stt_clfrt" id="stt_cld_8"></div>
-          </div>
-          <div>
-            <label> Border on hover</label>
-            <div class="stt_clfrt" id="stt_cl_9"></div>
-            <div class="stt_clfrt" id="stt_cld_9"></div>
-          </div>
-          <div>
-            <label> Text Placeholder </label>
-            <div class="stt_clfrt" id="stt_cl_18"></div>
-            <div class="stt_clfrt" id="stt_cld_18"></div>
-          </div>
-          <div>
-            <label> Input Caret Color </label>
-            <div class="stt_clfrt" id="stt_cl_19"></div>
-            <div class="stt_clfrt" id="stt_cld_19"></div>
-          </div>
-        </div>
-      </section>
-      <section id="p-grid">
-        <div class="row flex-column flex-sb">
-          <h4><label> Grid Layout</label></h4>
-          <div>
-            <div class="group-radio">
-              <div>
-                <input type="radio" name="t-style" id="t-style1" value="h" />
-                <label for="t-style1">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 36 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="1.5"
-                    class="prefix__icon prefix__icon-tabler prefix__icons-tabler-outline prefix__icon-tabler-layout-kanban"
-                    version="1.1"
-                  >
-                    <path fill="none" stroke="none" d="M9.578 0h24v24h-24Z" />
-                    <path
-                      d="M4.922 3.2h26.156zm2 2.7a2 2 0 0 0-2 2V16a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2V7.9a2 2 0 0 0-2-2zm10.156 12.082a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2zm10-12a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2zM4.936 20.8h26.156z"
-                    />
-                  </svg>
-                  Horizontal
-                </label>
-              </div>
-              <div>
-                <input
-                  type="radio"
-                  name="t-style"
-                  id="t-style2"
-                  value="v3"
-                  checked
-                />
-                <label for="t-style2">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 36 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="1.5"
-                    class="prefix__icon prefix__icon-tabler prefix__icons-tabler-outline prefix__icon-tabler-layout-kanban"
-                    version="1.1"
-                  >
-                    <path fill="none" stroke="none" d="M9.578 0h24v24h-24Z" />
-                    <path
-                      d="M4.922 3.918h6zM15.078 4h6zm10 0h6zM6.922 7.918a2 2 0 0 0-2 2v5.6a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2v-5.6a2 2 0 0 0-2-2zM17.078 8a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2zm10 0a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2v-4a2 2 0 0 0-2-2z"
-                    />
-                  </svg>
-                  Vertical 3 Columns
-                </label>
-              </div>
-              <div>
-                <input type="radio" name="t-style" id="t-style3" value="v2" />
-                <label for="t-style3">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="1.5"
-                    class="prefix__icon prefix__icon-tabler prefix__icons-tabler-outline prefix__icon-tabler-layout-kanban"
-                    version="1.1"
-                  >
-                    <path fill="none" stroke="none" d="M0 0h24v24H0z" />
-                    <path
-                      d="M4 4h6M14 4h6M4 10a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zM14 10a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2z"
-                    />
-                  </svg>
-                  Vertical 2 Columns
-                </label>
-              </div>
-            </div>
-          </div>
-          <h4>
-            <label> Grid Colors</label>
-            <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg">
-              <use href="#cl-icon"></use>
-            </svg>
-            <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg">
-              <use href="#cd-icon"></use>
-            </svg>
-          </h4>
-          <div>
-            <label> Folder Background</label>
-            <div class="stt_clfrt" id="stt_cl_10"></div>
-            <div class="stt_clfrt" id="stt_cld_10"></div>
-          </div>
-          <div>
-            <label> Folder Title</label>
-            <div class="stt_clfrt" id="stt_cl_11"></div>
-            <div class="stt_clfrt" id="stt_cld_11"></div>
-          </div>
-          <div>
-            <label> Link Background</label>
-            <div class="stt_clfrt" id="stt_cl_12"></div>
-            <div class="stt_clfrt" id="stt_cld_12"></div>
-          </div>
-          <div>
-            <label> Link Text</label>
-            <div class="stt_clfrt" id="stt_cl_13"></div>
-            <div class="stt_clfrt" id="stt_cld_13"></div>
-          </div>
-          <div>
-            <label> Hover Link background</label>
-            <div class="stt_clfrt" id="stt_cl_14"></div>
-            <div class="stt_clfrt" id="stt_cld_14"></div>
-          </div>
-          <div>
-            <label> Hover Link Text</label>
-            <div class="stt_clfrt" id="stt_cl_15"></div>
-            <div class="stt_clfrt" id="stt_cld_15"></div>
-          </div>
-          <div>
-            <label> Scrollbar Background</label>
-            <div class="stt_clfrt" id="stt_cl_16"></div>
-            <div class="stt_clfrt" id="stt_cld_16"></div>
-          </div>
-          <div>
-            <label> Scrollbar Thumb</label>
-            <div class="stt_clfrt" id="stt_cl_17"></div>
-            <div class="stt_clfrt" id="stt_cld_17"></div>
           </div>
         </div>
       </section>

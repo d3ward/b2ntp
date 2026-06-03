@@ -5,7 +5,7 @@
 	left: 0
 	top: 0
 	width: 4rem
-	background: var(--txt)
+	background: var(--c25)
 	padding: 3rem 0 .5rem .5rem
 	border-radius: var(--radius-b)
 	overflow: hidden
@@ -24,9 +24,9 @@
 			position: relative
 			width: 100%
 
-			a:hover,a.active
-				background: var(--bg)
-				color: var(--txt)
+			a:hover
+				background: var(--c22)
+				color: var(--c21)
 				&:before
 					content: ''
 					position: absolute
@@ -36,7 +36,7 @@
 					height: 20px
 					background: transparent
 					border-bottom-right-radius: var(--radius-b)
-					box-shadow: 7.5px 7.5px 0 7.5px var(--bg)
+					box-shadow: 7.5px 7.5px 0 7.5px var(--c22)
 				&:after
 					content: ''
 					position: absolute
@@ -46,7 +46,31 @@
 					height: 20px
 					background: transparent
 					border-top-right-radius: var(--radius-b)
-					box-shadow: 7.5px -7.5px 0 7.5px var(--bg)
+					box-shadow: 7.5px -7.5px 0 7.5px var(--c22)
+
+			a.active
+				background: var(--c23)
+				color: var(--c24)
+				&:before
+					content: ''
+					position: absolute
+					top: -20px
+					right: 0
+					width: 20px
+					height: 20px
+					background: transparent
+					border-bottom-right-radius: var(--radius-b)
+					box-shadow: 7.5px 7.5px 0 7.5px var(--c23)
+				&:after
+					content: ''
+					position: absolute
+					bottom: -20px
+					right: 0
+					width: 20px
+					height: 20px
+					background: transparent
+					border-top-right-radius: var(--radius-b)
+					box-shadow: 7.5px -7.5px 0 7.5px var(--c23)
 
 		a
 			display: flex
@@ -56,7 +80,7 @@
 			padding: .4rem
 			border-top-left-radius: var(--radius-b)
 			border-bottom-left-radius: var(--radius-b)
-			color: var(--txt-r)
+			color: var(--c21)
 			.a-icon
 				min-width: 2rem
 				height: 2rem

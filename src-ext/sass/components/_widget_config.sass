@@ -1,43 +1,6 @@
 
 /* --------- Widget Settings UI (Options Page) --------- */
 
-.widget-cards-grid
-    display: flex
-    flex-direction: column
-    gap: .4rem
-
-.widget-settings-card
-    display: flex
-    align-items: center
-    gap: .6rem
-    padding: .45rem .75rem
-    background: var(--c4)
-    border-radius: var(--radius)
-
-    .widget-settings-icon
-        display: flex
-        align-items: center
-        color: var(--txt)
-        min-width: 1.5rem
-        flex-shrink: 0
-
-    .widget-settings-label
-        flex: 1
-        font-size: .9rem
-        font-weight: 500
-
-    .widget-settings-side
-        display: flex
-        gap: .6rem
-        font-size: .8rem
-
-        label
-            display: flex
-            align-items: center
-            gap: .2rem
-            cursor: pointer
-            white-space: nowrap
-
 .widget-sidebar-columns
     display: grid
     grid-template-columns: 1fr 1fr
@@ -75,13 +38,19 @@
     align-items: center
     gap: .45rem
     padding: .3rem .5rem
-    cursor: grab
+    cursor: default
     font-size: .82rem
     border-radius: var(--radius)
     transition: background .1s
 
     &:hover
         background: var(--hover)
+
+    &.wdg-active
+        cursor: grab
+
+    &.wdg-inactive
+        opacity: .5
 
     &.dragging
         opacity: .35
@@ -94,10 +63,116 @@
         align-items: center
         flex-shrink: 0
 
+    &.wdg-inactive .wdg-drag-handle
+        visibility: hidden
+
+    .wdg-item-icon
+        display: flex
+        align-items: center
+        flex-shrink: 0
+        color: var(--txt)
+
+        svg
+            width: 14px
+            height: 14px
+
+    .wdg-item-name
+        flex: 1
+
+    .wdg-toggle
+        margin-left: auto
+        flex-shrink: 0
+
     svg
         flex-shrink: 0
         width: 14px
         height: 14px
+
+/* --------------- Widget Tabs ---------------- */
+
+.wdg-tab-bar
+    display: flex
+    gap: .15rem
+    border-bottom: 1px solid var(--brd)
+    padding: 0 .5rem
+    margin-bottom: .75rem
+    flex-shrink: 0
+
+.wdg-tab
+    background: none
+    border: none
+    border-bottom: 2px solid transparent
+    margin-bottom: -1px
+    padding: .45rem .85rem
+    cursor: pointer
+    font-size: .82rem
+    font-weight: 500
+    color: var(--txt)
+    opacity: .55
+    border-radius: var(--radius) var(--radius) 0 0
+    transition: opacity .15s, border-color .15s, background .15s
+
+    &:hover
+        opacity: .8
+        background: var(--hover)
+
+    &.active
+        opacity: 1
+        border-bottom-color: var(--primary)
+        color: var(--primary)
+        font-weight: 600
+
+.wdg-tab-panel
+    padding: 0 .25rem .25rem
+
+.wdg-tab-panel[hidden]
+    display: none !important
+
+/* ------------ Widget Subsections ------------ */
+
+.wdg-subsection
+    width: 100%
+    margin-top: .5rem
+    border: 1px solid var(--bg3)
+    border-radius: var(--radius)
+    overflow: hidden
+
+    summary
+        display: flex
+        align-items: center
+        gap: .5rem
+        padding: .5rem
+        background: var(--bg3)
+        font-weight: bold
+        cursor: pointer
+        list-style: none
+        user-select: none
+
+        &::-webkit-details-marker
+            display: none
+
+        &::before
+            content: '▶'
+            font-size: .65rem
+            opacity: .6
+            transition: transform .2s
+
+    &[open] summary::before
+        transform: rotate(90deg)
+
+    > .row
+        padding: .25rem .25rem 0
+
+/* ----------- Widget panel backgrounds --------- */
+
+.widget-panel[data-widget="tabs"]
+    background: var(--c20)
+
+.widget-panel:not([data-widget="tabs"])
+    margin: .3rem .25rem
+    border-radius: var(--radius)
+    background: rgba(0, 0, 0, .18)
+    overflow: hidden
 
 /* --------------- Widget Config -------------- */
 

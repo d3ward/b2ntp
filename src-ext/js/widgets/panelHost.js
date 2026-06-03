@@ -4,56 +4,61 @@ const CHEVRON_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="
 
 export function createWidgetPanel(descriptor, side, deps = {}) {
   const sideConfig = settingsState.getSidebarConfig()[side]
+  const isCollapsible = descriptor.id === 'tabs'
 
   const panel = document.createElement('div')
   panel.className = 'widget-panel'
   panel.dataset.widget = descriptor.id
 
-  const header = document.createElement('div')
-  header.className = 'widget-panel-header'
-
-  const iconSpan = document.createElement('span')
-  iconSpan.className = 'widget-icon'
-  iconSpan.innerHTML = descriptor.icon
-
   const badge = document.createElement('span')
   badge.className = 'widget-badge'
   badge.style.display = 'none'
-  iconSpan.appendChild(badge)
 
-  const labelSpan = document.createElement('span')
-  labelSpan.className = 'widget-label'
-  labelSpan.textContent = descriptor.label
+  if (isCollapsible) {
+    const header = document.createElement('div')
+    header.className = 'widget-panel-header'
 
-  const chevron = document.createElement('button')
-  chevron.className = 'widget-chevron'
-  chevron.setAttribute('aria-label', `Collapse ${descriptor.label} panel`)
-  chevron.innerHTML = CHEVRON_SVG
+    const iconSpan = document.createElement('span')
+    iconSpan.className = 'widget-icon'
+    iconSpan.innerHTML = descriptor.icon
+    iconSpan.appendChild(badge)
 
-  header.appendChild(iconSpan)
-  header.appendChild(labelSpan)
-  header.appendChild(chevron)
+    const labelSpan = document.createElement('span')
+    labelSpan.className = 'widget-label'
+    labelSpan.textContent = descriptor.label
+
+    const chevron = document.createElement('button')
+    chevron.className = 'widget-chevron'
+    chevron.setAttribute('aria-label', `Collapse ${descriptor.label} panel`)
+    chevron.innerHTML = CHEVRON_SVG
+
+    header.appendChild(iconSpan)
+    header.appendChild(labelSpan)
+    header.appendChild(chevron)
+    panel.appendChild(header)
+  }
 
   const body = document.createElement('div')
   body.className = 'widget-body'
-
-  panel.appendChild(header)
   panel.appendChild(body)
 
-  const panelCollapsed = sideConfig.panels?.[descriptor.id]?.collapsed || false
-  if (panelCollapsed) {
-    panel.classList.add('panel-collapsed')
-    body.hidden = true
-  }
+  if (isCollapsible) {
+    const panelCollapsed = sideConfig.panels?.[descriptor.id]?.collapsed || false
+    if (panelCollapsed) {
+      panel.classList.add('panel-collapsed')
+      body.hidden = true
+    }
 
-  chevron.addEventListener('click', () => {
-    const isCollapsed = panel.classList.toggle('panel-collapsed')
-    body.hidden = isCollapsed
-    const cfg = settingsState.getSidebarConfig()
-    if (!cfg[side].panels[descriptor.id]) cfg[side].panels[descriptor.id] = {}
-    cfg[side].panels[descriptor.id].collapsed = isCollapsed
-    settingsState.setSidebarConfig(cfg)
-  })
+    const chevron = panel.querySelector('.widget-chevron')
+    chevron.addEventListener('click', () => {
+      const isCollapsed = panel.classList.toggle('panel-collapsed')
+      body.hidden = isCollapsed
+      const cfg = settingsState.getSidebarConfig()
+      if (!cfg[side].panels[descriptor.id]) cfg[side].panels[descriptor.id] = {}
+      cfg[side].panels[descriptor.id].collapsed = isCollapsed
+      settingsState.setSidebarConfig(cfg)
+    })
+  }
 
   descriptor.init({ container: body, badge, ...deps })
 
@@ -61,8 +66,8 @@ export function createWidgetPanel(descriptor, side, deps = {}) {
 }
 
 export function mountSidebar(sideEl, side, widgetMap, deps = {}) {
-  const sideConfig = settingsState.getSidebarConfig()[side]
   sideEl.innerHTML = ''
+  const sideConfig = settingsState.getSidebarConfig()[side]
   for (const widgetId of sideConfig.order) {
     const descriptor = widgetMap[widgetId]
     if (!descriptor) continue
