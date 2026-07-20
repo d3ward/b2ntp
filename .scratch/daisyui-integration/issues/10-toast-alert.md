@@ -1,4 +1,4 @@
-Status: ready-for-agent
+Status: done
 Blocked by: 02
 
 # Migrate toasts to DaisyUI `toast` + `alert`
@@ -30,3 +30,53 @@ Replace the hand-rolled toast styling in `src-ext/sass/elements/_toast.sass` wit
 ## Notes
 
 - Easy places to trigger each type for verification: "Sync Bookmarks" (success), the reset-settings flow (warn), and `f_save_bdy()`'s catch branch (error).
+
+## Comments
+
+**Implemented.** `_toast.sass` deleted and removed from `_core.sass`. Container `#nt1` is now
+`toast toast-top toast-center`; `toast.js` builds items as `alert` + a status colour class.
+The factory's signature, `t.timeout` handling (default 3000, callers pass 2000), auto-close and
+click-to-dismiss are unchanged.
+
+Type mapping: `success`→`alert-success`, `error`→`alert-error`, `warn`→`alert-warning`,
+`info`→`alert-info`.
+
+### Two latent bugs fixed
+
+1. **`warn` was invisible-ish.** It referenced `--yellow`, which is defined in neither
+   `theme/light.sass` nor `theme/dark.sass`. Now resolves through the bridge to `--orange`
+   (`rgb(255,133,27)`).
+2. **The exit animation never played.** `toast.js` adds the class `toast-out`, but the Sass
+   nested it as `&-item-out` under `.b2-toast`, compiling to `.b2-toast-item-out` — a selector
+   that never matched anything. The 300ms `setTimeout` before `.remove()` was running against
+   no animation at all, so toasts vanished abruptly. The keyframes now live in `tailwind.css`
+   as a real `.toast-out` rule at exactly 300ms, matching the JS timeout.
+
+### Class names are written as literals on purpose
+
+`typeClass` in `toast.js` maps to whole class strings (`'alert-success'`) rather than composing
+`'alert-' + type`. Composed names are invisible to Tailwind's extractor and would simply not be
+generated. This is precisely the dynamic-class risk ticket 13 asks about — resolved at the
+source rather than with a safelist.
+
+### z-index needed stating explicitly
+
+Toasts must sit above open dialogs. A `z-[9999]` utility on the container **did not work**:
+Tailwind utilities are low-specificity once `postcss-cascade-layers` flattens the layers, while
+DaisyUI's `.modal` carries its `:not(#\#)` hack and computes to `z-index: 999`. Stated as
+`#nt1.toast { z-index: 9999 !important }` in `tailwind.css`.
+
+The same investigation showed the `z-index: 50` I added to `.modal` in ticket 07 was **inert**
+for the same reason — DaisyUI's own 999 is what was actually applying. That rule has been
+removed rather than left as dead code, and ticket 07's note corrected.
+
+### Verification
+
+- All four types render distinct, correct colours in both themes (success green, error red,
+  warning orange, info blue) with no transparent background.
+- Container is `position: fixed`, top-centred (16px from top, horizontally centred).
+- Toasts stack without overlapping (verified by comparing bounding rects pairwise).
+- `toast-out` resolves to `animation: toast-out 0.3s`, matching the removal delay.
+- Toasts stack above modals (9999 > 999).
+
+`npm run build-ext` succeeds; vitest unchanged at 87 passed / 6 pre-existing failures.

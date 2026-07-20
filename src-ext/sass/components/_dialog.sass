@@ -10,14 +10,6 @@
 // !important is unavoidable: DaisyUI ships `.modal` with a `:not(#\#)` x4-x5
 // specificity hack that no selector we can reasonably write here outranks.
 // Scoped as narrowly as possible -- visibility only.
-// DaisyUI's modal targets <dialog>, which the browser paints in the top layer,
-// so it ships no z-index. These are plain <div>s driven by a11y-dialog, so they
-// stack normally and get painted over by later siblings -- on blank.html the
-// dialog was fully obscured by the NTP content despite computing as visible.
-// 50 is the value the bespoke .dialog used, which keeps toasts (9999) above it.
-.modal
-	z-index: 50
-
 .modal[aria-hidden='true']
 	display: none !important
 

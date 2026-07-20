@@ -157,3 +157,35 @@
  * simply overridden and does nothing. Mapping --brd is therefore done per
  * component in ticket 04, where it can be verified against real inputs.
  */
+
+/*
+ * Toast exit animation.
+ *
+ * The only bespoke CSS left after moving toasts onto DaisyUI's `toast` + `alert`
+ * (ticket 10), so it lives here rather than keeping a Sass file alive for it.
+ *
+ * toast.js adds `toast-out` and removes the element 300ms later. The old
+ * _toast.sass compiled its rule to `.b2-toast-item-out`, which never matched
+ * that class -- so the exit animation had silently never played. The duration
+ * below must stay in step with that 300ms timeout.
+ */
+@keyframes toast-out {
+  to {
+    transform: translateY(-5vh);
+    opacity: 0;
+  }
+}
+
+.toast-out {
+  animation: toast-out 300ms ease forwards;
+}
+
+/*
+ * Toasts must sit above open dialogs. DaisyUI's `.modal` computes to z-index
+ * 999, and a `z-[9999]` utility on the container does not win -- Tailwind
+ * utilities are low-specificity once postcss-cascade-layers flattens the
+ * layers, while DaisyUI carries its `:not(#\#)` hack. Stated explicitly here.
+ */
+#nt1.toast {
+  z-index: 9999 !important;
+}
