@@ -57,7 +57,7 @@ export function initWidgetSettings() {
 
       const toggle = document.createElement('input')
       toggle.type = 'checkbox'
-      toggle.className = 'toggle wdg-toggle'
+      toggle.className = 'b2-toggle wdg-toggle'
       toggle.checked = active
       toggle.setAttribute('aria-label', `${active ? 'Remove' : 'Add'} ${descriptor.label} to ${side} sidebar`)
       toggle.addEventListener('change', () => toggleWidget(id, side, toggle.checked))

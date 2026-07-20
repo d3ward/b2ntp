@@ -12,6 +12,7 @@ import { initWidgetSettings } from "./settings/widgetSettings";
 import { getBookmarks } from "./blank/bookmarks";
 import { BackgroundStore } from "./blank/BackgroundStore";
 import "../sass/options.sass";
+import "../css/tailwind.css";
 
 await storage.init();
 await settingsState.init(storage);

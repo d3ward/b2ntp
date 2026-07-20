@@ -1,0 +1,31 @@
+/*
+ * Tailwind CSS + DaisyUI entry for the extension build.
+ *
+ * Kept as plain CSS on purpose: Tailwind's at-rule processing and the Sass
+ * compiler do not compose in a single file. Loaded alongside the compiled Sass
+ * entries (blank.sass / options.sass) from blank.js and options.js.
+ *
+ * Preflight is deliberately NOT imported. b2ntp has its own hand-rolled reset
+ * in sass/base/_reset.sass; pulling in Tailwind's would restyle every element
+ * on the page. We import the theme and utilities layers only.
+ *
+ * Layering note: everything below lands in a CSS cascade layer, while the
+ * compiled Sass is unlayered. Unlayered styles always beat layered ones, so the
+ * existing bespoke Sass keeps winning until a migration ticket deletes it, at
+ * which point DaisyUI takes over with no further intervention.
+ */
+
+@layer theme, base, components, utilities;
+
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities);
+
+/* Scan all extension markup and scripts for class usage. */
+@source "../";
+
+@plugin "daisyui" {
+  /* rootcolor sets background/text on :root and [data-theme]; b2ntp already
+     owns those via sass/theme/*.sass. rootscrollgutter shifts layout when a
+     modal opens, which the existing dialogs do not expect. */
+  exclude: rootcolor, rootscrollgutter;
+}

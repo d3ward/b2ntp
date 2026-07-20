@@ -5,6 +5,7 @@ import { aos } from "./components/aos";
 import { storage } from "./components/localStorage";
 import { settingsState, DEFAULTS } from "./settings/state";
 import "../sass/blank.sass";
+import "../css/tailwind.css";
 
 import { initBookmarks } from "./blank/bookmarks";
 import { applyBackground } from "./blank/background/apply";

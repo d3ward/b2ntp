@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite'
 import { resolve, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
+import tailwindcss from '@tailwindcss/vite'
 import { htmlTransformPlugin, copyStaticPlugin } from './config/vite.plugins.js'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
@@ -24,6 +25,7 @@ export default defineConfig(({ mode }) => ({
     __VERSION__: JSON.stringify(process.env.npm_package_version)
   },
   plugins: [
+    tailwindcss(),
     htmlTransformPlugin(__dirname),
     copyStaticPlugin({
       targets: [

@@ -129,16 +129,16 @@ fieldset
 		--bc: var(--active)
 		box-shadow: 0 0 0 var(--focus)
 
-	input[type="checkbox"]:not(.toggle),
-	input[type="radio"]:not(.toggle)
+	input[type="checkbox"]:not(.b2-toggle),
+	input[type="radio"]:not(.b2-toggle)
 		width: 1.3rem
 
-	input[type="checkbox"]:not(.toggle):after,
-	input[type="radio"]:not(.toggle):after
+	input[type="checkbox"]:not(.b2-toggle):after,
+	input[type="radio"]:not(.b2-toggle):after
 		opacity: var(--o, 0)
 
-	input[type="checkbox"]:not(.toggle):checked,
-	input[type="radio"]:not(.toggle):checked
+	input[type="checkbox"]:not(.b2-toggle):checked,
+	input[type="radio"]:not(.b2-toggle):checked
 		--o: 1
 
 	input[type="checkbox"] + label,
@@ -150,10 +150,10 @@ fieldset
 		cursor: pointer
 		margin-left: .3rem
 
-	input[type="checkbox"]:not(.toggle)
+	input[type="checkbox"]:not(.b2-toggle)
 		border-radius: .4rem
 
-	input[type="checkbox"]:not(.toggle):after
+	input[type="checkbox"]:not(.b2-toggle):after
 		width: .4rem
 		height: .6rem
 		border: .2rem solid var(--active-inner)
@@ -163,14 +163,14 @@ fieldset
 		top: .2rem
 		transform: rotate(var(--r, 20deg))
 
-	input[type="checkbox"]:not(.toggle):checked
+	input[type="checkbox"]:not(.b2-toggle):checked
 		--r: 43deg
 
-	input[type="checkbox"].toggle
+	input[type="checkbox"].b2-toggle
 		width: 38px
 		border-radius: 11px
 
-	input[type="checkbox"].toggle:after
+	input[type="checkbox"].b2-toggle:after
 		left: .1rem
 		top: .1rem
 		border-radius: 50%
@@ -179,11 +179,11 @@ fieldset
 		background: var(--ab, var(--border))
 		transform: translateX(var(--x, 0))
 
-	input[type="checkbox"].toggle:checked
+	input[type="checkbox"].b2-toggle:checked
 		--ab: var(--active-inner)
 		--x: 1.1rem
 
-	input[type="checkbox"].toggle:disabled:not(:checked):after
+	input[type="checkbox"].b2-toggle:disabled:not(:checked):after
 		opacity: 0.6
 
 	input[type="radio"]

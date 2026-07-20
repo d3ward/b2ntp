@@ -1,7 +1,7 @@
 /* ----------- Grid columns and row ----------- */
-.grid
+.b2-grid
 	flex-wrap: wrap
-.row ,.grid
+.row ,.b2-grid
 	display: flex
 	align-items: stretch
 	&>[class*="col"],&>div
@@ -30,7 +30,7 @@
 		width: calc((100%) / (12/10))
 
 @media (max-width:40em)
-	.row:not(.keep-width),.grid:not(.keep-width)
+	.row:not(.keep-width),.b2-grid:not(.keep-width)
 		flex-direction: column !important
 		&>[class*="col"],&>div
 			width: auto
