@@ -1,0 +1,19 @@
+/*
+ * Tailwind CSS + DaisyUI entry for the settings page (options.html).
+ *
+ * Same setup as css/blank.css -- see that file for the preflight and cascade
+ * rationale, which applies identically here.
+ *
+ * The settings page is where the DaisyUI migration actually happened, so it
+ * scans the whole extension tree. It is opened deliberately and rarely, unlike
+ * the NTP, so its CSS size is not on the critical path.
+ */
+
+@layer theme, base, components, utilities;
+
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities) source(none);
+
+@source "../";
+
+@import "./_bridge.css";

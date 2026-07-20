@@ -1,0 +1,57 @@
+/*
+ * Tailwind CSS + DaisyUI entry for the New Tab Page (blank.html).
+ *
+ * Kept as plain CSS on purpose: Tailwind's at-rule processing and the Sass
+ * compiler do not compose in a single file. Loaded alongside the compiled Sass
+ * entry (blank.sass) from blank.js.
+ *
+ * Preflight is deliberately NOT imported. b2ntp has its own hand-rolled reset
+ * in sass/base/_reset.sass; pulling in Tailwind's would restyle every element
+ * on the page. We import the theme and utilities layers only.
+ *
+ * Cascade note: the @layer declarations below DO reach the browser. The
+ * extension build disables postcss-preset-env's cascade-layers polyfill (see
+ * the css.postcss block in vite.ext.config.js) -- it used to rewrite every
+ * @layer into specificity hacks and strip the at-rule, which forced
+ * !important on anything that had to override DaisyUI. With real layers,
+ * everything here sits in a layer, the compiled Sass is unlayered, and
+ * unlayered author styles beat layered ones regardless of specificity -- so
+ * bespoke Sass wins by default. (The root postcss.config.js still applies the
+ * polyfill for the src-web marketing site, which is out of scope.)
+ *
+ * SOURCE SCOPING -- this is the whole point of having a separate entry.
+ *
+ * The NTP is loaded on every new tab, so its CSS is the one budget that must
+ * stay small (spec user story 18). `source(none)` turns off Tailwind's
+ * automatic file detection, and the @source lines below list only what
+ * actually renders here: blank.html, the two partials it includes, and the JS
+ * that runs on it. DaisyUI emits a component's rules only when it sees one of
+ * its classes, so scoping the sources is what keeps the settings-only
+ * components (input, select, textarea, checkbox, radio, range, toggle, tabs,
+ * collapse, menu, ...) out of this file entirely.
+ *
+ * If you add a DaisyUI class to NTP markup or to JS that runs on the NTP, it
+ * must be covered by one of these globs or it will silently not be styled.
+ */
+
+@layer theme, base, components, utilities;
+
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities) source(none);
+
+@source "../blank.html";
+@source "../partials/changelog.html";
+@source "../partials/gotop.html";
+/* CHANGELOG.md is raw HTML inlined into the changelog dialog at build time by
+   htmlTransformPlugin, so its `btn btn-primary` link is only visible to
+   Tailwind if the file itself is scanned. */
+@source "../../CHANGELOG.md";
+/* toast.js is the ONLY NTP script that adds DaisyUI classes (alert, alert-*).
+   Deliberately not globbing ../js/**: Tailwind's extractor matches bare words,
+   so scanning the rest of the NTP scripts drags in `input`, `select`,
+   `textarea`, `checkbox`, `toggle`, `tabs`, `menu` and `badge` purely because
+   those words appear as selectors, widget ids and variable names -- which put
+   ~30kB of settings-only component CSS back into this file. */
+@source "../js/components/toast.js";
+
+@import "./_bridge.css";

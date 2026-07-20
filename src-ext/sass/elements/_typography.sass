@@ -59,10 +59,15 @@ ins
 del 
 	color: var(--red)
 /* ------------------- Links ------------------ */
-a 
-	color: var(--primary) 
-	text-decoration: none 
+a
+	text-decoration: none
 	cursor: pointer
+// Colour is scoped away from .btn on purpose: this rule is unlayered, so it
+// outranks DaisyUI's layered .btn-primary and would repaint an
+// <a class="btn"> label in --primary -- the same colour as its own
+// background, making the text invisible.
+a:not(.btn)
+	color: var(--primary)
 .b2-link
 	color: var(--blue)
 	background-color: transparent

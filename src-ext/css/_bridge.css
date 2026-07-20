@@ -1,36 +1,10 @@
 /*
- * Tailwind CSS + DaisyUI entry for the extension build.
+ * Shared DaisyUI configuration and the b2ntp theming bridge.
  *
- * Kept as plain CSS on purpose: Tailwind's at-rule processing and the Sass
- * compiler do not compose in a single file. Loaded alongside the compiled Sass
- * entries (blank.sass / options.sass) from blank.js and options.js.
- *
- * Preflight is deliberately NOT imported. b2ntp has its own hand-rolled reset
- * in sass/base/_reset.sass; pulling in Tailwind's would restyle every element
- * on the page. We import the theme and utilities layers only.
- *
- * Cascade note: the @layer declarations below DO reach the browser. The
- * extension build disables postcss-preset-env's cascade-layers polyfill (see
- * the css.postcss block in vite.ext.config.js) -- it used to rewrite every
- * @layer into specificity hacks and strip the at-rule, which forced
- * !important on anything that had to override DaisyUI.
- *
- * With real layers, the cascade is simple: everything below sits in a layer,
- * the compiled Sass is unlayered, and unlayered author styles beat layered
- * ones regardless of specificity. So bespoke Sass wins by default, and CSS
- * meant to sit on top of DaisyUI just works.
- *
- * Note the root postcss.config.js still applies the polyfill for the src-web
- * marketing site, which is out of scope for this migration.
+ * Imported by both css/blank.css and css/options.css. It deliberately contains
+ * no @source directives -- each entry declares its own, so the two pages only
+ * generate the component CSS they actually use (see css/blank.css).
  */
-
-@layer theme, base, components, utilities;
-
-@import "tailwindcss/theme.css" layer(theme);
-@import "tailwindcss/utilities.css" layer(utilities);
-
-/* Scan all extension markup and scripts for class usage. */
-@source "../";
 
 @plugin "daisyui" {
   /* rootcolor sets background/text on :root and [data-theme]; b2ntp already

@@ -111,3 +111,52 @@ The NTP genuinely uses only a small slice (the changelog `modal`, `card`, `btn`,
 `alert`), so most of that chunk is for the settings page. Fixing it properly means splitting the
 Tailwind entry into per-page CSS files so `blank` pulls only what it needs, which is a build
 restructure beyond this ticket's scope. **Recommend a follow-up ticket.**
+
+## Comments — follow-up: NTP bundle size (user story 18) resolved
+
+The open issue recorded above is fixed. The single shared Tailwind/DaisyUI chunk is gone; each
+page now has its own entry with its own scanned sources.
+
+- `css/_bridge.css` — plugin config + theming bridge + the bespoke toast rules, shared by both.
+- `css/blank.css` — `source(none)` plus an explicit, narrow source list.
+- `css/options.css` — `source(none)` plus `@source "../"` (the settings page needs everything).
+
+`source(none)` is the documented approach for exactly this ("valuable in projects with multiple
+Tailwind stylesheets, ensuring each only includes necessary classes"). Since DaisyUI only emits a
+component's rules when it sees one of its classes, scoping sources per entry is what keeps
+`input`, `select`, `textarea`, `checkbox`, `radio`, `range`, `toggle`, `tabs`, `collapse` and
+`menu` out of the NTP's CSS entirely.
+
+**The source list has to be narrow, and that is subtle.** Globbing `../js/**` put ~30kB straight
+back, because Tailwind's extractor matches bare words: `input`, `select`, `toggle` and `badge`
+appear in NTP scripts as DOM selectors, widget ids and variable names. Auditing which files
+genuinely contribute DaisyUI classes left exactly one — `js/components/toast.js`. `CHANGELOG.md`
+also had to be listed: it is raw HTML inlined into the changelog dialog at build time, and carries
+the only `btn btn-primary` on the NTP.
+
+### Result
+
+| | pre-migration | before this fix | now |
+|---|---|---|---|
+| NTP CSS (gzip) | 9,360 | 18,250 | **10,119** |
+| NTP CSS (raw) | 42,090 | 110,092 | 46,590 |
+
+The NTP is now **+759 bytes gzip (+8%)** against the pre-migration baseline, rather than +95%.
+Options is unchanged in total (17,015 vs 17,660 gz — marginally better, no duplicated chunk).
+
+One DaisyUI `.tabs` base rule (~200 bytes) still reaches the NTP because `<aside id="tabs">`
+contains the bare word. Not worth chasing.
+
+### Two regressions found while verifying, and fixed
+
+Both were introduced earlier and **missed by the screenshot diffs**, because each new run was
+compared against a baseline that already contained them — a diff-against-previous cannot catch a
+regression that predates the previous run. Both were caught by looking at a rendered page.
+
+1. **`<a class="btn">` labels were invisible.** Enabling real cascade layers (this ticket) made the
+   unlayered `a { color: var(--primary) }` in `_typography.sass` outrank DaisyUI's layered
+   `.btn-primary`, painting the label the same purple as its own background. Scoped to
+   `a:not(.btn)`, keeping `text-decoration: none` on all anchors.
+2. **A purple focus ring around every dialog**, from the `tabindex="-1" autofocus` added to
+   `.modal-box` during the code-review fix — the reset's global `*:focus-visible` rule applied to
+   it. Suppressed on `.modal-box`, which is a focus target rather than an interactive control.

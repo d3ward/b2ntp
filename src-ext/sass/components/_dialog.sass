@@ -7,6 +7,15 @@
 // are needed any more.
 //
 // What remains is only the structure DaisyUI does not provide.
+// .modal-box carries tabindex="-1" autofocus so showModal() puts initial focus
+// on the container rather than on whichever control comes first (a close
+// button inside a form[method=dialog] would otherwise make Enter dismiss the
+// dialog immediately). It is not an interactive control, so suppress the
+// reset's global focus ring on it.
+.modal-box:focus,
+.modal-box:focus-visible
+	outline: none
+
 .modal-box
 	max-block-size: 80vh
 	max-block-size: 80dvb
