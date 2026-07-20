@@ -168,10 +168,12 @@
 .widget-panel[data-widget="tabs"]
     background: var(--c20)
 
+.widget-panel[data-widget="weather"]
+    background: var(--c0)
+
 .widget-panel:not([data-widget="tabs"])
     margin: .3rem .25rem
     border-radius: var(--radius)
-    background: rgba(0, 0, 0, .18)
     overflow: hidden
 
 /* --------------- Widget Config -------------- */
@@ -252,11 +254,11 @@
 
 .wth_s
     text-align: center
-    color: var(--c1)
+    color: var(--c3)
     width: 100%
     padding: .5rem
-    background: #00000094
-    border-radius: 8px
+    background: var(--c2)
+    border-radius: var(--radius)
     opacity: 0
     transition: all 1.5s ease-in
 

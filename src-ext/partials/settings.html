@@ -185,6 +185,14 @@
         <div class="row flex-column flex-sb">
           <h4><label>Theme</label></h4>
           <div>
+            <label>Theme Toggle Shortcut:</label>
+            <div id="theme-shortcut-label"><kbd>Alt</kbd> + <kbd>T</kbd></div>
+          </div>
+          <div>
+            <label>System Preference:</label>
+            <span id="system-preference-label">—</span>
+          </div>
+          <div>
             <label for="auto-switch">Auto Switch Theme:</label>
             <input
               id="auto-switch"
@@ -705,12 +713,6 @@
           <div class="row flex-column flex-sb">
             <h4>
               <label>Weather Configuration</label>
-              <input
-                id="wt_status"
-                type="checkbox"
-                class="toggle"
-                aria-label="Toggle Weather Widget"
-              />
             </h4>
             <div class="row">
               <div>

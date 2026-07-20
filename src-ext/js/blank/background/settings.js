@@ -118,21 +118,21 @@ export function initBackgroundSettings({
   });
 
   // Grid layout
-  const grid_wrap = getComputedStyle(ntp_bdy).getPropertyValue("--grid-wrap");
-  const grid_width = getComputedStyle(ntp_bdy).getPropertyValue("--grid-width");
+  const grid_wrap = getComputedStyle(ntp_bdy).getPropertyValue("--grid-wrap").trim();
+  const grid_width = getComputedStyle(ntp_bdy).getPropertyValue("--grid-width").trim();
   const t_style = document.getElementsByName("t-style");
-  if (grid_wrap === " wrap" && grid_width === " 33.33%") {
-    t_style[1].checked = true;
-  } else if (grid_wrap === " none" && grid_width === " 33.33%") {
+  if (grid_wrap === "nowrap" && grid_width === "33.33%") {
     t_style[0].checked = true;
-  } else {
+  } else if (grid_wrap === "wrap" && grid_width === "50%") {
     t_style[2].checked = true;
+  } else {
+    t_style[1].checked = true;
   }
   t_style.forEach((el) => {
     el.addEventListener("input", () => {
       var lv = el.value;
       if (lv == "h") {
-        ntp_bdy.style.setProperty("--grid-wrap", "none");
+        ntp_bdy.style.setProperty("--grid-wrap", "nowrap");
         ntp_bdy.style.setProperty("--grid-width", "33.33%");
       } else if (lv == "v2") {
         ntp_bdy.style.setProperty("--grid-wrap", "wrap");
@@ -141,6 +141,7 @@ export function initBackgroundSettings({
         ntp_bdy.style.setProperty("--grid-wrap", "wrap");
         ntp_bdy.style.setProperty("--grid-width", "33.33%");
       }
+      f_save_bdy();
     });
   });
 

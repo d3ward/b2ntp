@@ -13,6 +13,20 @@
 	overflow-y: auto
 	max-height: calc(100vh - 3.5rem)
 
+	::-webkit-scrollbar
+		width: 12px
+		background: var(--c16)
+
+	::-webkit-scrollbar-track
+		-webkit-border-radius: 10px
+		background: var(--c16)
+		border-radius: var(--radius)
+
+	::-webkit-scrollbar-thumb
+		-webkit-border-radius: 10px
+		border-radius: var(--radius)
+		background: var(--c17)
+
 	&[hidden]
 		display: none !important
 
@@ -117,6 +131,7 @@
 		gap: .3rem
 		padding: .22rem .4rem
 		cursor: pointer
+		border-radius: var(--radius)
 		transition: background .1s
 		color: var(--c21)
 

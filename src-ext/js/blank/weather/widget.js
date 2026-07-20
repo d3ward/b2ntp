@@ -67,7 +67,7 @@ async function _renderWeather() {
   if (!_container) return;
   const wth_data = settingsState.getWeatherConfig();
 
-  if (!wth_data.location || !wth_data.status) {
+  if (!wth_data.location) {
     _container.querySelectorAll(".wth_l").forEach((el) => { el.style.display = "none"; });
     _container.querySelectorAll(".wth_s").forEach((el) => { el.style.opacity = 1; });
     return;

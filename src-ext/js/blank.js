@@ -110,9 +110,9 @@ document.getElementById("open-options").onclick = () =>
   chrome.runtime.openOptionsPage();
 
 document.addEventListener("keydown", (event) => {
-  if (event.key === "s" && event.ctrlKey) {
+  if (event.code === "KeyS" && event.ctrlKey) {
     document.getElementById("sb_input").focus();
-  } else if (event.key === "t" && event.ctrlKey) {
+  } else if (event.code === "KeyT" && event.altKey) {
     toggleTheme();
   }
 });

@@ -10,6 +10,7 @@ import { initBackgroundSettings } from "./blank/background/settings";
 import { initWeatherSettings } from "./blank/weather/settings";
 import { initWidgetSettings } from "./settings/widgetSettings";
 import { getBookmarks } from "./blank/bookmarks";
+import { BackgroundStore } from "./blank/BackgroundStore";
 import "../sass/options.sass";
 
 await storage.init();
@@ -22,6 +23,7 @@ var ntp_theme = settingsState.getNtpTheme();
 var tlb_data = settingsState.getTlbData();
 
 ntp_bdy.setAttribute("data-theme", ntp_theme.value || "light");
+BackgroundStore.apply(settingsState.getBackgroundConfig(), ntp_bdy);
 
 function initDialog(id) {
   const el = document.querySelector(id);
@@ -141,6 +143,20 @@ function initializeThemeSettings() {
   startTimeSlider.value = ntp_theme.darkModeStart;
   endTimeSlider.value = ntp_theme.darkModeEnd;
   updateTimeRangeDisplay();
+
+  const sysPrefLabel = document.getElementById("system-preference-label");
+  const darkMQ = window.matchMedia("(prefers-color-scheme: dark)");
+  function updateSysPrefLabel() {
+    sysPrefLabel.textContent = darkMQ.matches ? "Dark" : "Light";
+  }
+  updateSysPrefLabel();
+  darkMQ.addEventListener("change", updateSysPrefLabel);
+
+  const isMac = /Mac|iPhone|iPad|iPod/.test(navigator.platform);
+  const shortcutEl = document.getElementById("theme-shortcut-label");
+  if (isMac) {
+    shortcutEl.innerHTML = "<kbd>⌥</kbd> + <kbd>T</kbd>";
+  }
 
   autoSwitchCheckbox.addEventListener("change", () => {
     updateNtpTheme({ autoSwitch: autoSwitchCheckbox.checked });
