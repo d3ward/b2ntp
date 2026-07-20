@@ -1,0 +1,78 @@
+Status: ready-for-agent
+
+# Bundle DaisyUI into b2ntp's settings UI
+
+## Problem Statement
+
+b2ntp's settings page (`options.html`) and, to a lesser extent, the New Tab Page widgets are styled entirely with hand-rolled Sass under `src-ext/sass/`: custom buttons, form controls (checkboxes, toggles, radios, selects), dialogs, collapsible sections, toasts, tab bars, and a full hand-maintained utility-class layer (spacing, alignment, display, borders, text) that duplicates functionality a mature CSS utility framework already provides. This hand-rolled system is harder to extend than a well-tested, actively maintained component library, and every new settings feature (most recently the bookmarks Grid Layout picker) re-invents patterns — button variants, radio-as-button-group, tab bars, modals — that already exist, polished, in DaisyUI. The maintainer wants the settings UI rebuilt on DaisyUI (on top of Tailwind CSS) instead of continuing to hand-roll these primitives, while explicitly preserving b2ntp's actual product differentiator: the deeply customizable New Tab Page theming (bookmarks/tabs/weather per-slot light/dark colors, wallpaper) that has no DaisyUI equivalent and must not be flattened into generic components.
+
+## Solution
+
+Introduce Tailwind CSS + DaisyUI as the primary UI toolkit for `src-ext`, applied first to the settings/options page, where DaisyUI's components (`btn`, `input`/`select`/`textarea`, `checkbox`/`toggle`/`radio`, `modal`, `tabs`, `collapse`, `toast`/`alert`, `menu`, `join`, `range`) map closely onto b2ntp's existing hand-rolled equivalents. Existing hand-rolled `src-ext/sass/elements/*` and `src-ext/sass/utilities/*`, plus the settings-only parts of `src-ext/sass/components/*`, are replaced by Tailwind utility classes and DaisyUI component classes wherever a clean equivalent exists, and that Sass is deleted. The New Tab Page's bespoke widget theming (bookmarks folders/links, the tabs sidebar, the weather widget, and their `--c0`–`--c26` per-slot light/dark color system, fixed for consistency in recent work) is explicitly preserved as-is, since it has no DaisyUI equivalent and is core to the product. JS interaction logic (color pickers, drag-reorder, dialog open/close via `A11yDialog`, toast timing, tab-panel switching, sidebar collapse, the grid-layout radio group) keeps its current behavior and DOM ID hooks; only the CSS classes those elements carry for pure visual styling are updated to point at DaisyUI equivalents.
+
+## User Stories
+
+1. As a b2ntp user, I want the settings page's buttons, forms, toggles, and dialogs to look and feel visually polished and consistent, so that configuring the extension feels as solid as the New Tab Page itself.
+2. As a b2ntp user, I want my New Tab Page's bookmarks, tabs sidebar, and weather widget to keep their current deep per-element color customization (light/dark, per-slot), so that this DaisyUI migration doesn't take away the granular theming I rely on.
+3. As a b2ntp user picking the bookmarks Grid Layout (Horizontal / 3 Columns / 2 Columns), I want the option cards to keep behaving exactly as they do today, so that the recent fix to this control isn't regressed by a visual restyle.
+4. As a b2ntp user opening any settings dialog (color picker, changelog, support, wallpaper crop confirmation), I want it to keep trapping focus and closing the same way it does today, so that accessibility behavior isn't lost in the restyle.
+5. As a b2ntp user toggling a setting (dark mode auto-switch, sidebar visibility, seconds display), I want the toggle to keep saving instantly, so that switching to DaisyUI's toggle component doesn't introduce persistence bugs.
+6. As a b2ntp user seeing a toast notification (success/error/warning/info) after an action, I want it to keep appearing and auto-dismissing the same way, so that the DaisyUI `alert`/`toast` restyle doesn't change the feedback timing I'm used to.
+7. As a b2ntp user navigating the settings page's left sidebar (Bookmarks / Background / Widgets / Search / Backup / About), I want the same navigation to keep working, so that a `menu`-based restyle of that nav doesn't break page routing.
+8. As a b2ntp user reordering widgets in the Layout tab (drag-and-drop widget list), I want dragging to keep working exactly as before, so that this interaction isn't disturbed by surrounding DaisyUI component changes.
+9. As a b2ntp user picking a custom color for a bookmarks/tabs/weather slot via the swatch buttons, I want the color picker to keep opening and applying colors as it does today, so that the swatch restyle (to sit visually consistent with DaisyUI form controls) doesn't change picker behavior.
+10. As a b2ntp user expanding a collapsible "How it works" or FAQ-style section, I want it to keep expanding/collapsing the same way, so that the `details`/`summary` → DaisyUI `collapse` swap is invisible behaviorally.
+11. As a b2ntp user resetting all settings via the "Reset NTP settings" button, I want the confirm-and-reload flow to keep working, so that button restyling doesn't affect this destructive action's safety confirmation.
+12. As the maintainer, I want the settings page's markup to use Tailwind utility classes instead of the current bespoke utility classes (`_pt-4`, `_2-col`, etc.), so that future settings UI work can lean on a documented, external framework instead of a private one only this repo understands.
+13. As the maintainer, I want DaisyUI's theme tokens wired to b2ntp's existing `--primary`/`--bg`/`--txt`/etc. custom properties (not a second, disconnected palette), so that light/dark mode and the user's chosen accent color stay visually unified across DaisyUI components and the bespoke widget chrome.
+14. As the maintainer, I want the `--c0`–`--c26` NTP widget color-slot system left completely outside DaisyUI's theme model, so that the settings UI migration can't accidentally regress the widget theming work already done.
+15. As the maintainer, I want the migration done component-by-component (buttons, then forms, then dialogs, then tabs/collapse, then toast, then nav, then utilities) rather than as one large rewrite, so that regressions are caught incrementally via visual verification rather than discovered all at once in a huge diff.
+16. As the maintainer, I want the existing vitest suite (`state.js`, `registry.js`/`panelHost.js`, `sidebarMigration.js`) to keep passing unmodified through this migration, so that I have confidence the interaction logic wasn't disturbed by the restyle.
+17. As the maintainer, I want a clear record of which hand-rolled Sass files were deleted and which DaisyUI/Tailwind classes replaced them, so that a future contributor understands where styling now lives.
+18. As the maintainer, I want the New Tab Page (`blank.html`) build and bundle size to be unaffected by pulling in Tailwind/DaisyUI, so that adding a settings-page dependency doesn't bloat the actual New Tab Page users see on every browser tab.
+19. As the maintainer, I want to know whether the existing `@fullhuman/postcss-purgecss` step is still necessary once Tailwind v4's on-demand class generation is in place, so that the build pipeline isn't carrying redundant tooling.
+20. As the maintainer, I want the shared `postcss.config.js` (currently used by both `src-web` and `src-ext` builds) evaluated for whether Tailwind/DaisyUI should be scoped to the `src-ext` (extension) build only, so that the marketing site (`src-web`) isn't unintentionally affected by this migration.
+
+## Implementation Decisions
+
+- **Build tooling**: add `tailwindcss`, `@tailwindcss/vite`, and `daisyui` (v4/v5 line, the current Tailwind-v4-compatible DaisyUI major) as dependencies. Wire `@tailwindcss/vite` into `vite.ext.config.js` only — the `src-web` marketing site's `vite.config.js` is not touched by this effort. Tailwind's `@import "tailwindcss"` and `@plugin "daisyui"` directives live in a new plain-CSS entry file (not fed through the Sass compiler, since Sass and Tailwind's at-rule processing don't compose in one file); this entry is imported alongside the existing compiled Sass entry points (`blank.sass`, `options.sass`) in `blank.html`/`options.html`.
+- **Theming bridge**: define DaisyUI theme(s) via its CSS-first (`@plugin "daisyui/theme"`) configuration, keyed off the same `[data-theme="light"]`/`[data-theme="dark"]` attribute b2ntp already toggles on `<body>`. DaisyUI's semantic tokens (`--color-primary`, `--color-base-100`, etc.) are pointed at b2ntp's existing custom properties (`--primary`, `--bg`, `--txt`, `--brd`, …) from `theme/light.sass`/`theme/dark.sass`, rather than shipping DaisyUI's default palette as a second, disconnected theme. The `--c0`–`--c26` per-widget slot system is explicitly not part of this bridge — it stays an independent theming layer solely for bookmarks/tabs/weather.
+- **Component replacement map** (settings page only):
+  - Buttons (`.btn`, `.btn-p`, `.btn-red`, `.group-btn`, `.pill`, `.outline`) → DaisyUI `btn` + semantic color modifiers + `join`.
+  - Form inputs/select/textarea/fieldset → DaisyUI `input`, `select`, `textarea`, `fieldset`.
+  - Hand-rolled checkbox/radio/toggle → DaisyUI `checkbox`, `radio`, `toggle`.
+  - `.group-radio` (icon-labeled radio button group, currently used by the bookmarks Grid Layout picker) → DaisyUI's documented "radio inputs styled as a button group" pattern via `join`, preserving the existing `name="t-style"` / `value="h"|"v2"|"v3"` radio semantics and the event-handling contract in `settings.js`.
+  - Dialogs (`.dialog`/`.dialog-content`) → DaisyUI `modal` markup/classes; `A11yDialog` is kept as the show/hide/focus-trap behavior layer (swapping it for native `<dialog>` is not part of this effort).
+  - `details`/`summary` → DaisyUI `collapse` (`collapse-arrow` variant to match the existing rotate-on-open chevron).
+  - `.toast`/`.toast-item` (+ the `toast()` factory in `components/toast.js`) → DaisyUI `toast` + `alert-success`/`alert-error`/`alert-warning`/`alert-info`; `toast.js`'s function signature and timeout/dismiss behavior are unchanged, only the class names it assigns change.
+  - Settings aside nav (`layout/aside_ntp.sass`'s `#settings-panel aside`) → DaisyUI `menu` (vertical); the bespoke cutout-shadow "connected tab" visual on the active item is a deliberate signature visual and is kept as bespoke CSS layered on top of the `menu` structure, not replaced.
+  - `.wdg-tab-bar`/`.wdg-tab` (Layout/Weather sub-tabs inside Widgets settings) → DaisyUI `tabs` (`tabs-lift` or `tabs-bordered`), preserving the existing `[hidden]`-attribute panel-switching JS.
+  - Color swatches (`.stt_clfrt`, driving `vanilla-picker`) → kept as a bespoke element (no DaisyUI equivalent for an arbitrary-color trigger swatch), resized/spaced to sit consistently alongside DaisyUI form controls.
+  - Utility Sass (`utilities/_alignment.sass`, `_background.sass`, `_border.sass`, `_display.sass`, `_general.sass`, `_margin.sass`, `_padding.sass`, `_position.sass`, `_spacer.sass`, `_text.sass`) → deleted entirely; markup updated to use Tailwind utility classes in place of the current bespoke ones (`_pt-4`, `_2-col`, etc.).
+  - The widget drag-reorder list (`.wdg-order-list`/`.wdg-order-item`) stays custom (no stock DaisyUI drag-and-drop component), but its spacing/sizing is adjusted to read consistently next to surrounding DaisyUI `menu`/`card` components.
+  - `elements/_picker.sass` (third-party `vanilla-picker` overrides) is untouched — not a DaisyUI replacement candidate.
+- **New Tab Page scope**: `theme/ntp.sass`, `settings/_colors.sass`, `components/_bookmarks.sass`, `components/_tabs.sass` (sidebar chrome), and the weather-specific rules in `components/_widget_config.sass` remain hand-rolled Sass, unchanged by this effort.
+- **Migration sequencing**: component-by-component (buttons → forms/toggles → dialogs → tabs/collapse → toast → nav → utility cleanup), each group verified visually before moving to the next, per the agreed testing seam.
+- **PostCSS pipeline**: evaluate whether `@fullhuman/postcss-purgecss` remains necessary once Tailwind v4's on-demand generation is active; if kept, verify the shared `postcss.config.js` content globs (currently `./src-web/**` and `./src-ext/**`) don't strip DaisyUI/Tailwind classes assembled dynamically in JS. Decide whether Tailwind/DaisyUI processing should be scoped so `src-web` is unaffected.
+
+## Testing Decisions
+
+- Test external behavior, not implementation details: the existing vitest suites (`settings/state.test.js`, `settings/sidebarMigration.test.js`, `widgets/registry.test.js`, `widgets/panelHost.test.js`) must keep passing through the migration. Any test found asserting a specific CSS class name that this migration intentionally replaces should be updated to assert the underlying behavior (value persisted, panel toggled, migration applied) instead of the class name — following this project's existing testing conventions (see prior art in those same files).
+- No new permanent test type or CI gate is introduced by this effort. Visual output (exact colors, spacing, pixel layout) is not unit-tested.
+- Verification method during implementation: the Playwright + stubbed-`chrome` scripted screenshot technique (headless render of `options.html` and `blank.html`, per-component-group before/after comparison) is the agreed acceptance seam for each replaced component group. This is a one-off verification technique used while implementing, not a committed test file.
+- If new JS wiring is written to bridge existing behavior onto new DaisyUI markup (e.g., adapting the grid-layout `.group-radio` handler to DaisyUI's `join` pattern), it gets a unit test at the same seam as the existing `settings.js`-adjacent tests, following their structure.
+
+## Out of Scope
+
+- Any change to the New Tab Page's `--c0`–`--c26` per-widget theming system, bookmarks/tabs/weather color pickers, or wallpaper system — stays exactly as it is today.
+- Replacing `A11yDialog`, `vanilla-picker`, `croppie`, or `embla-carousel` — only the CSS classes surrounding these libraries' markup may change; the libraries themselves are not swapped.
+- A permanent, CI-gated visual regression testing pipeline.
+- Any change to `src-web` (the marketing/landing site) or its build (`vite.config.js`).
+- New settings features, information-architecture changes, or rebranding — this is a styling/tooling migration, not a feature change.
+
+## Further Notes
+
+- This is a large effort; the natural next step is to break the "Component replacement map" bullets in Implementation Decisions into individual tickets under `.scratch/daisyui-integration/issues/`, sequenced per the migration order already agreed (buttons → forms/toggles → dialogs → tabs/collapse → toast → nav → utility cleanup).
+- DaisyUI v5's theme system is CSS-first (no `tailwind.config.js` `daisyui: { themes: [...] }` JS config) — theme definitions live directly in the new Tailwind CSS entry file, which is what makes the theming-bridge decision above practical to implement as pure CSS custom-property aliasing.
+- The settings page already exposes many bespoke ID-based hooks (`#stt_cl_10`, `#t-style1`, etc.) for JS wiring; the migration should preserve those IDs and only change classes used purely for visual styling, to avoid entangling a JS rewrite with a CSS rewrite in the same pass.
+- Recent work in this session fixed real bugs in the bookmarks Grid Layout picker (`.group-radio` / `t-style` radios) and the settings-page background-config restore path — any DaisyUI migration of that control must preserve the corrected behavior (persistence via `f_save_bdy()`, the `.trim()`-based state read-back, and the `nowrap`/`wrap` grid values), not just its current visual appearance.
