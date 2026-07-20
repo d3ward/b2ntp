@@ -38,6 +38,12 @@ span#clock
     width: 100%
     max-width: 40rem
 #sb_input
+    // display/line-height were inherited from the generic input rule in
+    // _form.sass until ticket 04 removed it. The NTP search bar is out of
+    // scope for DaisyUI, so it keeps them explicitly rather than gaining an
+    // `input` class.
+    display: block
+    line-height: 1.25rem
     background-color: var(--c7)
     color: var(--c8)
     padding: .5rem

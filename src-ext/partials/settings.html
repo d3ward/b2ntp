@@ -203,7 +203,7 @@
           </div>
           <div>
             <label for="auto-switch-type">Auto Switch Type:</label>
-            <select id="auto-switch-type">
+            <select class="select" id="auto-switch-type">
               <option value="system">System</option>
               <option value="time">Time-based</option>
             </select>
@@ -218,7 +218,7 @@
               <div class="slider-track"></div>
               <input
                 type="range"
-                class="slider"
+                class="range slider"
                 id="start-time"
                 min="0"
                 max="24"
@@ -226,7 +226,7 @@
               />
               <input
                 type="range"
-                class="slider"
+                class="range slider"
                 id="end-time"
                 min="0"
                 max="24"
@@ -423,7 +423,7 @@
               <div class="row flex-column">
                 <div>
                   <label for="wllp_value">Background Value Theme</label>
-                  <textarea type="text" id="wllp_value" style="width: 100%">
+                  <textarea class="textarea" type="text" id="wllp_value" style="width: 100%">
                   </textarea>
                 </div>
                 <div>
@@ -577,7 +577,7 @@
                   min="0"
                   max="50"
                   value="0"
-                  class="slr_rng"
+                  class="range slr_rng"
                   id="tg_r77"
                 />
               </div>
@@ -592,7 +592,7 @@
                   min="50"
                   max="150"
                   value="100"
-                  class="slr_rng"
+                  class="range slr_rng"
                   id="tg_r777"
                 />
               </div>
@@ -719,7 +719,7 @@
                 <div class="b2-grid" id="wt_grid">
                   <div>
                     Location
-                    <input
+                    <input class="input"
                       id="wt_loc"
                       type="text"
                       placeholder="City name or coordinates"
@@ -809,14 +809,14 @@
           <h4><label>Toolbar</label></h4>
           <div>
             <label for="timeFormat">Choose time format:</label>
-            <select id="timeFormat">
+            <select class="select" id="timeFormat">
               <option value="12">12-hour (AM/PM)</option>
               <option value="24">24-hour</option>
             </select>
           </div>
           <div>
             <label for="dateFormat">Choose date format:</label>
-            <select id="dateFormat">
+            <select class="select" id="dateFormat">
               <option value="auto">Auto (based on locale)</option>
               <option value="en-US">en-US</option>
             </select>
@@ -887,7 +887,7 @@
           <hr />
           <h4><label>Search Bar</label></h4>
           <div>
-            <textarea id="sb_txt" rows="10"></textarea>
+            <textarea class="textarea" id="sb_txt" rows="10"></textarea>
           </div>
           <div>
             <details class="_bg-bg3 _radius" open>
