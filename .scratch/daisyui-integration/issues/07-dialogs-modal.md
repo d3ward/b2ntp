@@ -1,4 +1,4 @@
-Status: done
+Status: resolved
 Blocked by: 03
 
 # Migrate dialogs to DaisyUI `modal`
@@ -165,3 +165,19 @@ Two notes on that:
 All 24 dialog checks re-run and pass against the native implementation, including Esc, close
 button, backdrop click, focus trap, focus restore, 80vh/42rem, reduced motion, and the
 changelog auto-open gate.
+
+### Fix (raised in code review): initial focus landed on the backdrop
+
+The backdrop `<form method="dialog">` was placed **before** `.modal-box`, whereas
+`docs/daisyui/Modal.md` puts it after. Because `showModal()` focuses the first focusable
+descendant, focus landed on the backdrop's hidden `close` button — so **pressing Enter on a
+freshly-opened dialog dismissed it immediately**.
+
+My original "focus is trapped inside" check passed straight through this: the backdrop button
+*is* inside the dialog, so containment was satisfied while focus placement was wrong. Containment
+is not the same assertion as correct initial focus.
+
+Fixed twice over: the backdrop now follows `.modal-box` per the docs, and `.modal-box` carries
+`tabindex="-1" autofocus` so focus starts on the container rather than on whichever control
+happens to come first. Verified: focus lands on `.modal-box`, and Enter no longer closes the
+dialog. All 21 dialog checks still pass.

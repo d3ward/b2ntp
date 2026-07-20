@@ -1,4 +1,4 @@
-Status: done
+Status: resolved
 Blocked by: 02
 
 # Migrate text inputs, selects, textareas, and fieldsets to DaisyUI

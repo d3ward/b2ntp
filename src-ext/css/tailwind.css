@@ -9,22 +9,19 @@
  * in sass/base/_reset.sass; pulling in Tailwind's would restyle every element
  * on the page. We import the theme and utilities layers only.
  *
- * Cascade note: the @layer declarations below do NOT survive to the browser.
- * postcss-preset-env(stage 2) pulls in postcss-cascade-layers, which flattens
- * every @layer into specificity hacks and strips the at-rule -- the built CSS
- * contains no @layer at all. So layer order is not a mechanism we can rely on
- * here.
+ * Cascade note: the @layer declarations below DO reach the browser. The
+ * extension build disables postcss-preset-env's cascade-layers polyfill (see
+ * the css.postcss block in vite.ext.config.js) -- it used to rewrite every
+ * @layer into specificity hacks and strip the at-rule, which forced
+ * !important on anything that had to override DaisyUI.
  *
- * What actually decides the cascade is specificity, and DaisyUI ships its
- * component rules with a `:not(#\#)` x4 hack (~4 ID selectors). That outranks
- * essentially every bespoke b2ntp selector. The practical consequence for this
- * migration: the moment an element gains a DaisyUI class, DaisyUI owns its
- * styling -- bespoke Sass on the same element loses even if it is more
- * specific by normal rules. That is what we want per component, but it means
- * bespoke CSS intended to layer ON TOP of DaisyUI (the dialog structural rules
- * in ticket 07, the nav cutout in ticket 11) must match that specificity
- * deliberately rather than assume it wins. See ticket 13 re: whether
- * postcss-cascade-layers should still be in the pipeline at all.
+ * With real layers, the cascade is simple: everything below sits in a layer,
+ * the compiled Sass is unlayered, and unlayered author styles beat layered
+ * ones regardless of specificity. So bespoke Sass wins by default, and CSS
+ * meant to sit on top of DaisyUI just works.
+ *
+ * Note the root postcss.config.js still applies the polyfill for the src-web
+ * marketing site, which is out of scope for this migration.
  */
 
 @layer theme, base, components, utilities;
@@ -181,13 +178,14 @@
 }
 
 /*
- * Toasts must sit above open dialogs. DaisyUI's `.modal` computes to z-index
- * 999, and a `z-[9999]` utility on the container does not win -- Tailwind
- * utilities are low-specificity once postcss-cascade-layers flattens the
- * layers, while DaisyUI carries its `:not(#\#)` hack. Stated explicitly here.
+ * Toasts sit above page content. Stated here rather than as a `z-[9999]`
+ * utility on the container: this rule is unlayered and so beats DaisyUI's
+ * layered `.toast`, whereas a utility would sit in the utilities layer and
+ * lose. (Against an open <dialog> it is top-layer promotion, not z-index,
+ * that does the work -- see the popover note below and toast.js.)
  */
 #nt1.toast {
-  z-index: 9999 !important;
+  z-index: 9999;
 }
 
 /*

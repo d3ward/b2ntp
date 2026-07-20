@@ -1,4 +1,4 @@
-Status: done
+Status: resolved
 Blocked by: 01
 
 # Bridge DaisyUI theme tokens to b2ntp's existing custom properties

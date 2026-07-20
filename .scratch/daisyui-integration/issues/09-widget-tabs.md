@@ -1,4 +1,4 @@
-Status: done
+Status: resolved
 Blocked by: 02
 
 # Migrate the widget settings sub-tabs to DaisyUI `tabs`

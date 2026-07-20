@@ -1,4 +1,4 @@
-Status: done
+Status: resolved
 
 # Add Tailwind CSS + DaisyUI to the extension build
 

@@ -1,4 +1,4 @@
-Status: done
+Status: resolved
 Blocked by: 05
 
 # Migrate the bookmarks Grid Layout picker (`.group-radio`) to DaisyUI

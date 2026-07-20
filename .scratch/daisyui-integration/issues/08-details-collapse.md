@@ -1,4 +1,4 @@
-Status: done
+Status: resolved
 Blocked by: 02
 
 # Migrate `details`/`summary` sections to DaisyUI `collapse`

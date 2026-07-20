@@ -1,4 +1,4 @@
-Status: done
+Status: resolved
 Blocked by: 12
 
 # Re-evaluate PurgeCSS in the PostCSS pipeline
