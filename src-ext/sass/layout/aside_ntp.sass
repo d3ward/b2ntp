@@ -50,17 +50,17 @@
 				align-items: center
 		// DaisyUI's menu ships its own hover/active colours. Point them at the
 		// slots this nav already consumed so it stays in step with the NTP
-		// sidebar. !important is needed because DaisyUI's menu rules carry the
-		// `:not(#\#)` specificity hack -- see ticket 13.
+		// sidebar. No !important needed -- this Sass is unlayered and outranks
+		// DaisyUI's layered rules (ticket 13).
 		a:hover
-			background: var(--c22) !important
-			color: var(--c21) !important
+			background: var(--c22)
+			color: var(--c21)
 		a.menu-active
-			background: var(--c23) !important
-			color: var(--c24) !important
-		// DaisyUI's menu suppresses the outline; the reset's focus-visible rule
-		// therefore never shows. Restore a visible ring for keyboard users.
+			background: var(--c23)
+			color: var(--c24)
+		// DaisyUI's menu suppresses the outline, so the reset's focus-visible
+		// rule never shows. Restore a visible ring for keyboard users.
 		a:focus-visible
-			outline: 2px solid var(--c23) !important
+			outline: 2px solid var(--c23)
 			outline-offset: -2px
 // NTP persistent widget sidebar — 1/5 of workspace width, mirrors right sidebar

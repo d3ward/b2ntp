@@ -10,12 +10,10 @@
 .modal-box
 	max-block-size: 80vh
 	max-block-size: 80dvb
-	// DaisyUI defaults .modal-box to 32rem. Its docs say to override with a
-	// max-w-* utility, but that does not work in this pipeline:
-	// postcss-cascade-layers flattens @layer, leaving Tailwind utilities at low
-	// specificity against DaisyUI's `:not(#\#)` hack. Verified -- max-w-[42rem]
-	// computes to 512px, unchanged. Hence !important. See ticket 13.
-	max-width: 42rem !important
+	// DaisyUI defaults .modal-box to 32rem. Plain override works now that the
+	// extension build keeps real cascade layers (ticket 13): this Sass is
+	// unlayered and therefore outranks DaisyUI's layered rules.
+	max-width: 42rem
 	display: flex
 	flex-direction: column
 	align-items: start
