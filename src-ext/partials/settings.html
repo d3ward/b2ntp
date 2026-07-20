@@ -282,11 +282,12 @@
         <div class="row flex-column flex-sb">
           <h4><label>Grid Layout</label></h4>
           <div>
-            <div class="group-radio">
-              <div>
-                <input type="radio" name="t-style" id="t-style1" value="h" />
-                <label for="t-style1">
+            <div class="flex w-full justify-center gap-2">
+              <div class="flex-1">
+                <input class="peer sr-only" type="radio" name="t-style" id="t-style1" value="h" />
+                <label for="t-style1" class="btn h-auto w-full flex-col gap-1 py-2 opacity-50 font-normal peer-checked:opacity-100 peer-checked:btn-primary peer-checked:border-primary">
                   <svg
+                    class="h-10"
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 36 24"
                     fill="none"
@@ -304,16 +305,17 @@
                   Horizontal
                 </label>
               </div>
-              <div>
-                <input
+              <div class="flex-1">
+                <input class="peer sr-only"
                   type="radio"
                   name="t-style"
                   id="t-style2"
                   value="v3"
                   checked
                 />
-                <label for="t-style2">
+                <label for="t-style2" class="btn h-auto w-full flex-col gap-1 py-2 opacity-50 font-normal peer-checked:opacity-100 peer-checked:btn-primary peer-checked:border-primary">
                   <svg
+                    class="h-10"
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 36 24"
                     fill="none"
@@ -331,10 +333,11 @@
                   Vertical 3 Columns
                 </label>
               </div>
-              <div>
-                <input type="radio" name="t-style" id="t-style3" value="v2" />
-                <label for="t-style3">
+              <div class="flex-1">
+                <input class="peer sr-only" type="radio" name="t-style" id="t-style3" value="v2" />
+                <label for="t-style3" class="btn h-auto w-full flex-col gap-1 py-2 opacity-50 font-normal peer-checked:opacity-100 peer-checked:btn-primary peer-checked:border-primary">
                   <svg
+                    class="h-10"
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 24 24"
                     fill="none"
