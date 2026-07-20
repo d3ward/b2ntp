@@ -1,5 +1,12 @@
-
 // Settings panel navigation sidebar
+// The list itself is a DaisyUI `menu`; what stays bespoke here is only the
+// collapse/expand behaviour (4rem <-> 13.5rem) and the NTP colour slots
+// --c21..--c25, which this nav shares with the NTP sidebar widget and only
+// consumes -- it never redefines them.
+//
+// The curved-cutout active-item treatment that used to live here (:before /
+// :after box-shadow pseudo-elements) was dropped deliberately at the
+// maintainer's request; DaisyUI's `menu-active` now carries the active state.
 #settings-panel aside
 	position: sticky
 	left: 0
@@ -13,7 +20,6 @@
 	&.active
 		width: 13.5rem
 	ul
-		positon: absolute
 		top: 0
 		left: 0
 		width: 100%
@@ -23,55 +29,6 @@
 		li
 			position: relative
 			width: 100%
-
-			a:hover
-				background: var(--c22)
-				color: var(--c21)
-				&:before
-					content: ''
-					position: absolute
-					top: -20px
-					right: 0
-					width: 20px
-					height: 20px
-					background: transparent
-					border-bottom-right-radius: var(--radius-b)
-					box-shadow: 7.5px 7.5px 0 7.5px var(--c22)
-				&:after
-					content: ''
-					position: absolute
-					bottom: -20px
-					right: 0
-					width: 20px
-					height: 20px
-					background: transparent
-					border-top-right-radius: var(--radius-b)
-					box-shadow: 7.5px -7.5px 0 7.5px var(--c22)
-
-			a.active
-				background: var(--c23)
-				color: var(--c24)
-				&:before
-					content: ''
-					position: absolute
-					top: -20px
-					right: 0
-					width: 20px
-					height: 20px
-					background: transparent
-					border-bottom-right-radius: var(--radius-b)
-					box-shadow: 7.5px 7.5px 0 7.5px var(--c23)
-				&:after
-					content: ''
-					position: absolute
-					bottom: -20px
-					right: 0
-					width: 20px
-					height: 20px
-					background: transparent
-					border-top-right-radius: var(--radius-b)
-					box-shadow: 7.5px -7.5px 0 7.5px var(--c23)
-
 		a
 			display: flex
 			width: 100%
@@ -91,4 +48,19 @@
 				white-space: nowrap
 				display: flex
 				align-items: center
+		// DaisyUI's menu ships its own hover/active colours. Point them at the
+		// slots this nav already consumed so it stays in step with the NTP
+		// sidebar. !important is needed because DaisyUI's menu rules carry the
+		// `:not(#\#)` specificity hack -- see ticket 13.
+		a:hover
+			background: var(--c22) !important
+			color: var(--c21) !important
+		a.menu-active
+			background: var(--c23) !important
+			color: var(--c24) !important
+		// DaisyUI's menu suppresses the outline; the reset's focus-visible rule
+		// therefore never shows. Restore a visible ring for keyboard users.
+		a:focus-visible
+			outline: 2px solid var(--c23) !important
+			outline-offset: -2px
 // NTP persistent widget sidebar — 1/5 of workspace width, mirrors right sidebar
