@@ -109,3 +109,59 @@ inside on open; focus returns to the trigger on close. Plus:
   still gates it.
 
 `npm run build-ext` succeeds; vitest unchanged at 87 passed / 6 pre-existing failures.
+
+## Comments — revision: a11y-dialog replaced with native `<dialog>`
+
+**Maintainer changed direction mid-implementation** (see `docs/daisyui/Modal.md`): use DaisyUI's
+default modal rather than keeping `a11y-dialog`. This supersedes this ticket's "Keep
+`a11y-dialog`" scope line and the spec's Out-of-Scope entry.
+
+All three dialogs are now native `<dialog>` elements opened with `showModal()` — DaisyUI's
+recommended method (Method 1 in the docs).
+
+- `a11y-dialog` **removed from `package.json`**. `src-ext/js/components/dialog.js` was a
+  vendored copy of it and is imported nowhere — left in place, flagged for ticket 12's sweep.
+- `data-a11y-dialog-hide` → `<form method="dialog">` wrappers, which close the dialog natively.
+- Backdrop → `<form method="dialog" class="modal-backdrop"><button>close</button></form>`,
+  straight from the docs.
+- `data-a11y-dialog-show` → `data-dialog-open`, wired by a 5-line `wireDialogOpeners()`.
+- `background/settings.js`: `.on("hide")` → `addEventListener("close")`, `.hide()` → `.close()`,
+  `.show()` → `.showModal()`. Three call sites.
+
+**This deleted almost all the CSS this ticket originally needed.** Esc, focus trapping, focus
+restore, inertness and top-layer painting now come from the platform, and DaisyUI's `.modal`
+rules key off the `[open]` attribute `showModal()` sets. Every `!important` visibility,
+opacity, backdrop and z-index override is gone; `_dialog.sass` is down to the structural rules
+DaisyUI lacks.
+
+One `!important` remains, on `max-width`. DaisyUI defaults `.modal-box` to 32rem and its docs
+say to override with a `max-w-*` utility — **that does not work in this pipeline**. Verified:
+adding `max-w-[42rem]` leaves the computed value at 512px, because `postcss-cascade-layers`
+flattens `@layer` and leaves Tailwind utilities at low specificity against DaisyUI's
+`:not(#\#)` hack (up to 10 deep on some rules). More evidence for ticket 13.
+
+Also dropped a `.modal-backdrop > button` rule I had added — DaisyUI already stretches it
+(`place-self: stretch stretch`), and mine fought its `z-index: -1`.
+
+### Toasts and the top layer — a real consequence of this switch
+
+A native `<dialog>` paints in the **top layer**, which no `z-index` can beat. So the ticket-10
+requirement "toasts appear above open modals" broke the moment dialogs went native: verified
+the toast rendered *underneath* the modal.
+
+Fixed by promoting the toast container into the top layer too — `#nt1` is now
+`popover="manual"`, and `toast.js` calls `showPopover()` when raising a toast and
+`hidePopover()` once the last one is removed. Confirmed by screenshot that a toast now paints
+above an open modal.
+
+Two notes on that:
+- The UA popover styles bring their own border/padding/background/margin. Only those are reset;
+  resetting `inset`/`width`/`translate` as well knocked the container out of position, because
+  `.toast-center` and `.toast-top` own those (with a **10-deep** specificity hack).
+- `document.elementFromPoint()` at the toast's centre still reports the modal backdrop, so
+  click-to-dismiss likely does not work *while a modal is open*. Auto-dismiss is unaffected,
+  and toasts during an open modal are a corner case, but it is not fully fixed.
+
+All 24 dialog checks re-run and pass against the native implementation, including Esc, close
+button, backdrop click, focus trap, focus restore, 80vh/42rem, reduced motion, and the
+changelog auto-open gate.

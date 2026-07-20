@@ -151,7 +151,7 @@ export function initBackgroundSettings({
     popup: false,
   });
 
-  dlg_color_picker.on("hide", () => {
+  dlg_color_picker.addEventListener("close", () => {
     try {
       picker.setColor("#00000000", true);
     } catch (error) {
@@ -203,7 +203,7 @@ export function initBackgroundSettings({
       storage.set("ntp_mtc", mtc);
     }
     f_save_bdy();
-    dlg_color_picker.hide();
+    dlg_color_picker.close();
   });
 
   var stt_cl = document.querySelectorAll(".stt_clfrt:not(.not_stt)");
@@ -463,7 +463,7 @@ function f_cp_bg(ntp_bdy, picker, dlg_color_picker) {
   );
   picker.setColor(color, true);
   _f_save_bdy();
-  dlg_color_picker.show();
+  dlg_color_picker.showModal();
 }
 
 function f_cp_rgb(ntp_bdy, picker, type, number) {
@@ -474,7 +474,7 @@ function f_cp_rgb(ntp_bdy, picker, type, number) {
   );
   console.log("f_rgb - cp_type : " + cp_type, " color : " + current_color);
   picker.setColor(current_color, true);
-  _dlg_color_picker.show();
+  _dlg_color_picker.showModal();
 }
 
 function isValidColor(color) {

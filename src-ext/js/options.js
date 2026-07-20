@@ -1,4 +1,3 @@
-import A11yDialog from "a11y-dialog";
 import packageJSON from "../../package.json";
 import { toast } from "./components/toast";
 import { pagesRoute } from "./components/pagesRoute";
@@ -26,10 +25,21 @@ var tlb_data = settingsState.getTlbData();
 ntp_bdy.setAttribute("data-theme", ntp_theme.value || "light");
 BackgroundStore.apply(settingsState.getBackgroundConfig(), ntp_bdy);
 
+// Native <dialog>: DaisyUI's recommended modal method. Esc, focus trapping and
+// top-layer painting come from the platform, so there is no behaviour layer.
 function initDialog(id) {
   const el = document.querySelector(id);
   if (!el) { console.warn(`[options] dialog element not found: ${id} — partial may not be included`); return null; }
-  return new A11yDialog(el);
+  return el;
+}
+
+// Declarative openers: [data-dialog-open="<id>"] calls showModal() on that dialog.
+function wireDialogOpeners() {
+  document.querySelectorAll("[data-dialog-open]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      document.getElementById(btn.dataset.dialogOpen)?.showModal();
+    });
+  });
 }
 
 const dlg_color_picker = initDialog("#dlg_clvn");
@@ -342,6 +352,7 @@ function onReady() {
   initializeThemeSettings();
   initBookmarksSettings();
   initSidebarSettings();
+  wireDialogOpeners();
   initWidgetTabs();
   initWidgetSettings();
   initWeatherSettings({ ntoast });

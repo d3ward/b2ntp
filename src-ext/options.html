@@ -26,17 +26,12 @@
 
   <body>
     <!-- Color Picker Modal -->
-    <div
-      class="modal"
-      id="dlg_clvn"
-      aria-labelledby="dlg_clvn-title"
-      aria-hidden="true"
-    >
-      <div class="modal-backdrop" data-a11y-dialog-hide></div>
+    <dialog class="modal" id="dlg_clvn" aria-labelledby="dlg_clvn-title">
+      <form method="dialog" class="modal-backdrop"><button aria-label="Close">close</button></form>
       <div class="modal-box">
         <header>
           <h3 id="dlg_clvn-title">Color Picker</h3>
-          <button class="btn" data-a11y-dialog-hide>
+          <form method="dialog"><button class="btn">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="24"
@@ -50,20 +45,20 @@
               <path stroke="none" d="M0 0h24v24H0z" />
               <path d="M18 6 6 18M6 6l12 12" />
             </svg>
-          </button>
+          </button></form>
         </header>
         <section>
           <div id="cp_v"></div>
         </section>
         <footer class="modal-action _f-center">
-          <button class="btn" data-a11y-dialog-hide>Cancel</button>
+          <form method="dialog"><button class="btn">Cancel</button></form>
           <button class="btn" id="cp_ok">OK</button>
         </footer>
       </div>
-    </div>
+    </dialog>
 
     <!-- Toast -->
-    <div class="toast toast-top toast-center" id="nt1" toast-pos="top"></div>
+    <div class="toast toast-top toast-center" id="nt1" toast-pos="top" popover="manual"></div>
     <header>
       <h3>
         <svg

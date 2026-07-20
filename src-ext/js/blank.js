@@ -1,4 +1,3 @@
-import A11yDialog from "a11y-dialog";
 import packageJSON from "../../package.json";
 import { toast } from "./components/toast";
 import { aos } from "./components/aos";
@@ -18,9 +17,7 @@ await storage.init();
 await settingsState.init(storage);
 settingsState.subscribeExternalChanges(storage);
 
-const dialog_changelog = new A11yDialog(
-  document.querySelector("#dlg_changelog"),
-);
+const dialog_changelog = document.querySelector("#dlg_changelog");
 
 const ntp_bdy = document.body;
 var ntp_theme = settingsState.getNtpTheme();
@@ -35,7 +32,7 @@ ntp_bdy.setAttribute("data-theme", ntp_theme.value || "light");
 const ntp_version = packageJSON.version;
 var bzversion = storage.get("ntp_version");
 if (bzversion !== ntp_version) {
-  dialog_changelog.show();
+  dialog_changelog.showModal();
   storage.set("ntp_version", ntp_version);
 }
 

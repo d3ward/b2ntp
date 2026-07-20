@@ -80,3 +80,19 @@ removed rather than left as dead code, and ticket 07's note corrected.
 - Toasts stack above modals (9999 > 999).
 
 `npm run build-ext` succeeds; vitest unchanged at 87 passed / 6 pre-existing failures.
+
+## Comments — revision: aligned to DaisyUI's documented alert markup
+
+Per `docs/daisyui/Toast.md` and `Alert.md`, the container/item split is already the documented
+pattern (`toast toast-top toast-center` wrapping `alert alert-*`). The item markup is now
+aligned too:
+
+- `role="alert"` (was `role="status"` + `aria-live`), matching the docs.
+- DaisyUI's documented stroke-based icons at `h-6 w-6 shrink-0 stroke-current`, so they inherit
+  the alert's content colour, replacing the bespoke 20px fill icons.
+- Message wrapped in a real `<span>`. The old code did `innerHTML = icon + message + '</span>'`
+  — an unbalanced closing tag with no opening `<span>`. Now built with `textContent`, which also
+  stops error strings (`ntoast.error(err.message)`) being interpreted as HTML.
+
+`#nt1` additionally carries `popover="manual"` and `toast.js` promotes it into the top layer —
+required now that dialogs are native `<dialog>`. Full rationale in ticket 07's revision note.

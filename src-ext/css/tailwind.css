@@ -189,3 +189,21 @@
 #nt1.toast {
   z-index: 9999 !important;
 }
+
+/*
+ * The toast container is a `popover="manual"` element (see toast.js) so it can
+ * enter the top layer alongside native <dialog>. The UA popover styles bring
+ * their own border, padding, background and `inset: 0; margin: auto` centring,
+ * which would fight DaisyUI's `.toast` placement -- strip them and let .toast
+ * position the container as usual.
+ */
+#nt1[popover] {
+  /* Only the decorative UA chrome. Do NOT touch inset/width/height/translate --
+     DaisyUI's .toast/.toast-top/.toast-center own those and resetting them
+     knocks the container out of position. */
+  margin: 0;
+  border: 0;
+  padding: 0;
+  overflow: visible;
+  background: transparent;
+}
