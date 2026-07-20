@@ -128,41 +128,6 @@
 .wdg-tab-panel[hidden]
     display: none !important
 
-/* ------------ Widget Subsections ------------ */
-
-.wdg-subsection
-    width: 100%
-    margin-top: .5rem
-    border: 1px solid var(--bg3)
-    border-radius: var(--radius)
-    overflow: hidden
-
-    summary
-        display: flex
-        align-items: center
-        gap: .5rem
-        padding: .5rem
-        background: var(--bg3)
-        font-weight: bold
-        cursor: pointer
-        list-style: none
-        user-select: none
-
-        &::-webkit-details-marker
-            display: none
-
-        &::before
-            content: '▶'
-            font-size: .65rem
-            opacity: .6
-            transition: transform .2s
-
-    &[open] summary::before
-        transform: rotate(90deg)
-
-    > .row
-        padding: .25rem .25rem 0
-
 /* ----------- Widget panel backgrounds --------- */
 
 .widget-panel[data-widget="tabs"]
