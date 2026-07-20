@@ -27,13 +27,13 @@
   <body>
     <!-- Color Picker Modal -->
     <div
-      class="dialog"
+      class="modal"
       id="dlg_clvn"
       aria-labelledby="dlg_clvn-title"
       aria-hidden="true"
     >
-      <div class="dialog-overlay" data-a11y-dialog-hide></div>
-      <div class="dialog-content">
+      <div class="modal-backdrop" data-a11y-dialog-hide></div>
+      <div class="modal-box">
         <header>
           <h3 id="dlg_clvn-title">Color Picker</h3>
           <button class="btn" data-a11y-dialog-hide>
@@ -55,7 +55,7 @@
         <section>
           <div id="cp_v"></div>
         </section>
-        <footer class="_f-center">
+        <footer class="modal-action _f-center">
           <button class="btn" data-a11y-dialog-hide>Cancel</button>
           <button class="btn" id="cp_ok">OK</button>
         </footer>

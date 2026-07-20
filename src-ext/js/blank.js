@@ -25,6 +25,13 @@ const dialog_changelog = new A11yDialog(
 const ntp_bdy = document.body;
 var ntp_theme = settingsState.getNtpTheme();
 
+// Apply the stored theme on load, mirroring options.js. The onChange handler
+// below only fires on a *change*, so without this the NTP started with no
+// data-theme at all: a stored dark theme rendered light until something
+// toggled it, and the DaisyUI theme tokens (keyed to [data-theme]) never
+// resolved, leaving migrated components unstyled.
+ntp_bdy.setAttribute("data-theme", ntp_theme.value || "light");
+
 const ntp_version = packageJSON.version;
 var bzversion = storage.get("ntp_version");
 if (bzversion !== ntp_version) {

@@ -1,67 +1,82 @@
-.dialog,.dialog-overlay
-	position: fixed
-	top: 0
-	right: 0
-	bottom: 0
-	left: 0
-.dialog
-	display: flex
+// ------------------ Dialogs -----------------
+// DaisyUI's `modal` supplies the look; a11y-dialog stays the single source of
+// truth for open/closed state.
+//
+// DaisyUI hides `.modal` by default and reveals it on [open], :target or
+// :popover-open. a11y-dialog sets none of those on a <div> -- it toggles
+// aria-hidden. So visibility is keyed to aria-hidden here and nowhere else,
+// which keeps one mechanism rather than two competing ones.
+//
+// !important is unavoidable: DaisyUI ships `.modal` with a `:not(#\#)` x4-x5
+// specificity hack that no selector we can reasonably write here outranks.
+// Scoped as narrowly as possible -- visibility only.
+// DaisyUI's modal targets <dialog>, which the browser paints in the top layer,
+// so it ships no z-index. These are plain <div>s driven by a11y-dialog, so they
+// stack normally and get painted over by later siblings -- on blank.html the
+// dialog was fully obscured by the NTP content despite computing as visible.
+// 50 is the value the bespoke .dialog used, which keeps toasts (9999) above it.
+.modal
 	z-index: 50
-	padding: .5rem
-.dialog[aria-hidden='true']
-	display: none
-.dialog-overlay
-	background: rgba(43, 46, 56, 0.9)
 
-.dialog-content
-	z-index: 50
-	margin: auto
+.modal[aria-hidden='true']
+	display: none !important
+
+// Note the negation: a11y-dialog *removes* aria-hidden on show (it does not set
+// it to "false"), so `[aria-hidden='false']` would never match.
+//
+// DaisyUI gates more than the wrapper on its open state: `.modal-box` is held at
+// opacity 0 (plus a transform) and the backdrop tint is applied, all keyed to
+// [open]/:target/:popover-open. Without re-deriving those from aria-hidden the
+// dialog lays out at full size but paints completely transparent -- which is
+// exactly how this first presented.
+.modal:not([aria-hidden='true'])
+	pointer-events: auto !important
+	visibility: visible !important
+	opacity: 1 !important
+	.modal-box
+		opacity: 1 !important
+		transform: none !important
+	.modal-backdrop
+		background: rgba(43, 46, 56, .9)
+
+// Structural rules DaisyUI does not provide.
+.modal-box
+	max-block-size: 80vh
+	max-block-size: 80dvb
+	max-width: 42rem !important
 	display: flex
 	flex-direction: column
 	align-items: start
-	max-block-size: 80vh
-	max-block-size: 80dvb
-	border-radius: var(--radius)
-	width: 100%
-	max-width: 42rem
 	overflow: hidden
-	background: var(--bg)
+	padding: 0 !important
+	// DaisyUI only paints the box background in its open state, so set it here.
+	// !important for the same specificity reason as the visibility rules above.
+	background-color: var(--bg) !important
 	color: var(--txt)
 	*
 		margin: 0
 	>*
 		padding: 1rem
 		width: 100%
-	>footer
-		border-top: 1px solid var(--brd)
-		display: flex
-		gap: .5rem
 	>header
 		border-bottom: 1px solid var(--brd)
 		display: flex
 		align-items: center
 		justify-content: space-between
+	>footer
+		border-top: 1px solid var(--brd)
+		display: flex
+		gap: .5rem
+		margin-top: 0 !important
+	// Long content scrolls inside the dialog, not the page.
 	>section
 		overflow: auto
 		width: 100%
-@keyframes dialog-fade-in
-	from
-		opacity: 0
 
-@keyframes dialog-slide-up
-	from
-		transform: translateY(10%)
-.dialog-sm .dialog-content
-	max-width: 320px
-.dialog-lg .dialog-content
-	max-width: unset
-.dialog-overlay
-	animation: dialog-fade-in 200ms both
-.dialog-content
-	animation: dialog-fade-in 400ms 200ms both, dialog-slide-up 400ms 200ms both
-
+// DaisyUI animates the modal; that must stay suppressible.
 @media (prefers-reduced-motion: reduce)
-	.dialog-close
-		transition: none
-	.dialog-content
-		animation: none
+	.modal,
+	.modal-box,
+	.modal-backdrop
+		animation: none !important
+		transition: none !important
