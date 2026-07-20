@@ -1,4 +1,4 @@
-Status: ready-for-agent
+Status: done
 Blocked by: 03, 04, 05, 06, 07, 08, 09, 10, 11
 
 # Delete the bespoke utility Sass layer and convert markup to Tailwind utilities
@@ -47,3 +47,82 @@ Also out of scope: `src-ext/sass/utilities/` is shared with the `src-web` build 
 ## Notes
 
 - Blocked by all component tickets because those migrations will themselves remove or rewrite markup carrying these classes — doing the cleanup first would mean converting classes that are about to be deleted anyway.
+
+## Comments
+
+**Implemented.** All ten `src-ext/sass/utilities/*.sass` files deleted. They were imported only
+by `blank.sass` (not `_core.sass`), so those `@use` lines were the only removal needed —
+`blank.sass` is now three lines.
+
+### The ticket's two main premises were both wrong
+
+**1. `src-web` does not share these files.** The ticket warned that `utilities/` is shared with
+the `src-web` build via `_core.sass` and asked me to surface the conflict. In fact `src-web` has
+its **own complete copy** at `src-web/sass/utilities/` (11 files), imported from
+`src-web/sass/index.sass`. The two trees are fully independent, so deleting the extension's copy
+cannot affect the marketing site. `npm run build` verified passing.
+
+**2. Utilities were never loaded on the settings page.** Only `blank.sass` imported them;
+`options.sass` never did. Since almost all the usages are in `settings.html`, which renders only
+inside `options.html`, most of these classes **were already doing nothing**. (Same trap that bit
+ticket 03's `._icon` and ticket 08's `._bg-bg3`.)
+
+### Actual inventory vs the ticket's table
+
+The table in this ticket did not match the code. Auditing every `_`-prefixed class in markup and
+JS, mapping each to its defining rule:
+
+**Genuinely dead — used in markup, defined nowhere.** Removed, no replacement needed:
+`_d-flex` (3), `_aos-top`, `_ta-left`, `_p-1`, `_pt-4`, `_pb-1`, `_pt-2`, `_brd-txt`, `_icon`.
+
+**Live, but defined outside `utilities/`** — the ticket assumed these were in the utility layer:
+
+| class | actually defined in | converted to |
+|---|---|---|
+| `_2-col` (6) | `layout/grid.sass` | `grid grid-cols-2 gap-2` |
+| `_ta-center` (5) | `components/_settings.sass` | `text-center` |
+| `_f-center` (3) | `utilities/_general.sass` **and** `components/_settings.sass` | `flex items-center justify-center` |
+| `_max-500` (1) | `components/_settings.sass` | `max-w-[500px] mx-auto` |
+| `_txt` (1) | `utilities/_text.sass` | `text-[color:var(--txt)]` |
+
+Each was converted from its **actual declared values**, not the ticket's guesses — e.g. `_2-col`
+is `gap: 0.5rem`, so `gap-2`, and `_max-500` also carried `margin: auto`, hence `mx-auto`.
+
+The `._f-center` rule in `_settings.sass` also served `#b_add, #b_add2, #b_save, #b_close`; only
+the `._f-center` part of that selector list was removed so those IDs keep working.
+
+Classes the ticket listed that no longer existed by this point (`_mt-2`, `_mt-1`, `_radius`,
+`_bg-bg3`, `_bg3`, `_shadowless`) had already been removed by tickets 06/08 and the card work.
+
+Confirmed zero `_`-prefixed classes remain in any `src-ext` markup.
+
+### Removing a11y-dialog broke the marketing site
+
+`npm uninstall a11y-dialog` (from ticket 07's rework) broke `npm run build`: **`src-web/js/themes.js`
+imports it**. Since `src-web` is explicitly out of scope, the dependency is restored. It is not
+bundled into the extension — the only trace in `dist-ext` is the dependency list inside the
+inlined `package.json`, which `blank.js`/`options.js` pull in for `version`.
+
+### Dead code found but NOT deleted
+
+`src-ext/js/components/dialog.js` — a vendored copy of a11y-dialog, imported nowhere — is deleted,
+since ticket 07's rework definitively obsoleted it.
+
+Eight further component files are imported by nothing and appear to be **pre-existing** dead code
+unrelated to this migration. Listing rather than deleting, since that is the maintainer's call:
+`alert.js`, `embla_utils.js`, `gotop.js`, `modal.js`, `navbar.js`, `sidebar.js`,
+`swipeManager.js`, `themeManager.js`. Note `gotop.js` being unimported means the `#gt-link`
+button in `gotop.html` never gets its scroll handler.
+
+Also still present and dead (verified in ticket 04): the `.double-slider` / `.slider-track` /
+`#start-time::-webkit-slider-thumb` rules and `#timeFormat,#dateFormat,#auto-switch-type` in
+`base/_ntp.sass` — settings-page selectors sitting in a `blank.sass`-only file — and
+`#wt_status:checked~.b2-grid` in `_widget_config.sass`.
+
+### Verification
+
+- `npm run build-ext` and `npm run build` both succeed.
+- All settings sections and the NTP screenshotted in both themes and reviewed. The NTP was also
+  captured with the changelog dismissed (the harness always catches it open on a fresh profile),
+  confirming wallpaper, clock, search bar and sidebars all render normally.
+- vitest unchanged at 87 passed / 6 pre-existing failures.
