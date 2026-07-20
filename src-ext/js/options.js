@@ -327,9 +327,9 @@ function initWidgetTabs() {
   const tabs = document.querySelectorAll(".wdg-tab");
   tabs.forEach((tab) => {
     tab.addEventListener("click", () => {
-      tabs.forEach((t) => t.classList.remove("active"));
+      tabs.forEach((t) => t.classList.remove("tab-active"));
       document.querySelectorAll(".wdg-tab-panel").forEach((p) => { p.hidden = true; });
-      tab.classList.add("active");
+      tab.classList.add("tab-active");
       const panel = document.getElementById(tab.dataset.tab);
       if (panel) panel.hidden = false;
     });
