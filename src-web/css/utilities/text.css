@@ -1,0 +1,47 @@
+/* ------------ Text Color Utility ------------ */
+._txt-primary {
+	color: var(--primary) !important;
+}
+._txt-black {
+	color: var(--black) !important;
+}
+._txt-white {
+	color: var(--white) !important;
+}
+._txt-blue {
+	color: var(--blue) !important;
+}
+._txt-red {
+	color: var(--red) !important;
+}
+._txt-green {
+	color: var(--green) !important;
+}
+._txt-yellow {
+	color: var(--yellow) !important;
+}
+._txt-orange {
+	color: var(--orange) !important;
+}
+._txt {
+	color: var(--txt) !important;
+}
+._txt-r {
+	color: var(--txt-r) !important;
+}
+._mono {
+	font-family: monospace;
+}
+._txt-center {
+	text-align: center;
+}
+
+.better_r {
+	-webkit-font-smoothing: antialiased !important;
+	-moz-font-smoothing: antialiased !important;
+	font-size: 16px;
+	letter-spacing: .7px;
+	line-height: 1.5;
+	text-align: justify;
+	text-rendering: optimizelegibility !important;
+}

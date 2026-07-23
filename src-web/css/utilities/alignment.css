@@ -1,0 +1,10 @@
+/* ------------ Alignement Utility ------------ */
+._ta-center {
+	text-align: center !important;
+}
+._ta-left {
+	text-align: left !important;
+}
+._ta-right {
+	text-align: right !important;
+}

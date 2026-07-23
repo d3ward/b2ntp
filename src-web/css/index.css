@@ -1,0 +1,44 @@
+@import "./theme/light.css";
+@import "./theme/dark.css";
+
+@import "./base/basic.css";
+
+@import "./elements/typography.css";
+@import "./elements/button.css";
+@import "./elements/form.css";
+
+@import "./layout/navbar.css";
+@import "./layout/header.css";
+@import "./layout/container.css";
+@import "./layout/grid.css";
+@import "./layout/footer.css";
+
+@import "./components/card.css";
+@import "./components/dialog.css";
+@import "./components/features.css";
+@import "./components/gotop_link.css";
+
+@import "./extra/tooltip.css";
+@import "./extra/alert.css";
+@import "./extra/wave.css";
+@import "./extra/aos.css";
+@import "./extra/embla.css";
+
+@import "./utilities/alignment.css";
+@import "./utilities/background.css";
+@import "./utilities/position.css";
+@import "./utilities/border.css";
+@import "./utilities/display.css";
+@import "./utilities/margin.css";
+@import "./utilities/general.css";
+@import "./utilities/padding.css";
+@import "./utilities/spacer.css";
+@import "./utilities/text.css";
+
+main {
+	margin-top: 8rem;
+}
+
+.card>div>svg {
+	color: var(--primary);
+}

@@ -1,0 +1,34 @@
+/* --------- Background Color Utility --------- */
+._bg-primary {
+	background-color: var(--primary) !important;
+}
+._bg-black {
+	background-color: var(--black) !important;
+}
+._bg-white {
+	background-color: var(--white) !important;
+}
+._bg-blue {
+	background-color: var(--blue) !important;
+}
+._bg-red {
+	background-color: var(--red) !important;
+}
+._bg-green {
+	background-color: var(--green) !important;
+}
+._bg-yellow {
+	background-color: var(--yellow) !important;
+}
+._bg-orange {
+	background-color: var(--orange) !important;
+}
+._bg {
+	background-color: var(--bg) !important;
+}
+._bg2 {
+	background-color: var(--bg2) !important;
+}
+._bg3 {
+	background-color: var(--bg3) !important;
+}

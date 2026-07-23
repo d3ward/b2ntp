@@ -1,0 +1,113 @@
+body,
+[data-theme="light"] {
+	/* Color Palette */
+	--blue: #0074D8;
+	--blue-l: #1492FF;
+	--blue-h: #E0F1FF;
+	--blue-d: #002E57;
+	--purple: #8034d5;
+	--purple-l: #985add;
+	--purple-h: #f7f2fc;
+	--purple-d: #40186b;
+	--green: #22C55E;
+	--green-h: #CFF7DE;
+	--green-l: #40DE7A;
+	--green-d: #0D4E25;
+	--red: #FF4132;
+	--red-h: #FFD9D6;
+	--red-l: #FF675C;
+	--red-d: #7A0800;
+	--orange: #FF851B;
+	--orange-h: #FFE7D1;
+	--orange-l: #FF9D47;
+	--orange-d: #703400;
+	--white: #fafafa;
+	--white-h: #dbdbdb;
+	--white-l: #fff;
+
+	--black: #101010;
+	--black-l: #000;
+	--black-h: #4d4d4d;
+
+	--txt-on-p: var(--white);
+	--txt-on-red: var(--white);
+	--txt-on-green: var(--white);
+	--txt-on-purple: var(--white);
+	--txt-on-blue: var(--white);
+	--txt-on-orange: var(--white);
+	--gray: #e5e7eb;
+	--gray-l: #f3f4f6;
+	--gray-d: #9ca3af;
+	/* Key Colors */
+	--primary: var(--purple);
+	--primary-h: var(--purple-h);
+	--primary-l: var(--purple-l);
+	--primary-d: var(--purple-d);
+	--accent: #E3F2FD;
+	--active: #ECEFF1;
+	--focus: var(--primary);
+	--hover: #ECF4FD;
+	/* Text Color */
+	--txt: var(--black);
+	--txt-l: var(--black-l);
+	--txt-h: var(--black-h);
+	--txt-r: var(--white);
+
+	/* Background Colors */
+	--bg: #f9fafb;
+	--bg2: #f3f4f6;
+	--bg3: #e5e7eb;
+	/* Border */
+	--brd: #d1d5db;
+	/* Radius */
+	--radius: .5rem;
+	--radius-b: 1.25rem;
+	/* Navbar */
+	--bg-nav: var(--bg);
+	--bg-nav-h: var(--bg2);
+	--bb-nav: var(--primary);
+	/* Form */
+	--input-bg: var(--bg);
+	--input-txt: var(--txt);
+	--input-focus: var(--primary-t);
+	--input-brd: var(--brd);
+	/* Buttons */
+	--btn-bg: var(--bg);
+	--btn-ac: var(--primary);
+	--btn-txt: var(--txt);
+	--btn-brd: var(--brd);
+	--btn-hs: 0;
+	--btn-f: var(--bg2);
+	--btn-bg-h: var(--bg3);
+	--btn-sd: 0 1px var(--btn-brd);
+	--btn-radius: .5rem;
+
+	/* Card */
+	--bg-card: var(--bg);
+	/* Details */
+	--bg-details: var(--bg2);
+	--bg-details-open: var(--primary);
+	--txt-details-open: var(--white);
+	/* Aside */
+	--aside-bg: transparent;
+	--aside-bg-h: var(--bg3);
+	--aside-bs: none;
+
+	/* Tabs */
+	--bg-tabs: var(--bg);
+	--brd-tabs-l: var(--primary);
+	--brd-tabs: var(--bg2);
+	/* table */
+	--bg-table: var(--bg);
+	--fake-brd-table: inset 0 0px 0px 1px var(--bg3);
+	--bg-table-hover: var(--bg3);
+	--brd-table: var(--bg3);
+	--shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+	--b-shadow: #95abbb;
+	--radius: .5rem;
+
+	--gs-txt: var(--txt);
+	--gs-bg: var(--bg);
+	--gs-accent: var(--accent);
+	--gs-bshadow: none;
+}

@@ -1,4 +1,4 @@
-import '../sass/index.sass'
+import '../css/index.css'
 import A11yDialog from 'a11y-dialog'
 import { createCarousel } from './components/embla_setup'
 import { navbar } from './components/navbar'

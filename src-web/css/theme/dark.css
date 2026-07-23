@@ -1,0 +1,54 @@
+[data-theme="dark"] {
+	/* Color Palette */
+	--blue: #0074D8;
+	--blue-l: #1492FF;
+	--blue-h: #002E57;
+	--blue-d: #005CAD;
+	--purple: #8034d5;
+	--purple-l: #985add;
+	--purple-h: #40186b;
+	--purple-d: #6b2bb2;
+	--green: #22C55E;
+	--green-h: #0D4E25;
+	--green-l: #40DE7A;
+	--green-d: #1B9D4B;
+	--red: #FF4132;
+	--red-h: #7A0800;
+	--red-l: #FF675C;
+	--red-d: #F51000;
+	--orange: #FF851B;
+	--orange-h: #703400;
+	--orange-l: #FF9D47;
+	--orange-d: #E06900;
+	--txt-l: var(--white-l);
+	--txt-p: var(--white);
+	--txt-red: var(--white);
+	--txt-green: var(--white);
+	--txt-blue: var(--white);
+	--txt-orange: var(--white);
+	/* Text Colors */
+	--txt: var(--white);
+	--txt-r: var(--black);
+	/* Background Colors */
+	--bg3: #1f2937;
+	--bg2: #101010;
+	--bg: #040404;
+
+	/* Border */
+	--brd: #4b5563;
+	--aside-bg-h: #374151;
+	--bg-card: var(--bg);
+	--bg-details: var(--bg2);
+	--bg-details2: var(--bg3);
+	--txt-details-open: var(--txt);
+	--shadow: none;
+	--b-shadow: var(--black);
+}
+
+[data-theme="light"] .light-icon,
+[data-theme="dark"] .dark-icon {
+	display: block !important;
+}
+.theme-icon {
+	display: none;
+}

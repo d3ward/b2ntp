@@ -1,0 +1,16 @@
+/* -------------- Spacer Utility -------------- */
+[class*="-0"] {
+	--spacer: 0 !important;
+}
+[class*="-1"] {
+	--spacer: 1rem !important;
+}
+[class*="-2"] {
+	--spacer: 2rem !important;
+}
+[class*="-3"] {
+	--spacer: 3rem !important;
+}
+[class*="-4"] {
+	--spacer: 4rem !important;
+}

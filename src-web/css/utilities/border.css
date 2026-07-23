@@ -1,0 +1,50 @@
+/* -------------- Border Utility -------------- */
+._radius {
+	border-radius: var(--radius) !important;
+}
+._radiusless {
+	border-radius: 0 !important;
+}
+._brd-none {
+	border: none !important;
+}
+/* ----------- Border Color Utility ----------- */
+._brd-primary {
+	border: 2px solid var(--primary) !important;
+}
+._brd-txt-r {
+	border: 2px solid var(--txt-r) !important;
+}
+._brd-txt {
+	border: 2px solid var(--txt) !important;
+}
+._brd-black {
+	border: 2px solid var(--black) !important;
+}
+._brd-white {
+	border: 2px solid var(--white) !important;
+}
+._brd-blue {
+	border: 2px solid var(--blue) !important;
+}
+._brd-bg {
+	border: 2px solid var(--bg) !important;
+}
+._brd-bg2 {
+	border: 2px solid var(--bg2) !important;
+}
+._brd-bg3 {
+	border: 2px solid var(--bg3) !important;
+}
+._brd-red {
+	border: 2px solid var(--red) !important;
+}
+._brd-green {
+	border: 2px solid var(--green) !important;
+}
+._brd-yellow {
+	border: 2px solid var(--yellow) !important;
+}
+._brd-orange {
+	border: 2px solid var(--orange) !important;
+}

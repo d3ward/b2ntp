@@ -1,5 +1,5 @@
 import A11yDialog from 'a11y-dialog'
-import '../sass/themes.sass'
+import '../css/themes.css'
 import { themeManager } from './components/themeManager'
 import { navbar } from './components/navbar'
 import { aos } from './components/aos'
