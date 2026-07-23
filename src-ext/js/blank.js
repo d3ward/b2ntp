@@ -11,7 +11,7 @@ import { applyBackground } from "./blank/background/apply";
 import { BackgroundStore } from "./blank/BackgroundStore";
 import { getTabs } from "./blank/tabs";
 import { WIDGETS } from "./widgets/registry";
-import { mountSidebar } from "./widgets/panelHost";
+import { mountRegion } from "./widgets/panelHost";
 import { ensureWidgetsSeeded } from "./widgets/resolver";
 
 await storage.init();
@@ -141,17 +141,21 @@ function onDOMReady() {
     };
   }
 
-  // Mount sidebars
+  // Mount rails
   const ntpSidebar = document.getElementById("tabs");
   const rightSidebar = document.getElementById("right-sidebar");
 
-  mountSidebar(ntpSidebar, 'left', WIDGETS, { ntoast, getTabs });
-  mountSidebar(rightSidebar, 'right', WIDGETS, { ntoast });
+  function renderRails() {
+    const widgetsCfg = settingsState.getWidgets();
+    mountRegion(ntpSidebar, widgetsCfg.layout.left, WIDGETS, { ntoast, getTabs });
+    mountRegion(rightSidebar, widgetsCfg.layout.right, WIDGETS, { ntoast });
+  }
+
+  renderRails();
 
   settingsState.onChange('widgets', () => {
     document.body.classList.remove('clock-widget-active');
-    mountSidebar(ntpSidebar, 'left', WIDGETS, { ntoast, getTabs });
-    mountSidebar(rightSidebar, 'right', WIDGETS, { ntoast });
+    renderRails();
   });
 }
 

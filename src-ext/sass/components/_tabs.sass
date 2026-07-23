@@ -36,72 +36,22 @@
 	.widget-panel[hidden]
 		display: none !important
 
-	.widget-panel-header
-		display: flex
-		align-items: center
-		gap: .3rem
-		padding: .35rem .4rem
-		cursor: default
-
-		.widget-icon
-			position: relative
-			min-width: 2rem
-			width: 2rem
-			height: 2rem
-			display: flex
-			align-items: center
-			justify-content: center
-			flex-shrink: 0
-			color: var(--c21)
-
-		.widget-badge
-			position: absolute
-			top: -4px
-			right: -6px
-			background: var(--primary)
-			color: white
-			border-radius: 50%
-			font-size: .55rem
-			min-width: .9rem
-			height: .9rem
-			display: flex
-			align-items: center
-			justify-content: center
-			padding: 0 .1rem
-
-		.widget-label
-			flex: 1
-			white-space: nowrap
-			overflow: hidden
-			font-size: .85rem
-			color: var(--c21)
-			font-weight: 600
-
-		.widget-chevron
-			background: none
-			border: none
-			cursor: pointer
-			min-width: 1.4rem
-			width: 1.4rem
-			height: 1.4rem
-			display: flex
-			align-items: center
-			justify-content: center
-			color: var(--c21)
-			padding: 0
-			border-radius: .2rem
-			svg
-				transition: transform .2s
-
-	.panel-collapsed .widget-chevron svg
-		transform: rotate(-90deg)
-
 	.widget-body
 		overflow-y: auto
 		max-height: 70vh
 
 	.widget-body[hidden]
 		display: none !important
+
+	// Self-drawn count -- the host no longer renders a badge, so the tabs
+	// widget shows its own count inside its body (spec.md ticket 03).
+	.tabs-count
+		opacity: .5
+		padding: .35rem .4rem .12rem
+		font-size: .75rem
+		text-transform: uppercase
+		letter-spacing: .06em
+		color: var(--c21)
 
 	.tab-section
 		margin-bottom: .2rem
@@ -197,18 +147,12 @@
 
 	// Collapsed state: icon-only, hide text elements — width stays 20%, only content hides
 	&.collapsed
-		.widget-label,
-		.widget-chevron,
 		.tab-title,
 		.tab-close,
 		.tab-section-title,
 		.tab-group-header,
 		.widget-body
 			display: none !important
-
-		.widget-panel-header
-			justify-content: center
-			padding: .35rem 0
 
 	.clock-widget-time
 		display: block

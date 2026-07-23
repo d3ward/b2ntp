@@ -1,10 +1,8 @@
 let _tabs = [];
 let _container = null;
-let _badge = null;
 
-export function initTabs({ container, badge, ntoast }) {
+export function initTabs({ container, ntoast }) {
   _container = container;
-  _badge = badge || null;
   renderTabs();
   registerEventListeners();
 }
@@ -33,6 +31,7 @@ function render(tabs, groups) {
   if (!body) return;
 
   body.innerHTML = "";
+  body.appendChild(createCount(tabs.length));
 
   const TAB_GROUP_ID_NONE =
     typeof chrome.tabGroups !== "undefined"
@@ -74,7 +73,13 @@ function render(tabs, groups) {
   }
 
   body.appendChild(fragment);
-  updateCountBadge(tabs.length);
+}
+
+function createCount(count) {
+  const el = document.createElement("div");
+  el.className = "tabs-count";
+  el.textContent = `${count} tab${count === 1 ? "" : "s"}`;
+  return el;
 }
 
 function createSection(title, tabs) {
@@ -157,12 +162,6 @@ function createTabItem(tab) {
   item.appendChild(titleEl);
   item.appendChild(closeBtn);
   return item;
-}
-
-function updateCountBadge(count) {
-  if (!_badge) return;
-  _badge.textContent = count;
-  _badge.style.display = count > 0 ? 'flex' : 'none';
 }
 
 function getColorFromString(str) {
