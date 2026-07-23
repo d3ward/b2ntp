@@ -1,0 +1,129 @@
+<!-- PROTOTYPE — throwaway. ntp-widgets-redesign ticket 10: --c* colour layer on the new chrome.
+     Left: cards driven by the user --c* slots (region background + card surface/border/text).
+     Right: same cards on DaisyUI base tokens, with --c* kept for body CONTENT only.
+     Edit the swatches to see what the user actually controls. Note the sticky header opacity.
+     Not production code. -->
+<style>
+  :root{
+    /* DaisyUI-ish base (the bridge) */
+    --bg:#f7f6fa;--surface:#fff;--surface-2:#f1eef7;--ink:#1b1720;--muted:#6b6577;--border:#e6e3ee;
+    --primary:#8034d5;--shadow:0 1px 2px #1b17200f,0 8px 24px #1b172010;--r:12px;--gap:.6rem;
+    --ui:-apple-system,system-ui,"Segoe UI",Roboto,sans-serif;--mono:ui-monospace,Menlo,monospace;
+    /* the independent user colour layer (subset that matters for chrome) */
+    --c25:#efeaf7;   /* left region background */
+    --cMain:#f4f1fb; /* NEW slot: main region background */
+    --c26:#efeaf7;   /* right region background */
+    --cCard:#ffffff; /* NEW slot: widget card surface */
+    --cBorder:#e3ddef;/* NEW slot: card border */
+    --c21:#5b5568;   /* card body text/icon (repurposed from old header colour) */
+    --c2:#8034d5;    /* example body-content colour (bookmark accent) */
+  }
+  @media (prefers-color-scheme:dark){:root{
+    --bg:#0f0d13;--surface:#17141c;--surface-2:#201b29;--ink:#ece9f2;--muted:#9a93a8;--border:#272231;
+    --primary:#a06cff;--shadow:0 1px 2px #0000004d,0 10px 30px #00000059;
+    --c25:#191521;--cMain:#151019;--c26:#191521;--cCard:#17141c;--cBorder:#2a2436;--c21:#b7b0c4;--c2:#a06cff;}}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:var(--ui);color:var(--ink);background:var(--bg);padding:1.1rem}
+  h1{font-size:1.05rem;margin:0 0 .2rem}h2{font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:1.4rem 0 .5rem}
+  p.lede{color:var(--muted);font-size:.84rem;margin:0 0 .7rem;max-width:62rem}
+  code{font-family:var(--mono);font-size:.8em;background:var(--surface-2);padding:.1rem .3rem;border-radius:5px}
+
+  .swatches{display:flex;flex-wrap:wrap;gap:.6rem;margin:.4rem 0 1rem}
+  .sw{display:flex;align-items:center;gap:.35rem;font-size:.72rem;color:var(--muted)}
+  .sw input{width:1.6rem;height:1.6rem;border:1px solid var(--border);border-radius:6px;background:none;padding:0;cursor:pointer}
+
+  .cols{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;align-items:start}
+  .col > h3{font-size:.85rem;margin:0 0 .5rem}
+  .col > .why{font-size:.74rem;color:var(--muted);margin:0 0 .7rem}
+
+  /* --- region + card, driven by whichever source the column picks --- */
+  .region{border-radius:14px;padding:.55rem;display:flex;flex-direction:column;gap:var(--gap);position:relative;height:19rem;overflow:hidden}
+  .scroll{overflow-y:auto;display:flex;flex-direction:column;gap:var(--gap);padding-bottom:.4rem}
+  .card{border-radius:var(--r);box-shadow:var(--shadow);padding:.6rem .7rem;font-size:.82rem}
+  .card h4{margin:0 0 .35rem;font-size:.72rem;text-transform:uppercase;letter-spacing:.05em}
+  .stub{display:grid;gap:.3rem}.stub i{height:.5rem;border-radius:4px;background:var(--surface-2);display:block}.stub i:nth-child(2){width:65%}
+  .sticky{position:sticky;top:0;z-index:2}
+  .accent{color:var(--c2);font-weight:600}
+  .di-btn{border:1px solid var(--primary);color:var(--primary);background:none;border-radius:8px;padding:.25rem .6rem;font:inherit;font-size:.78rem}
+
+  /* COLUMN A — user --c* slots drive the chrome */
+  .A .region{background:var(--cMain)}
+  .A .region.left{background:var(--c25)}
+  .A .card{background:var(--cCard);border:1px solid var(--cBorder);color:var(--c21)}
+  .A .card h4{color:var(--c21)}
+  .A .sticky{background:var(--cCard)}     /* opaque so scroll content doesn't bleed through */
+
+  /* COLUMN B — DaisyUI base drives chrome; --c* only inside bodies */
+  .B .region{background:var(--surface-2)}
+  .B .card{background:var(--surface);border:1px solid var(--border);color:var(--ink)}
+  .B .card h4{color:var(--muted)}
+  .B .sticky{background:var(--surface)}
+</style>
+
+<h1>Ticket 10 — the <code>--c*</code> layer on headerless cards</h1>
+<p class="lede">Same three-region layout, two mappings. Edit the user swatches and watch which parts
+respond. The sticky <b>main</b> header must stay opaque (scroll the main column).</p>
+
+<div class="swatches" id="sw"></div>
+
+<div class="cols">
+  <div class="col A">
+    <h3>A · <code>--c*</code> slots drive the chrome</h3>
+    <p class="why">Region background = <code>--c25/--cMain/--c26</code>; card = <code>--cCard</code> +
+      <code>--cBorder</code>; text = <code>--c21</code>. Preserves (and extends) today's per-region
+      background customization. Cost: 2 new slots, chrome colour is the user's problem.</p>
+    <div class="region left"><div class="card"><h4>Tabs</h4><div class="stub"><i></i><i></i><i></i></div></div>
+      <div class="card"><h4>Clock</h4><div style="font-size:1.4rem;font-weight:600">14:22</div></div></div>
+  </div>
+  <div class="col B">
+    <h3>B · DaisyUI base drives chrome; <code>--c*</code> for body content only</h3>
+    <p class="why">Card surface/border/text = base tokens (via the bridge). <code>--c*</code> shrinks
+      to widget-body content (bookmark accents, etc). Consistent chrome, one theme story — but the
+      per-region background customization users have today is gone.</p>
+    <div class="region left"><div class="card"><h4>Tabs</h4><div class="stub"><i></i><i></i><i></i></div></div>
+      <div class="card"><h4>Clock</h4><div style="font-size:1.4rem;font-weight:600">14:22</div></div></div>
+  </div>
+</div>
+
+<h2>Main region — sticky header opacity + DaisyUI inside a body</h2>
+<div class="cols">
+  <div class="col A">
+    <div class="region">
+      <div class="card sticky"><h4>Search (sticky header slot)</h4><div class="stub"><i></i></div></div>
+      <div class="scroll">
+        <div class="card"><h4>Bookmarks</h4>
+          <div class="stub"><i></i><i></i></div>
+          <p style="margin:.4rem 0 0"><span class="accent">▸ folder</span> — body content still reads <code>--c2</code></p>
+          <button class="di-btn">a DaisyUI btn inside the body</button>
+        </div>
+        <div class="card"><h4>filler</h4><div class="stub"><i></i><i></i><i></i></div></div>
+        <div class="card"><h4>filler</h4><div class="stub"><i></i><i></i><i></i></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="col B">
+    <div class="region">
+      <div class="card sticky"><h4>Search (sticky header slot)</h4><div class="stub"><i></i></div></div>
+      <div class="scroll">
+        <div class="card"><h4>Bookmarks</h4>
+          <div class="stub"><i></i><i></i></div>
+          <p style="margin:.4rem 0 0"><span class="accent">▸ folder</span> — body content still reads <code>--c2</code></p>
+          <button class="di-btn">a DaisyUI btn inside the body</button>
+        </div>
+        <div class="card"><h4>filler</h4><div class="stub"><i></i><i></i><i></i></div></div>
+        <div class="card"><h4>filler</h4><div class="stub"><i></i><i></i><i></i></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const SW=[['--c25','Left bg'],['--cMain','Main bg (new)'],['--c26','Right bg (new split)'],
+  ['--cCard','Card surface (new)'],['--cBorder','Card border (new)'],['--c21','Card text'],['--c2','Body accent']]
+const box=document.getElementById('sw'),root=document.documentElement
+const hex=(v)=>{const c=getComputedStyle(root).getPropertyValue(v).trim();return c.startsWith('#')?c:'#ffffff'}
+SW.forEach(([v,l])=>{const w=document.createElement('label');w.className='sw'
+  const i=document.createElement('input');i.type='color';i.value=hex(v)
+  i.oninput=()=>root.style.setProperty(v,i.value)
+  w.append(i,document.createTextNode(l));box.appendChild(w)})
+</script>

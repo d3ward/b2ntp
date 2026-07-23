@@ -1,0 +1,181 @@
+<!-- PROTOTYPE — throwaway. ntp-widgets-redesign ticket 03: layout + scroll/pin model.
+     v2 — Rails, whole-page sticky scroll. Not production code. -->
+<style>
+  :root {
+    --bg: #f7f6fa; --surface: #ffffff; --surface-2: #f1eef7;
+    --ink: #1b1720; --muted: #6b6577; --border: #e6e3ee;
+    --primary: #8034d5; --primary-tint: #8034d515; --scroll: #0e9298;
+    --shadow: 0 1px 2px #1b17200f, 0 8px 24px #1b172010;
+    --r: 14px; --gap: .7rem;
+    --mono: ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, monospace;
+    --ui: -apple-system, system-ui, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+    --top: .7rem;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg:#0f0d13; --surface:#17141c; --surface-2:#201b29; --ink:#ece9f2; --muted:#9a93a8;
+      --border:#272231; --primary:#a06cff; --primary-tint:#a06cff1f; --scroll:#34d3d9;
+      --shadow: 0 1px 2px #0000004d, 0 10px 30px #00000059; }
+  }
+  :root[data-theme="dark"] { --bg:#0f0d13; --surface:#17141c; --surface-2:#201b29; --ink:#ece9f2; --muted:#9a93a8;
+    --border:#272231; --primary:#a06cff; --primary-tint:#a06cff1f; --scroll:#34d3d9;
+    --shadow: 0 1px 2px #0000004d, 0 10px 30px #00000059; }
+  :root[data-theme="light"] { --bg:#f7f6fa; --surface:#ffffff; --surface-2:#f1eef7; --ink:#1b1720; --muted:#6b6577;
+    --border:#e6e3ee; --primary:#8034d5; --primary-tint:#8034d515; --scroll:#0e9298;
+    --shadow: 0 1px 2px #1b17200f, 0 8px 24px #1b172010; }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; font-family: var(--ui); color: var(--ink); background: var(--bg);
+    min-height: 100dvh;              /* THE PAGE scrolls — the whole window */
+    -webkit-font-smoothing: antialiased;
+    padding-bottom: 3.2rem;          /* clear the legend */
+  }
+
+  /* Widgets and bookmarks are siblings in one tall grid row. Because bookmarks
+     make the row tall, the sticky rails stay pinned the whole way down. */
+  .workspace {
+    display: grid;
+    grid-template-columns: 15rem minmax(0, 1fr) 16rem;
+    align-items: start;
+    gap: var(--gap);
+    max-width: 82rem; margin: 0 auto; padding: var(--top);
+  }
+
+  /* ---- Rails: sticky, capped to the viewport ---- */
+  .rail {
+    position: sticky; top: var(--top);
+    max-height: calc(100dvh - var(--top) * 2);
+    display: flex; flex-direction: column; gap: var(--gap);
+    min-height: 0;
+  }
+
+  .main { display: flex; flex-direction: column; gap: var(--gap); min-width: 0; }
+  /* Search rides along too, so "everything else stays intact" */
+  .main .w-search { position: sticky; top: var(--top); z-index: 3; }
+
+  /* ---- Widget card ---- */
+  .cell {
+    background: var(--surface); border: 1px solid var(--border); border-radius: var(--r);
+    box-shadow: var(--shadow); padding: .85rem; display: flex; flex-direction: column; gap: .55rem;
+    min-height: 0;
+  }
+  .cell-title {
+    font-size: .7rem; font-weight: 600; letter-spacing: .04em; text-transform: uppercase;
+    color: var(--muted); display: flex; align-items: center; gap: .4rem;
+  }
+  .cell-title .sc { color: var(--scroll); font: 600 .6rem/1 var(--mono); text-transform: none; letter-spacing: 0; }
+
+  .w-search { flex-direction: row; align-items: center; gap: .7rem; padding: .7rem .85rem; }
+  .search-input {
+    flex: 1; min-width: 0; height: 2.6rem; border: 1px solid var(--border); border-radius: 10px;
+    background: var(--surface-2); color: var(--ink); padding: 0 .9rem; font-size: 1rem; outline: none;
+  }
+  .search-input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-tint); }
+  .search-ico { color: var(--muted); font-size: 1.1rem; }
+
+  .clock-time { font-size: 2rem; font-weight: 700; font-variant-numeric: tabular-nums; line-height: 1; }
+  .clock-date { color: var(--muted); font-size: .82rem; }
+
+  .weather-row { display: flex; align-items: center; gap: .7rem; }
+  .weather-temp { font-size: 1.8rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .weather-ico { font-size: 1.9rem; }
+  .weather-city { color: var(--muted); font-size: .82rem; }
+
+  .note-area {
+    min-height: 5rem; resize: none; border: 1px solid var(--border); border-radius: 10px;
+    background: var(--surface-2); color: var(--ink); padding: .6rem; font: inherit; font-size: .86rem; outline: none;
+  }
+  .note-area:focus { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-tint); }
+
+  /* Tabs widget: a long list with its OWN built-in scroll (the rail never grows) */
+  .w-tabs { flex: 1 1 auto; min-height: 8rem; overflow: hidden; }
+  .tabs-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: .2rem;
+    overflow-y: auto; overscroll-behavior: contain; min-height: 0; }
+  .tabs-list li { font-size: .84rem; padding: .35rem .5rem; border-radius: 8px; cursor: default; }
+  .tabs-list li:hover { background: var(--surface-2); }
+
+  /* Bookmarks: the tall content the page scroll moves through */
+  .w-books { padding: 0; overflow: hidden; }
+  .books-head { display: flex; align-items: center; justify-content: space-between; padding: .7rem .85rem .55rem; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: var(--surface); }
+  .books-body { padding: .7rem .85rem 1rem; display: grid; grid-template-columns: repeat(auto-fill, minmax(9.5rem, 1fr)); gap: .55rem; align-content: start; }
+  .bm { display: flex; align-items: center; gap: .5rem; padding: .5rem .6rem; border-radius: 10px;
+    background: var(--surface-2); border: 1px solid var(--border); font-size: .82rem; cursor: default; }
+  .bm:hover { border-color: var(--primary); }
+  .bm-fav { width: 1.3rem; height: 1.3rem; border-radius: 6px; display: grid; place-items: center; font-size: .72rem; color: #fff; flex: none; }
+  .bm-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .books-folder { grid-column: 1 / -1; font-size: .72rem; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); margin: .6rem 0 .1rem; }
+  .books-folder:first-child { margin-top: 0; }
+
+  .legend {
+    position: fixed; left: 50%; bottom: .8rem; transform: translateX(-50%); z-index: 50;
+    display: flex; gap: .8rem; align-items: center; flex-wrap: wrap; justify-content: center;
+    background: var(--surface); border: 1px solid var(--border); border-radius: 999px;
+    box-shadow: var(--shadow); padding: .45rem .9rem; font-size: .76rem; color: var(--muted);
+    max-width: calc(100vw - 1.6rem);
+  }
+  .legend b { color: var(--ink); font-weight: 600; }
+  .legend .dot { color: var(--scroll); }
+
+  @media (max-width: 760px) {
+    .workspace { grid-template-columns: minmax(0,1fr); }
+    .rail { position: static; max-height: none; flex-direction: column; }
+    .rail--right { order: 3; }
+  }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+</style>
+
+<div class="workspace">
+  <aside class="rail rail--left" id="railL"></aside>
+  <div class="main" id="main"></div>
+  <aside class="rail rail--right" id="railR"></aside>
+</div>
+
+<div class="legend">
+  <span>Scroll <b>anywhere</b> — rails &amp; search stay, bookmarks move.</span>
+  <span class="dot">•</span>
+  <span>The <b>Tabs</b> widget scrolls <b>inside itself</b>.</span>
+</div>
+
+<script>
+  const PAL = ['#8034d5','#0e9298','#e0690a','#c0392b','#2d7d46','#1f6fd6','#7d3ac1','#b5179e'];
+  const fav = s => PAL[[...s].reduce((a,c)=>a+c.charCodeAt(0),0) % PAL.length];
+
+  const FOLDERS = [
+    ['Daily', ['Gmail','Calendar','GitHub','Linear','Notion','Figma','Slack','Drive']],
+    ['Dev', ['MDN','Can I Use','Stack Overflow','npm','Regex101','DevDocs','Vite','esbuild','Bundlephobia','TypeScript','Excalidraw','Prettier']],
+    ['Read', ['Hacker News','Lobsters','Reddit','The Verge','Ars Technica','CSS-Tricks','Smashing','A List Apart']],
+    ['Media', ['YouTube','Spotify','Twitch','Letterboxd','Bandcamp','SoundCloud']],
+    ['Shopping', ['Amazon','eBay','Etsy','Steam','Humble']],
+    ['Work', ['Jira','Confluence','Sentry','Datadog','Vercel','Cloudflare','1Password','Statuspage','PagerDuty','Grafana']],
+  ];
+  function booksHTML() {
+    let h = '';
+    for (const [f, links] of FOLDERS) {
+      h += `<div class="books-folder">${f}</div>`;
+      for (const n of links) h += `<div class="bm"><span class="bm-fav" style="background:${fav(n)}">${n[0]}</span><span class="bm-name">${n}</span></div>`;
+    }
+    return h;
+  }
+
+  const TABS = ['Read later','Design refs','Sprint board','Weekend','Home reno','Draft posts','Recipes','Gift ideas','Trip: Porto','Invoices','Learning JS','Bookmarks bar','To watch','Music finds','Side project'];
+
+  document.getElementById('railL').innerHTML =
+    `<div class="cell w-clock"><div class="cell-title">Clock</div><div class="clock-time" id="clk">09:41</div><div class="clock-date">Mon, 23 Jul</div></div>` +
+    `<div class="cell w-weather"><div class="cell-title">Weather</div><div class="weather-row"><span class="weather-ico">⛅</span><span class="weather-temp">21°</span></div><div class="weather-city">Lisbon · Partly cloudy</div></div>`;
+
+  document.getElementById('railR').innerHTML =
+    `<div class="cell w-note"><div class="cell-title">Quick note</div><textarea class="note-area" placeholder="Jot something…">Lock the widget shell model ✦</textarea></div>` +
+    `<div class="cell w-tabs"><div class="cell-title">Tabs <span class="sc">↕ built-in scroll</span></div><ul class="tabs-list">${TABS.map(t=>`<li>◷ ${t}</li>`).join('')}</ul></div>`;
+
+  document.getElementById('main').innerHTML =
+    `<div class="cell w-search"><span class="search-ico">⌕</span><input class="search-input" placeholder="Search the web…" aria-label="Search"></div>` +
+    `<div class="cell w-books"><div class="books-head"><div class="cell-title">Bookmarks</div></div><div class="books-body">${booksHTML()}</div></div>`;
+
+  (function clock(){
+    const el = document.getElementById('clk');
+    const d = new Date();
+    el.textContent = String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');
+    setInterval(clock, 20000);
+  })();
+</script>

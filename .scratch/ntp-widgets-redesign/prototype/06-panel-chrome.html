@@ -1,0 +1,219 @@
+<!-- PROTOTYPE — throwaway. ntp-widgets-redesign ticket 06: mounting & panel lifecycle.
+     Three things to react to:
+       A. panel chrome — bare vs uniform header vs opt-in
+       B. collapse — chevron / titlebar-click / none
+       C. the schema -> UI settings renderer (live, from a descriptor `settings` schema)
+     Not production code. -->
+<style>
+  :root {
+    --bg: #f7f6fa; --surface: #ffffff; --surface-2: #f1eef7;
+    --ink: #1b1720; --muted: #6b6577; --border: #e6e3ee;
+    --primary: #8034d5; --primary-tint: #8034d515;
+    --shadow: 0 1px 2px #1b17200f, 0 8px 24px #1b172010;
+    --r: 14px; --gap: .7rem;
+    --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    --ui: -apple-system, system-ui, "Segoe UI", Roboto, sans-serif;
+    /* stand-in for the widget colour layer */
+    --c21: #6b6577;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg:#0f0d13; --surface:#17141c; --surface-2:#201b29; --ink:#ece9f2; --muted:#9a93a8;
+      --border:#272231; --primary:#a06cff; --primary-tint:#a06cff1f; --c21:#9a93a8;
+      --shadow: 0 1px 2px #0000004d, 0 10px 30px #00000059; }
+  }
+  * { box-sizing: border-box; }
+  body { margin:0; font-family: var(--ui); color: var(--ink); background: var(--bg); padding: 1.2rem; }
+  h1 { font-size: 1.05rem; margin: 0 0 .2rem; }
+  h2 { font-size: .82rem; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin: 2rem 0 .6rem; }
+  p.lede { color: var(--muted); font-size: .85rem; margin: 0 0 .4rem; max-width: 60rem; }
+  code { font-family: var(--mono); font-size: .8em; background: var(--surface-2); padding: .1rem .3rem; border-radius: 5px; }
+
+  .row { display: grid; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); gap: 1rem; align-items: start; }
+  .opt { background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--r); padding: .7rem; }
+  .opt > h3 { margin: 0 0 .1rem; font-size: .85rem; }
+  .opt > .why { color: var(--muted); font-size: .75rem; margin: 0 0 .6rem; }
+
+  /* ---------- panel chrome ---------- */
+  .widget-panel {
+    background: var(--surface); border: 1px solid var(--border); border-radius: var(--r);
+    box-shadow: var(--shadow); margin-bottom: .55rem; overflow: hidden;
+  }
+  .widget-panel-header {
+    display: flex; align-items: center; gap: .35rem; padding: .35rem .5rem; color: var(--c21);
+  }
+  .widget-panel-header.clickable { cursor: pointer; user-select: none; }
+  .widget-panel-header.clickable:hover { background: var(--primary-tint); }
+  .widget-icon { position: relative; width: 1.6rem; height: 1.6rem; display: grid; place-items: center; flex: 0 0 auto; }
+  .widget-icon svg { width: 18px; height: 18px; }
+  .widget-badge {
+    position: absolute; top: -3px; right: -5px; background: var(--primary); color: #fff;
+    border-radius: 50%; font-size: .55rem; min-width: .9rem; height: .9rem; display: grid; place-items: center;
+  }
+  .widget-label { flex: 1; font-size: .82rem; font-weight: 600; }
+  .widget-chevron {
+    background: none; border: 0; cursor: pointer; color: var(--c21); padding: .15rem; border-radius: 5px;
+    display: grid; place-items: center;
+  }
+  .widget-chevron svg { transition: transform .18s; }
+  .panel-collapsed .widget-chevron svg { transform: rotate(-90deg); }
+  .widget-body { padding: .6rem .7rem .7rem; font-size: .82rem; color: var(--muted); }
+  .widget-panel.bare .widget-body { padding-top: .7rem; }
+  .fake { display: grid; gap: .35rem; }
+  .fake i { display: block; height: .55rem; border-radius: 4px; background: var(--surface-2); }
+  .fake i:nth-child(2) { width: 75%; }
+  .fake i:nth-child(3) { width: 55%; }
+
+  /* hover-revealed chrome (option C variant) */
+  .widget-panel.hoverchrome .widget-panel-header { opacity: 0; transition: opacity .15s; }
+  .widget-panel.hoverchrome:hover .widget-panel-header,
+  .widget-panel.hoverchrome:focus-within .widget-panel-header { opacity: 1; }
+
+  /* ---------- settings renderer ---------- */
+  .settings-pane { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); padding: .9rem; }
+  .field { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: .5rem .8rem; padding: .45rem 0; border-bottom: 1px solid var(--border); }
+  .field:last-child { border-bottom: 0; }
+  .field label { font-size: .84rem; }
+  .field .hint { grid-column: 1 / -1; font-size: .72rem; color: var(--muted); margin-top: -.3rem; }
+  .field input[type="text"], .field input[type="number"], .field select {
+    background: var(--surface-2); border: 1px solid var(--border); color: var(--ink);
+    border-radius: 8px; padding: .3rem .45rem; font: inherit; font-size: .8rem; min-width: 9rem;
+  }
+  .field input[type="range"] { min-width: 9rem; }
+  .out { font-family: var(--mono); font-size: .75rem; white-space: pre; background: var(--surface-2);
+    border: 1px solid var(--border); border-radius: var(--r); padding: .7rem; overflow-x: auto; }
+</style>
+
+<h1>Ticket 06 — panel chrome, collapse, settings renderer</h1>
+<p class="lede">Rough. Same four widgets rendered three ways, plus a live schema&rarr;UI renderer. React to the shapes, not the pixels.</p>
+
+<h2>A · Panel chrome</h2>
+<div class="row" id="chrome-row"></div>
+
+<h2>B · Collapse affordance</h2>
+<p class="lede">Only if collapse survives at all. Click the headers.</p>
+<div class="row" id="collapse-row"></div>
+
+<h2>C · Settings renderer — schema in, form out</h2>
+<p class="lede">One generic renderer walks a descriptor's <code>settings</code> schema. Everything below is generated; nothing is hand-written markup.</p>
+<div class="row" style="grid-template-columns: minmax(18rem,1fr) minmax(16rem,.8fr)">
+  <div class="settings-pane" id="settings-pane"></div>
+  <div>
+    <div class="out" id="settings-out"></div>
+    <p class="lede" style="margin-top:.5rem">Only changed keys are stored (sparse overrides, ticket 05).</p>
+  </div>
+</div>
+
+<script type="module">
+const svg = (d) => `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${d}</svg>`
+const ICONS = {
+  tabs: svg('<path d="M3 5m0 1a1 1 0 0 1 1 -1h16a1 1 0 0 1 1 1v3a1 1 0 0 1 -1 1h-16a1 1 0 0 1 -1 -1z"/><path d="M3 14m0 1a1 1 0 0 1 1 -1h8a1 1 0 0 1 1 1v3a1 1 0 0 1 -1 1h-8a1 1 0 0 1 -1 -1z"/>'),
+  clock: svg('<path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0"/><path d="M12 7v5l3 3"/>'),
+  weather: svg('<path d="M7 18a4.6 4.4 0 0 1 0 -9a5 4.5 0 0 1 11 2h1a3.5 3.5 0 0 1 0 7h-12"/>'),
+  qnote: svg('<path d="M5 3m0 2a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v14a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2z"/><path d="M9 7l6 0"/><path d="M9 11l6 0"/>'),
+}
+const CHEV = svg('<path d="M6 9l6 6 6-6"/>').replace('width="24" height="24"','width="15" height="15"')
+
+const DEMO = [
+  { id:'clock',   label:'Clock',      badge:null },
+  { id:'tabs',    label:'Tabs',       badge:'3'  },
+  { id:'weather', label:'Weather',    badge:null },
+  { id:'qnote',   label:'Quick Note', badge:null },
+]
+
+// --- the mount function under discussion -----------------------------------
+function panel(d, { chrome='uniform', collapse='chevron', hover=false } = {}) {
+  const el = document.createElement('div')
+  el.className = 'widget-panel' + (chrome === 'none' ? ' bare' : '') + (hover ? ' hoverchrome' : '')
+
+  if (chrome !== 'none') {
+    const h = document.createElement('div')
+    h.className = 'widget-panel-header' + (collapse === 'titlebar' ? ' clickable' : '')
+    h.innerHTML =
+      `<span class="widget-icon">${ICONS[d.id]}${d.badge ? `<span class="widget-badge">${d.badge}</span>` : ''}</span>` +
+      `<span class="widget-label">${d.label}</span>` +
+      (collapse === 'chevron' ? `<button class="widget-chevron" aria-label="Collapse ${d.label}">${CHEV}</button>` : '')
+    el.appendChild(h)
+  }
+
+  const body = document.createElement('div')
+  body.className = 'widget-body'
+  body.innerHTML = `<div class="fake"><i></i><i></i><i></i></div>`
+  el.appendChild(body)
+
+  const toggle = () => { const c = el.classList.toggle('panel-collapsed'); body.hidden = c }
+  if (collapse === 'chevron') el.querySelector('.widget-chevron')?.addEventListener('click', toggle)
+  if (collapse === 'titlebar') el.querySelector('.widget-panel-header')?.addEventListener('click', toggle)
+  return el
+}
+
+function group(host, title, why, opts) {
+  const box = document.createElement('div')
+  box.className = 'opt'
+  box.innerHTML = `<h3>${title}</h3><p class="why">${why}</p>`
+  DEMO.forEach(d => box.appendChild(panel(d, opts)))
+  host.appendChild(box)
+}
+
+const chromeRow = document.getElementById('chrome-row')
+group(chromeRow, 'A1 · Bare', 'No header anywhere — widgets draw their own identity (today, for everything but tabs).', { chrome:'none' })
+group(chromeRow, 'A2 · Uniform', 'Every widget gets icon + title + affordance. Predictable, but the clock gets a "Clock" label it does not need.', { chrome:'uniform' })
+group(chromeRow, 'A3 · Chrome on hover', 'Bare at rest; header fades in on hover/focus. Hover a card.', { chrome:'uniform', hover:true })
+
+const collapseRow = document.getElementById('collapse-row')
+group(collapseRow, 'B1 · Chevron button', 'Explicit control, today\'s behaviour. Extra target in every header.', { collapse:'chevron' })
+group(collapseRow, 'B2 · Whole titlebar', 'Header is the button. Bigger hit area, no extra glyph — but no visible affordance.', { collapse:'titlebar' })
+group(collapseRow, 'B3 · No collapse', 'Drop it. Remove from the rail instead; one less persisted state.', { collapse:'none' })
+
+// --- C: the schema -> UI renderer -----------------------------------------
+const SCHEMA = {
+  format:      { type:'select', default:'24', label:'Time format', options:[['24','24-hour'],['12','12-hour']] },
+  showSeconds: { type:'bool',   default:false, label:'Show seconds' },
+  units:       { type:'select', default:'C',  label:'Units', options:[['C','Celsius'],['F','Fahrenheit']] },
+  location:    { type:'text',   default:'',   label:'Location', placeholder:'City or lat,lon', hint:'Blank = auto-detect' },
+  refreshMins: { type:'number', default:30,   label:'Refresh every (min)', min:5, max:180, step:5 },
+  opacity:     { type:'range',  default:100,  label:'Opacity', min:20, max:100, step:5 },
+}
+const stored = {}   // sparse overrides
+
+const RENDERERS = {
+  bool:   (k, f, v, on) => { const i = el('input',{type:'checkbox'}); i.checked = v; i.onchange = () => on(i.checked); return i },
+  text:   (k, f, v, on) => { const i = el('input',{type:'text', placeholder:f.placeholder||''}); i.value = v; i.oninput = () => on(i.value); return i },
+  number: (k, f, v, on) => { const i = el('input',{type:'number', min:f.min, max:f.max, step:f.step}); i.value = v; i.oninput = () => on(Number(i.value)); return i },
+  range:  (k, f, v, on) => { const i = el('input',{type:'range', min:f.min, max:f.max, step:f.step}); i.value = v; i.oninput = () => on(Number(i.value)); return i },
+  select: (k, f, v, on) => {
+    const s = el('select'); f.options.forEach(([val, lbl]) => s.appendChild(el('option',{value:val}, lbl)))
+    s.value = v; s.onchange = () => on(s.value); return s
+  },
+}
+function el(tag, attrs = {}, text) {
+  const n = document.createElement(tag)
+  for (const [k, v] of Object.entries(attrs)) if (v !== undefined) n.setAttribute(k, v)
+  if (text != null) n.textContent = text
+  return n
+}
+function renderSettings(schema, values, onChange) {
+  const frag = document.createDocumentFragment()
+  for (const [key, field] of Object.entries(schema)) {
+    const row = el('div', { class:'field' })
+    const id = 'f-' + key
+    const lab = el('label', { for:id }, field.label)
+    const ctl = (RENDERERS[field.type] || RENDERERS.text)(key, field, values[key], (v) => onChange(key, v))
+    ctl.id = id
+    row.append(lab, ctl)
+    if (field.hint) row.appendChild(el('div', { class:'hint' }, field.hint))
+    frag.appendChild(row)
+  }
+  return frag
+}
+function paint() {
+  const resolved = Object.fromEntries(Object.entries(SCHEMA).map(([k, f]) => [k, k in stored ? stored[k] : f.default]))
+  const pane = document.getElementById('settings-pane')
+  pane.replaceChildren(renderSettings(SCHEMA, resolved, (k, v) => {
+    if (v === SCHEMA[k].default) delete stored[k]; else stored[k] = v
+    document.getElementById('settings-out').textContent =
+      'settings["<widget>"] =\n' + JSON.stringify(stored, null, 2)
+  }))
+  document.getElementById('settings-out').textContent = 'settings["<widget>"] =\n' + JSON.stringify(stored, null, 2)
+}
+paint()
+</script>

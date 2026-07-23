@@ -1,0 +1,268 @@
+<!-- PROTOTYPE — throwaway. ntp-widgets-redesign ticket 08: arrangement / editing UX.
+     React to: (A) the keyboard-native region editor — three regions, main header/body,
+     CORE locks, add-tray; (B) where editing lives (options vs on-NTP edit mode).
+     Not production code. Keyboard: focus an item, use the move controls or arrow keys. -->
+<style>
+  :root {
+    --bg:#f7f6fa; --surface:#fff; --surface-2:#f1eef7; --ink:#1b1720; --muted:#6b6577;
+    --border:#e6e3ee; --primary:#8034d5; --primary-tint:#8034d515; --danger:#c0362c;
+    --shadow:0 1px 2px #1b17200f,0 8px 24px #1b172010; --r:12px;
+    --ui:-apple-system,system-ui,"Segoe UI",Roboto,sans-serif; --mono:ui-monospace,Menlo,monospace;
+  }
+  @media (prefers-color-scheme: dark){ :root{
+    --bg:#0f0d13; --surface:#17141c; --surface-2:#201b29; --ink:#ece9f2; --muted:#9a93a8;
+    --border:#272231; --primary:#a06cff; --primary-tint:#a06cff1f; --danger:#ff6b5e;
+    --shadow:0 1px 2px #0000004d,0 10px 30px #00000059; }}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:var(--ui);color:var(--ink);background:var(--bg);padding:1.2rem}
+  h1{font-size:1.05rem;margin:0 0 .2rem} h2{font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:1.8rem 0 .6rem}
+  p.lede{color:var(--muted);font-size:.85rem;margin:0 0 .8rem;max-width:60rem}
+  code{font-family:var(--mono);font-size:.8em;background:var(--surface-2);padding:.1rem .3rem;border-radius:5px}
+
+  .editor{display:grid;grid-template-columns:1fr 1.3fr 1fr;gap:.8rem;align-items:start;max-width:60rem}
+  .region{background:var(--surface-2);border:1px solid var(--border);border-radius:var(--r);padding:.6rem;min-height:6rem}
+  .region > h3{margin:0 0 .5rem;font-size:.72rem;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);display:flex;justify-content:space-between}
+  .slot-label{font-size:.62rem;color:var(--muted);opacity:.8;margin:.4rem 0 .25rem;text-transform:uppercase;letter-spacing:.04em}
+  ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.35rem}
+  .drop{min-height:1.6rem;border:1px dashed transparent;border-radius:8px}
+  .drop.empty{border-color:var(--border)}
+
+  li.item{display:flex;align-items:center;gap:.4rem;background:var(--surface);border:1px solid var(--border);
+    border-radius:9px;padding:.35rem .4rem;font-size:.82rem;box-shadow:var(--shadow);cursor:default}
+  li.item:focus-within,li.item:focus{outline:2px solid var(--primary);outline-offset:1px}
+  li.item[tabindex]{cursor:pointer}
+  .ico{width:1.3rem;height:1.3rem;display:grid;place-items:center;color:var(--muted);flex:0 0 auto}
+  .ico svg{width:16px;height:16px}
+  .nm{flex:1}
+  .lock{font-size:.6rem;color:var(--muted);border:1px solid var(--border);border-radius:5px;padding:.05rem .3rem}
+  .mv{display:flex;gap:.15rem}
+  .mv button, .rm{background:none;border:1px solid var(--border);border-radius:6px;color:var(--muted);
+    width:1.5rem;height:1.5rem;display:grid;place-items:center;cursor:pointer;font-size:.8rem;padding:0}
+  .mv button:hover,.rm:hover{border-color:var(--primary);color:var(--primary)}
+  .rm:hover{border-color:var(--danger);color:var(--danger)}
+  .mv button:disabled{opacity:.3;cursor:not-allowed}
+  li.core .rm{display:none}
+  .gear{background:none;border:1px solid var(--border);border-radius:6px;color:var(--muted);width:1.5rem;height:1.5rem;display:grid;place-items:center;cursor:pointer}
+  .gear:hover{border-color:var(--primary);color:var(--primary)}
+
+  .tray{margin-top:1rem;max-width:60rem}
+  .tray ul{flex-direction:row;flex-wrap:wrap}
+  .tray li.item{cursor:pointer;opacity:.85}
+  .tray li.item:hover{opacity:1;border-color:var(--primary)}
+  .tray .add{margin-left:.2rem;color:var(--primary);font-weight:600}
+
+  .out{font-family:var(--mono);font-size:.75rem;white-space:pre;background:var(--surface-2);border:1px solid var(--border);
+    border-radius:var(--r);padding:.7rem;overflow-x:auto;max-width:60rem;margin-top:1rem}
+
+  /* B: settings popover */
+  dialog.pop{border:1px solid var(--border);border-radius:var(--r);background:var(--surface);color:var(--ink);
+    box-shadow:var(--shadow);padding:0;max-width:20rem;width:90vw}
+  dialog.pop::backdrop{background:#0006}
+  .pop h4{margin:0;padding:.6rem .8rem;border-bottom:1px solid var(--border);font-size:.85rem;display:flex;justify-content:space-between}
+  .pop .body{padding:.6rem .8rem}
+  .field{display:grid;grid-template-columns:1fr auto;gap:.4rem;align-items:center;padding:.35rem 0}
+  .field label{font-size:.82rem}
+  .field input,.field select{background:var(--surface-2);border:1px solid var(--border);color:var(--ink);border-radius:7px;padding:.25rem .4rem;font:inherit;font-size:.8rem}
+  .x{background:none;border:0;color:var(--muted);cursor:pointer;font-size:1rem}
+</style>
+
+<h1>Ticket 08 — arrangement / editing UX</h1>
+<p class="lede">Keyboard-native region editor (research 01). Three regions; <code>main</code> has a pinned
+header slot + a body list; <b>search</b> and <b>bookmarks</b> are CORE (no remove, no leaving main).
+Focus a widget and use its ◂ ▸ / ▴ ▾ controls or the arrow keys; the gear opens its settings.</p>
+
+<div class="editor" id="editor"></div>
+
+<div class="tray">
+  <h2>Add-tray — widgets not currently placed</h2>
+  <ul id="tray"></ul>
+</div>
+
+<div class="out" id="out"></div>
+
+<h2 style="margin-top:2rem">B · Where does this live?</h2>
+<p class="lede">Same editor component, two possible homes. This prototype is the options-page framing;
+the on-NTP "edit mode" would drop the exact same regions over the live NTP with a Done button.</p>
+
+<dialog class="pop" id="pop">
+  <h4><span id="pop-title">Settings</span><button class="x" id="pop-x">✕</button></h4>
+  <div class="body" id="pop-body"></div>
+</dialog>
+
+<script type="module">
+const svg=(d)=>`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${d}</svg>`
+const GEAR=svg('<path d="M12 15a3 3 0 100-6 3 3 0 000 6z"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 11-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06A1.65 1.65 0 004.6 15a1.65 1.65 0 00-1.51-1H3a2 2 0 110-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06A1.65 1.65 0 009 4.6a1.65 1.65 0 001-1.51V3a2 2 0 114 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06A1.65 1.65 0 0019.4 9c.14.31.22.65.22 1z"/>')
+const ICONS={
+  tabs:svg('<path d="M3 5m0 1a1 1 0 0 1 1 -1h16a1 1 0 0 1 1 1v3a1 1 0 0 1 -1 1h-16a1 1 0 0 1 -1 -1z"/><path d="M3 14m0 1a1 1 0 0 1 1 -1h8a1 1 0 0 1 1 1v3a1 1 0 0 1 -1 1h-8a1 1 0 0 1 -1 -1z"/>'),
+  clock:svg('<path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0"/><path d="M12 7v5l3 3"/>'),
+  weather:svg('<path d="M7 18a4.6 4.4 0 0 1 0 -9a5 4.5 0 0 1 11 2h1a3.5 3.5 0 0 1 0 7h-12"/>'),
+  qnote:svg('<path d="M5 3m0 2a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v14a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2z"/><path d="M9 7l6 0"/><path d="M9 11l6 0"/>'),
+  search:svg('<circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/>'),
+  bookmarks:svg('<path d="M6 4h12a1 1 0 0 1 1 1v15l-7-4-7 4V5a1 1 0 0 1 1-1z"/>'),
+}
+const META={
+  search:{label:'Search'},bookmarks:{label:'Bookmarks'},tabs:{label:'Tabs'},
+  weather:{label:'Weather'},clock:{label:'Clock'},qnote:{label:'Quick Note'},
+}
+const CORE=new Set(['search','bookmarks'])
+const SCHEMAS={
+  clock:{format:{type:'select',label:'Format',default:'24',options:[['24','24h'],['12','12h']]},showSeconds:{type:'bool',label:'Seconds',default:false}},
+  weather:{units:{type:'select',label:'Units',default:'C',options:[['C','°C'],['F','°F']]}},
+}
+
+// state — the ticket-05/06 shape
+let layout = {
+  left:  ['tabs','clock'],
+  main:  { header:'search', body:['bookmarks'] },
+  right: ['weather','qnote'],
+}
+const settings = {}   // sparse overrides
+
+const ALL=Object.keys(META)
+const placed=()=>[...layout.left,layout.main.header,...layout.main.body,...layout.right].filter(Boolean)
+
+function itemEl(id,{region,list,index,slot}){
+  const li=document.createElement('li')
+  li.className='item'+(CORE.has(id)?' core':'')
+  li.tabIndex=0
+  li.dataset.id=id
+  const gearBtn = SCHEMAS[id] ? `<button class="gear" title="Settings">${GEAR}</button>` : ''
+  li.innerHTML=`<span class="ico">${ICONS[id]}</span><span class="nm">${META[id].label}</span>`+
+    (CORE.has(id)?`<span class="lock">core</span>`:'')+gearBtn+
+    `<span class="mv"><button data-mv="prev" title="Move earlier / to previous region">◂</button>`+
+    `<button data-mv="next" title="Move later / to next region">▸</button></span>`+
+    (CORE.has(id)?'':`<button class="rm" title="Remove">✕</button>`)
+  li.querySelector('.gear')?.addEventListener('click',()=>openSettings(id))
+  li.querySelector('.rm')?.addEventListener('click',()=>{remove(id);render();focusId(id,true)})
+  li.querySelector('[data-mv="prev"]').addEventListener('click',()=>move(id,-1))
+  li.querySelector('[data-mv="next"]').addEventListener('click',()=>move(id,+1))
+  li.addEventListener('keydown',(e)=>{
+    if(e.key==='ArrowLeft'||e.key==='ArrowUp'){e.preventDefault();move(id,-1)}
+    if(e.key==='ArrowRight'||e.key==='ArrowDown'){e.preventDefault();move(id,+1)}
+    if((e.key==='Delete'||e.key==='Backspace')&&!CORE.has(id)){e.preventDefault();remove(id);render();focusId(id,true)}
+  })
+  return li
+}
+
+// A single ordered "spine" of placements makes ◂/▸ a linear walk across regions.
+// spine = [ left…, main.header, main.body…, right… ]
+function spine(){
+  const s=[]
+  layout.left.forEach(id=>s.push({id,region:'left'}))
+  if(layout.main.header) s.push({id:layout.main.header,region:'main',slot:'header'})
+  layout.main.body.forEach(id=>s.push({id,region:'main',slot:'body'}))
+  layout.right.forEach(id=>s.push({id,region:'right'}))
+  return s
+}
+function detach(id){
+  layout.left=layout.left.filter(x=>x!==id)
+  layout.right=layout.right.filter(x=>x!==id)
+  layout.main.body=layout.main.body.filter(x=>x!==id)
+  if(layout.main.header===id) layout.main.header=null
+}
+function move(id,dir){
+  const core=CORE.has(id)
+  const s=spine(); const i=s.findIndex(x=>x.id===id); const cur=s[i]
+  // CORE: reorder only within its own slot-group of main; never leaves main.
+  if(core){
+    // search=header (can't move), bookmarks=body (reorder within body only)
+    if(cur.slot==='body'){
+      const b=layout.main.body; const j=b.indexOf(id); const k=j+dir
+      if(k>=0&&k<b.length){[b[j],b[k]]=[b[k],b[j]]}
+    }
+    render(); focusId(id); return
+  }
+  detach(id)
+  // rebuild target position by walking the spine minus this item
+  const rest=s.filter(x=>x.id!==id)
+  let target=Math.max(0,Math.min(rest.length, (dir>0? i : i-1)))
+  // insert into whichever region owns index `target` (or its neighbour)
+  const anchor=rest[dir>0?Math.min(target,rest.length-1):Math.max(0,target-1)]
+  const region=anchor?anchor.region:'left'
+  insertInto(id,region, anchor, dir)
+  render(); focusId(id)
+}
+function insertInto(id,region,anchor,dir){
+  if(region==='main'){
+    // body only — header slot is occupied by CORE search; drop non-core into body
+    const b=layout.main.body
+    let idx=anchor&&anchor.slot==='body'?b.indexOf(anchor.id)+(dir>0?1:0):(dir>0?0:b.length)
+    b.splice(Math.max(0,idx),0,id)
+  }else{
+    const arr=layout[region]
+    let idx=anchor?arr.indexOf(anchor.id)+(dir>0?1:0):(dir>0?0:arr.length)
+    if(idx<0)idx=arr.length
+    arr.splice(idx,0,id)
+  }
+}
+function remove(id){ if(CORE.has(id))return; detach(id) }
+function add(id){ layout.right.push(id); render(); focusId(id) }
+
+function focusId(id,toTrayIfGone){
+  requestAnimationFrame(()=>{
+    const el=document.querySelector(`#editor li[data-id="${id}"]`)||(toTrayIfGone?document.querySelector(`#tray li[data-id="${id}"]`):null)
+    el?.focus()
+  })
+}
+
+function render(){
+  const ed=document.getElementById('editor'); ed.innerHTML=''
+  const col=(title,region,inner)=>{
+    const box=document.createElement('div');box.className='region'
+    box.innerHTML=`<h3>${title}</h3>`; box.appendChild(inner); ed.appendChild(box)
+  }
+  const list=(ids,region,slot)=>{
+    const ul=document.createElement('ul')
+    ids.forEach((id,index)=>ul.appendChild(itemEl(id,{region,list:ids,index,slot})))
+    if(!ids.length){const d=document.createElement('div');d.className='drop empty';d.textContent='—';d.style.cssText='color:var(--muted);font-size:.72rem;text-align:center;padding:.4rem';ul.appendChild(d)}
+    return ul
+  }
+  col('Left','left',list(layout.left,'left'))
+  const mainBox=document.createElement('div')
+  const hl=document.createElement('div');hl.className='slot-label';hl.textContent='Header (pinned)'
+  const bl=document.createElement('div');bl.className='slot-label';bl.textContent='Body'
+  mainBox.append(hl,list(layout.main.header?[layout.main.header]:[],'main','header'),bl,list(layout.main.body,'main','body'))
+  col('Main','main',mainBox)
+  col('Right','right',list(layout.right,'right'))
+
+  const tray=document.getElementById('tray');tray.innerHTML=''
+  const unplaced=ALL.filter(id=>!placed().includes(id))
+  if(!unplaced.length){tray.innerHTML='<li style="color:var(--muted);font-size:.8rem;list-style:none">All widgets placed.</li>'}
+  unplaced.forEach(id=>{
+    const li=document.createElement('li');li.className='item';li.tabIndex=0;li.dataset.id=id
+    li.innerHTML=`<span class="ico">${ICONS[id]}</span><span class="nm">${META[id].label}</span><span class="add">+ add</span>`
+    li.addEventListener('click',()=>add(id))
+    li.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();add(id)}})
+    tray.appendChild(li)
+  })
+
+  document.getElementById('out').textContent='widgets.layout =\n'+JSON.stringify(layout,null,2)+
+    '\n\nwidgets.settings =\n'+JSON.stringify(settings,null,2)
+}
+
+function openSettings(id){
+  const schema=SCHEMAS[id]; if(!schema)return
+  document.getElementById('pop-title').textContent=META[id].label+' settings'
+  const body=document.getElementById('pop-body');body.innerHTML=''
+  const stored=settings[id]||{}
+  for(const[key,f]of Object.entries(schema)){
+    const val=key in stored?stored[key]:f.default
+    const row=document.createElement('div');row.className='field'
+    const lab=document.createElement('label');lab.textContent=f.label
+    let ctl
+    if(f.type==='bool'){ctl=document.createElement('input');ctl.type='checkbox';ctl.checked=val;ctl.onchange=()=>set(id,key,ctl.checked,f.default)}
+    else if(f.type==='select'){ctl=document.createElement('select');f.options.forEach(([v,l])=>{const o=document.createElement('option');o.value=v;o.textContent=l;ctl.appendChild(o)});ctl.value=val;ctl.onchange=()=>set(id,key,ctl.value,f.default)}
+    row.append(lab,ctl);body.appendChild(row)
+  }
+  document.getElementById('pop').showModal()
+}
+function set(id,key,v,def){
+  if(!settings[id])settings[id]={}
+  if(v===def)delete settings[id][key]; else settings[id][key]=v
+  if(settings[id]&&!Object.keys(settings[id]).length)delete settings[id]
+  render()
+}
+document.getElementById('pop-x').onclick=()=>document.getElementById('pop').close()
+
+render()
+</script>

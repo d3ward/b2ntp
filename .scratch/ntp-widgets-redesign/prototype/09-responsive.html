@@ -1,0 +1,124 @@
+<!-- PROTOTYPE — throwaway. ntp-widgets-redesign ticket 09: responsive / mobile reflow.
+     Extends the ticket-03 Rails model. Drag the window narrow, or use the width buttons.
+     Shows: 3-col -> (2-col) -> 1-col stack, stack order, and mobile sticky search.
+     Not production code. -->
+<style>
+  :root{
+    --bg:#f7f6fa;--surface:#fff;--surface-2:#f1eef7;--ink:#1b1720;--muted:#6b6577;
+    --border:#e6e3ee;--primary:#8034d5;--primary-tint:#8034d515;
+    --shadow:0 1px 2px #1b17200f,0 8px 24px #1b172010;--r:12px;--gap:.7rem;--top:.7rem;
+    --ui:-apple-system,system-ui,"Segoe UI",Roboto,sans-serif;
+  }
+  @media (prefers-color-scheme:dark){:root{
+    --bg:#0f0d13;--surface:#17141c;--surface-2:#201b29;--ink:#ece9f2;--muted:#9a93a8;
+    --border:#272231;--primary:#a06cff;--primary-tint:#a06cff1f;
+    --shadow:0 1px 2px #0000004d,0 10px 30px #00000059;}}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:var(--ui);color:var(--ink);background:var(--bg)}
+  .bar{position:sticky;top:0;z-index:10;background:var(--surface);border-bottom:1px solid var(--border);
+    padding:.5rem .8rem;display:flex;gap:.5rem;align-items:center;flex-wrap:wrap;font-size:.8rem}
+  .bar b{font-size:.85rem} .bar .sp{flex:1}
+  .bar button{background:var(--surface-2);border:1px solid var(--border);color:var(--ink);border-radius:8px;
+    padding:.25rem .6rem;cursor:pointer;font:inherit;font-size:.78rem}
+  .bar button.on{border-color:var(--primary);color:var(--primary)}
+  .frame{margin:1rem auto;border:1px dashed var(--border);border-radius:14px;overflow:hidden;transition:max-width .2s;background:var(--bg)}
+  .scroll{height:70vh;overflow-y:auto;padding-bottom:2rem}
+
+  /* ---- the model under test ---- */
+  .workspace{
+    display:grid;
+    grid-template-columns:15rem minmax(0,1fr) 16rem;
+    align-items:start;gap:var(--gap);max-width:82rem;margin:0 auto;padding:var(--top);
+  }
+  .rail{position:sticky;top:var(--top);max-height:calc(100% - var(--top)*2);
+    display:flex;flex-direction:column;gap:var(--gap);min-height:0}
+  .main{display:flex;flex-direction:column;gap:var(--gap);min-width:0}
+  .main .w-search{position:sticky;top:var(--top);z-index:3}
+
+  /* ---- MID: 2-col — right rail drops under main, left rail stays ---- */
+  .frame.mid .workspace{grid-template-columns:14rem minmax(0,1fr);}
+  .frame.mid .r-right{grid-column:1 / -1;display:grid;grid-template-columns:1fr 1fr;position:static;max-height:none}
+
+  /* ---- NARROW: 1-col stack ---- */
+  .frame.narrow .workspace{grid-template-columns:1fr}
+  .frame.narrow .rail{position:static;max-height:none}     /* rails go static */
+  .frame.narrow .r-left{order:2}
+  .frame.narrow .main{order:1}                              /* main first */
+  .frame.narrow .r-right{order:3}
+  .frame.narrow.mainlast .r-left{order:1}
+  .frame.narrow.mainlast .main{order:2}
+  .frame.narrow.mainlast .r-right{order:3}
+  /* mobile sticky search toggle */
+  .frame.narrow.nostick .main .w-search{position:static}
+
+  .cell{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);
+    box-shadow:var(--shadow);padding:.75rem .85rem}
+  .cell h4{margin:0 0 .4rem;font-size:.72rem;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+  .w-search .search-input{width:100%;height:2.6rem;border:1px solid var(--border);border-radius:12px;
+    background:var(--surface);padding:0 .9rem;font:inherit;color:var(--ink)}
+  .w-search{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);box-shadow:var(--shadow);padding:.6rem}
+  .stub{display:grid;gap:.3rem}.stub i{height:.55rem;border-radius:4px;background:var(--surface-2);display:block}
+  .stub i:nth-child(2){width:70%}
+  .books{display:grid;grid-template-columns:repeat(auto-fill,minmax(8rem,1fr));gap:.5rem}
+  .bm{background:var(--surface-2);border:1px solid var(--border);border-radius:9px;padding:.5rem;font-size:.8rem}
+  .tall{max-height:9rem;overflow:auto}   /* a scrolls:true widget */
+  .note{font-size:.72rem;color:var(--muted);padding:.3rem .8rem}
+</style>
+
+<div class="bar">
+  <b>Ticket 09 · responsive reflow</b>
+  <span>width:</span>
+  <button data-w="wide" class="on">Wide (3-col)</button>
+  <button data-w="mid">Mid (2-col)</button>
+  <button data-w="narrow">Narrow (stack)</button>
+  <span class="sp"></span>
+  <button data-t="mainlast">stack: main-first</button>
+  <button data-t="nostick">search: sticky</button>
+</div>
+<p class="note" id="hint"></p>
+
+<div class="frame" id="frame" style="max-width:82rem">
+  <div class="scroll">
+    <div class="workspace">
+      <aside class="rail r-left">
+        <div class="cell"><h4>Tabs</h4><div class="stub"><i></i><i></i><i></i></div></div>
+        <div class="cell"><h4>Clock</h4><div style="font-size:1.6rem;font-weight:600">14:22</div></div>
+      </aside>
+      <main class="main">
+        <div class="w-search"><input class="search-input" placeholder="Search…"></div>
+        <div class="cell"><h4>Bookmarks (rides the page)</h4>
+          <div class="books" id="books"></div>
+        </div>
+      </main>
+      <aside class="rail r-right">
+        <div class="cell"><h4>Weather</h4><div class="stub"><i></i><i></i></div></div>
+        <div class="cell"><h4>Quick Note (scrolls: true)</h4>
+          <div class="tall"><div class="stub" id="tallstub"></div></div>
+        </div>
+      </aside>
+    </div>
+  </div>
+</div>
+
+<script>
+const books=document.getElementById('books');for(let i=0;i<14;i++){const d=document.createElement('div');d.className='bm';d.textContent='site '+(i+1);books.appendChild(d)}
+const ts=document.getElementById('tallstub');for(let i=0;i<10;i++){const i2=document.createElement('i');ts.appendChild(i2)}
+const frame=document.getElementById('frame'),hint=document.getElementById('hint')
+const WIDTHS={wide:'82rem',mid:'46rem',narrow:'26rem'}
+const HINTS={
+  wide:'≥ ~64rem: three columns, rails sticky, search sticky. The desktop model (ticket 03).',
+  mid:'~40–64rem: two columns — left rail + main; right rail drops full-width beneath, static, as a 2-up row.',
+  narrow:'< ~40rem: single stack. Rails go static (no sticky). Toggle the two buttons on the right to compare stack order and mobile search stickiness.'
+}
+let w='wide'
+function apply(){frame.style.maxWidth=WIDTHS[w];frame.className='frame '+(w==='wide'?'':w)+
+  (frame.dataset.mainlast==='1'?' mainlast':'')+(frame.dataset.nostick==='1'?' nostick':'');hint.textContent=HINTS[w]}
+document.querySelectorAll('[data-w]').forEach(b=>b.onclick=()=>{w=b.dataset.w;
+  document.querySelectorAll('[data-w]').forEach(x=>x.classList.toggle('on',x===b));apply()})
+document.querySelectorAll('[data-t]').forEach(b=>b.onclick=()=>{
+  const k=b.dataset.t;frame.dataset[k]=frame.dataset[k]==='1'?'0':'1';b.classList.toggle('on');
+  b.textContent = k==='mainlast' ? (frame.dataset[k]==='1'?'stack: main-last':'stack: main-first')
+                                 : (frame.dataset[k]==='1'?'search: static':'search: sticky');
+  apply()})
+apply()
+</script>
