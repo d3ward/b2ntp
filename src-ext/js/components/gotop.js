@@ -12,9 +12,9 @@ export function gotop() {
 		window.addEventListener('scroll', () => {
 			let y = window.scrollY
 			if (y > 0) {
-				el.gt.classList.remove('b2-hidden')
+				el.gt.classList.remove('invisible', 'opacity-0')
 			} else {
-				el.gt.classList.add('b2-hidden')
+				el.gt.classList.add('invisible', 'opacity-0')
 			}
 		})
 		el.gt.onclick = function (e) {
