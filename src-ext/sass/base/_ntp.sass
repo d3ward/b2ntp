@@ -1,10 +1,14 @@
 @use "reset"
 
+// overflow-x lives on html alone (not body too): html is the page's one true
+// scroll container this way. Declaring it on body as well used to pair an
+// explicit overflow-x with an implicit (default) overflow-y on the SAME
+// element, which the CSS overflow spec resolves by promoting that implicit
+// visible to auto -- silently turning body into a second, nested scroll
+// container that trapped position:sticky descendants inside it instead of
+// the real page (today's "sticky trapped in .workspace" bug).
 html
 	background: var(--c4)
-
-html,
-body
 	overflow-x: hidden
 
 body
@@ -12,7 +16,6 @@ body
 	min-height: 100vh
 	width: 100vw
 	font-size: 13pt
-	overflow-x: hidden
 	user-select: none
 	font-family: var(--custom-font) !important
 	scroll-behavior: smooth
@@ -51,13 +54,16 @@ body
 	background: var(--c12)
 
 /* -------------- Main container wrapper -------------- */
+// Three-region grid (left rail | main | right rail). The whole document
+// scrolls (body, see above) -- .workspace itself carries no overflow, so it
+// never becomes a scroll container that traps the sticky rails/search bar.
 .workspace
-	display: flex
-	flex-direction: row
+	display: grid
+	grid-template-columns: 20% minmax(0, 1fr) 20%
+	align-items: start
 	width: 100%
 	max-width: 120rem
 	margin: 0 auto
-	align-items: flex-start
 	gap: .5rem
 	padding: 4rem 1rem
 	> *
@@ -68,18 +74,17 @@ main
 	flex-direction: column
 	align-items: center
 	justify-content: center
-	flex: 1
 	min-width: 0
-	overflow-x: hidden
 	gap: .5rem
 
-// Sidebar Widgets — same fixed
+// Sidebar Widgets — sticky, capped to the viewport so a rail taller than the
+// screen scrolls internally instead of running past it.
 aside
-	width: 20%
-	flex-shrink: 0
-	align-self: flex-start
 	position: sticky
 	top: .5rem
+	max-height: calc(100dvh - 1rem)
+	overflow-y: auto
+	min-height: 0
 
 .no-animations *,
 .no-animations *::before,
