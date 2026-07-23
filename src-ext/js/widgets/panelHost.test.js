@@ -2,14 +2,14 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 
 // vi.mock is hoisted — use a mutable variable the factory closes over
 let _mockConfig = {
-  left:  { enabled: true, collapsed: false, order: ['test'],  panels: {} },
-  right: { enabled: true, collapsed: false, order: [],        panels: {} },
+  layout:   { left: ['test'], right: [] },
+  settings: {},
 }
 
 vi.mock('../settings/state.js', () => ({
   settingsState: {
-    getSidebarConfig: vi.fn(() => _mockConfig),
-    setSidebarConfig: vi.fn(),
+    getWidgets: vi.fn(() => _mockConfig),
+    setWidgets: vi.fn(),
   },
 }))
 
@@ -21,15 +21,16 @@ function makeMockDescriptor(id = 'test', overrides = {}) {
     id,
     label: 'Test Widget',
     icon: '<svg></svg>',
-    defaultSide: 'left',
+    placement: { region: 'left', order: 0 },
+    settings: {},
     init: vi.fn(),
     ...overrides,
   }
 }
 
 const DEFAULT_CONFIG = {
-  left:  { enabled: true, collapsed: false, order: ['test'],  panels: {} },
-  right: { enabled: true, collapsed: false, order: [],        panels: {} },
+  layout:   { left: ['test'], right: [] },
+  settings: {},
 }
 
 beforeEach(() => {
@@ -98,8 +99,8 @@ describe('createWidgetPanel — init call', () => {
 describe('createWidgetPanel — collapsed state', () => {
   it('adds panel-collapsed class when saved state is collapsed', () => {
     _mockConfig = {
-      left:  { enabled: true, collapsed: false, order: ['test'], panels: { test: { collapsed: true } } },
-      right: { enabled: true, collapsed: false, order: [], panels: {} },
+      layout:   { left: ['test'], right: [] },
+      settings: { test: { collapsed: true } },
     }
     const panel = createWidgetPanel(makeMockDescriptor('test'), 'left')
     expect(panel.classList.contains('panel-collapsed')).toBe(true)
@@ -116,8 +117,8 @@ describe('createWidgetPanel — collapsed state', () => {
 describe('mountSidebar', () => {
   it('appends one panel per widget in order', () => {
     _mockConfig = {
-      left:  { enabled: true, collapsed: false, order: ['a', 'b'], panels: {} },
-      right: { enabled: true, collapsed: false, order: [],         panels: {} },
+      layout:   { left: ['a', 'b'], right: [] },
+      settings: {},
     }
     const container = document.createElement('div')
     const widgetMap = {
@@ -133,12 +134,28 @@ describe('mountSidebar', () => {
 
   it('skips widgets not in widgetMap', () => {
     _mockConfig = {
-      left:  { enabled: true, collapsed: false, order: ['a', 'missing'], panels: {} },
-      right: { enabled: true, collapsed: false, order: [], panels: {} },
+      layout:   { left: ['a', 'missing'], right: [] },
+      settings: {},
     }
     const container = document.createElement('div')
     mountSidebar(container, 'left', { a: makeMockDescriptor('a') })
     expect(container.querySelectorAll('.widget-panel')).toHaveLength(1)
+  })
+
+  it('skips widgets resolved as disabled', () => {
+    _mockConfig = {
+      layout:   { left: ['a', 'b'], right: [] },
+      settings: { b: { enabled: false } },
+    }
+    const container = document.createElement('div')
+    const widgetMap = {
+      a: makeMockDescriptor('a'),
+      b: makeMockDescriptor('b'),
+    }
+    mountSidebar(container, 'left', widgetMap)
+    const panels = container.querySelectorAll('.widget-panel')
+    expect(panels).toHaveLength(1)
+    expect(panels[0].dataset.widget).toBe('a')
   })
 
   it('clears existing content before mounting', () => {

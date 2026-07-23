@@ -1,8 +1,8 @@
 import { describe, it, expect } from 'vitest'
 import { WIDGETS } from './registry'
 
-const REQUIRED_FIELDS = ['id', 'label', 'icon', 'defaultSide', 'init']
-const VALID_SIDES = ['left', 'right', null]
+const REQUIRED_FIELDS = ['id', 'label', 'icon', 'placement', 'settings', 'init']
+const VALID_REGIONS = ['left', 'main', 'right']
 
 describe('WIDGETS registry shape', () => {
   it('exports an object with all four widget IDs', () => {
@@ -33,8 +33,17 @@ describe('WIDGETS registry shape', () => {
         expect(WIDGETS[id].icon.length).toBeGreaterThan(0)
       })
 
-      it('defaultSide is left, right, or null', () => {
-        expect(VALID_SIDES).toContain(WIDGETS[id].defaultSide)
+      it('placement has a valid region and a numeric order', () => {
+        expect(VALID_REGIONS).toContain(WIDGETS[id].placement.region)
+        expect(typeof WIDGETS[id].placement.order).toBe('number')
+      })
+
+      it('does not declare defaultSide', () => {
+        expect(WIDGETS[id]).not.toHaveProperty('defaultSide')
+      })
+
+      it('settings is an object', () => {
+        expect(typeof WIDGETS[id].settings).toBe('object')
       })
 
       it('init is a function', () => {
@@ -44,20 +53,32 @@ describe('WIDGETS registry shape', () => {
   }
 })
 
-describe('WIDGETS registry defaultSide assignments', () => {
-  it('tabs defaults to left', () => {
-    expect(WIDGETS.tabs.defaultSide).toBe('left')
+describe('WIDGETS registry placement assignments', () => {
+  it('tabs is placed in the left region', () => {
+    expect(WIDGETS.tabs.placement.region).toBe('left')
   })
 
-  it('weather defaults to right', () => {
-    expect(WIDGETS.weather.defaultSide).toBe('right')
+  it('weather is placed in the right region', () => {
+    expect(WIDGETS.weather.placement.region).toBe('right')
   })
 
-  it('clock has no default side', () => {
-    expect(WIDGETS.clock.defaultSide).toBeNull()
+  it('clock is placed in the left region', () => {
+    expect(WIDGETS.clock.placement.region).toBe('left')
   })
 
-  it('qnote has no default side', () => {
-    expect(WIDGETS.qnote.defaultSide).toBeNull()
+  it('qnote is placed in the right region', () => {
+    expect(WIDGETS.qnote.placement.region).toBe('right')
+  })
+
+  it('orders are unique within each region', () => {
+    const byRegion = {}
+    for (const descriptor of Object.values(WIDGETS)) {
+      const { region, order } = descriptor.placement
+      byRegion[region] = byRegion[region] || []
+      byRegion[region].push(order)
+    }
+    for (const orders of Object.values(byRegion)) {
+      expect(new Set(orders).size).toBe(orders.length)
+    }
   })
 })

@@ -10,11 +10,14 @@ import { initWeatherSettings } from "./blank/weather/settings";
 import { initWidgetSettings } from "./settings/widgetSettings";
 import { getBookmarks } from "./blank/bookmarks";
 import { BackgroundStore } from "./blank/BackgroundStore";
+import { WIDGETS } from "./widgets/registry";
+import { ensureWidgetsSeeded } from "./widgets/resolver";
 import "../sass/options.sass";
 import "../css/options.css";
 
 await storage.init();
 await settingsState.init(storage);
+ensureWidgetsSeeded(WIDGETS);
 
 const ntp_bdy = document.body;
 const ntp_version = packageJSON.version;
@@ -267,19 +270,6 @@ function initBookmarksSettings() {
   });
 }
 
-function initSidebarSettings() {
-  const sidebar_config = settingsState.getSidebarConfig();
-  const sidebarEnabledToggle = document.getElementById("sidebar-enabled");
-  if (sidebarEnabledToggle) {
-    sidebarEnabledToggle.checked = sidebar_config.left.enabled !== false;
-    sidebarEnabledToggle.addEventListener("change", () => {
-      const cfg = structuredClone(settingsState.getSidebarConfig());
-      cfg.left.enabled = sidebarEnabledToggle.checked;
-      settingsState.setSidebarConfig(cfg);
-    });
-  }
-}
-
 function initStorageStats() {
   const size_p = document.getElementById("size_progress");
 
@@ -351,7 +341,6 @@ function onReady() {
   pagesRoute();
   initializeThemeSettings();
   initBookmarksSettings();
-  initSidebarSettings();
   wireDialogOpeners();
   initWidgetTabs();
   initWidgetSettings();

@@ -1,5 +1,6 @@
 import { WIDGETS } from '../widgets/registry.js'
 import { settingsState } from './state.js'
+import { resolveWidgetSettings } from '../widgets/resolver.js'
 
 const DRAG_HANDLE_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="5" r="1.5"/><circle cx="15" cy="5" r="1.5"/><circle cx="9" cy="12" r="1.5"/><circle cx="15" cy="12" r="1.5"/><circle cx="9" cy="19" r="1.5"/><circle cx="15" cy="19" r="1.5"/></svg>`
 
@@ -10,27 +11,35 @@ export function initWidgetSettings() {
   if (!leftListEl || !rightListEl) return
 
   function getCfg() {
-    return settingsState.getSidebarConfig()
+    return settingsState.getWidgets()
+  }
+
+  function isActive(widgetId, side, cfg) {
+    if (!(cfg.layout[side] || []).includes(widgetId)) return false
+    return resolveWidgetSettings(WIDGETS[widgetId], cfg).enabled !== false
   }
 
   function toggleWidget(widgetId, side, enabled) {
     const cfg = structuredClone(getCfg())
     const other = side === 'left' ? 'right' : 'left'
+    cfg.settings[widgetId] = cfg.settings[widgetId] || {}
     if (enabled) {
-      cfg[other].order = cfg[other].order.filter((id) => id !== widgetId)
-      if (!cfg[side].order.includes(widgetId)) cfg[side].order.push(widgetId)
+      cfg.layout[other] = (cfg.layout[other] || []).filter((id) => id !== widgetId)
+      if (!cfg.layout[side].includes(widgetId)) cfg.layout[side].push(widgetId)
+      delete cfg.settings[widgetId].enabled
     } else {
-      cfg[side].order = cfg[side].order.filter((id) => id !== widgetId)
+      cfg.settings[widgetId].enabled = false
     }
-    settingsState.setSidebarConfig(cfg)
+    if (Object.keys(cfg.settings[widgetId]).length === 0) delete cfg.settings[widgetId]
+    settingsState.setWidgets(cfg)
     render()
   }
 
   function renderColumn(listEl, side) {
     const cfg = getCfg()
-    const activeOrder = cfg[side].order
     const allIds = Object.keys(WIDGETS)
-    const inactiveIds = allIds.filter((id) => !activeOrder.includes(id))
+    const activeIds = (cfg.layout[side] || []).filter((id) => isActive(id, side, cfg))
+    const inactiveIds = allIds.filter((id) => !activeIds.includes(id))
 
     listEl.innerHTML = ''
 
@@ -69,7 +78,7 @@ export function initWidgetSettings() {
       listEl.appendChild(item)
     }
 
-    activeOrder.forEach((id) => renderItem(id, true))
+    activeIds.forEach((id) => renderItem(id, true))
     inactiveIds.forEach((id) => renderItem(id, false))
   }
 
@@ -123,8 +132,8 @@ export function initWidgetSettings() {
       e.preventDefault()
       const newOrder = [...listEl.querySelectorAll('.wdg-active')].map((el) => el.dataset.id)
       const cfg = structuredClone(getCfg())
-      cfg[side].order = newOrder
-      settingsState.setSidebarConfig(cfg)
+      cfg.layout[side] = newOrder
+      settingsState.setWidgets(cfg)
     })
   }
 

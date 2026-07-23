@@ -12,9 +12,11 @@ import { BackgroundStore } from "./blank/BackgroundStore";
 import { getTabs } from "./blank/tabs";
 import { WIDGETS } from "./widgets/registry";
 import { mountSidebar } from "./widgets/panelHost";
+import { ensureWidgetsSeeded } from "./widgets/resolver";
 
 await storage.init();
 await settingsState.init(storage);
+ensureWidgetsSeeded(WIDGETS);
 settingsState.subscribeExternalChanges(storage);
 
 const dialog_changelog = document.querySelector("#dlg_changelog");
@@ -140,18 +142,13 @@ function onDOMReady() {
   }
 
   // Mount sidebars
-  const sidebar_config = settingsState.getSidebarConfig();
   const ntpSidebar = document.getElementById("tabs");
   const rightSidebar = document.getElementById("right-sidebar");
-
-  if (!sidebar_config.left.enabled) ntpSidebar.hidden = true;
 
   mountSidebar(ntpSidebar, 'left', WIDGETS, { ntoast, getTabs });
   mountSidebar(rightSidebar, 'right', WIDGETS, { ntoast });
 
-  settingsState.onChange('sidebarConfig', () => {
-    const cfg = settingsState.getSidebarConfig();
-    ntpSidebar.hidden = !cfg.left.enabled;
+  settingsState.onChange('widgets', () => {
     document.body.classList.remove('clock-widget-active');
     mountSidebar(ntpSidebar, 'left', WIDGETS, { ntoast, getTabs });
     mountSidebar(rightSidebar, 'right', WIDGETS, { ntoast });

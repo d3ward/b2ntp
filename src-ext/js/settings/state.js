@@ -1,12 +1,13 @@
 import { storage as _defaultStorage } from "../components/localStorage";
-import { migrateSidebarConfig } from "./sidebarMigration";
 
 export const DEFAULTS = {
   ntpTheme: { value: "", autoSwitch: true, autoSwitchType: "system", darkModeStart: 20, darkModeEnd: 6 },
   tlbData: { dateFormat: "auto", timeFormat: "24", seconds: false },
-  sidebarConfig: {
-    left:  { enabled: true, collapsed: false, order: ['tabs'],    panels: {} },
-    right: { enabled: true, collapsed: false, order: ['weather'], panels: {} },
+  widgets: {
+    // layout starts empty; ensureWidgetsSeeded (widgets/resolver.js) fills it from each
+    // registry descriptor's placement so registry.js stays the single source of truth.
+    layout: { left: [], right: [] },
+    settings: { clock: { enabled: false }, qnote: { enabled: false } },
   },
   weatherConfig: { location: "" },
   backgroundConfig: null,
@@ -15,7 +16,7 @@ export const DEFAULTS = {
 const STORAGE_KEYS = {
   ntpTheme: "ntp_theme",
   tlbData: "tlb_data",
-  sidebarConfig: "sidebar_config",
+  widgets: "widgets_config",
   weatherConfig: "wth_data",
   backgroundConfig: "ntp_bdy",
 };
@@ -44,11 +45,6 @@ export const settingsState = {
         _adapter.set(storageKey, def);
       }
     }
-    const storedSidebar = _adapter.get(STORAGE_KEYS.sidebarConfig);
-    const migratedSidebar = migrateSidebarConfig(storedSidebar);
-    if (migratedSidebar !== storedSidebar) {
-      _adapter.set(STORAGE_KEYS.sidebarConfig, migratedSidebar);
-    }
     const storedWeather = _adapter.get(STORAGE_KEYS.weatherConfig);
     if (storedWeather && typeof storedWeather === "object" && "lat" in storedWeather && !("location" in storedWeather)) {
       _adapter.set(STORAGE_KEYS.weatherConfig, {
@@ -61,8 +57,8 @@ export const settingsState = {
   setNtpTheme: (v) => _set("ntpTheme", v),
   getTlbData: () => _get("tlbData"),
   setTlbData: (v) => _set("tlbData", v),
-  getSidebarConfig: () => _get("sidebarConfig"),
-  setSidebarConfig: (v) => _set("sidebarConfig", v),
+  getWidgets: () => _get("widgets"),
+  setWidgets: (v) => _set("widgets", v),
   getWeatherConfig: () => _get("weatherConfig"),
   setWeatherConfig: (v) => _set("weatherConfig", v),
   getBackgroundConfig: () => _get("backgroundConfig"),

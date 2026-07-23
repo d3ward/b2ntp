@@ -1,9 +1,11 @@
 import { settingsState } from '../settings/state.js'
+import { resolveWidgetSettings } from './resolver.js'
 
 const CHEVRON_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>`
 
 export function createWidgetPanel(descriptor, side, deps = {}) {
-  const sideConfig = settingsState.getSidebarConfig()[side]
+  const widgetsCfg = settingsState.getWidgets()
+  const resolved = resolveWidgetSettings(descriptor, widgetsCfg)
   const isCollapsible = descriptor.id === 'tabs'
 
   const panel = document.createElement('div')
@@ -43,7 +45,7 @@ export function createWidgetPanel(descriptor, side, deps = {}) {
   panel.appendChild(body)
 
   if (isCollapsible) {
-    const panelCollapsed = sideConfig.panels?.[descriptor.id]?.collapsed || false
+    const panelCollapsed = resolved.collapsed || false
     if (panelCollapsed) {
       panel.classList.add('panel-collapsed')
       body.hidden = true
@@ -53,10 +55,10 @@ export function createWidgetPanel(descriptor, side, deps = {}) {
     chevron.addEventListener('click', () => {
       const isCollapsed = panel.classList.toggle('panel-collapsed')
       body.hidden = isCollapsed
-      const cfg = settingsState.getSidebarConfig()
-      if (!cfg[side].panels[descriptor.id]) cfg[side].panels[descriptor.id] = {}
-      cfg[side].panels[descriptor.id].collapsed = isCollapsed
-      settingsState.setSidebarConfig(cfg)
+      const cfg = structuredClone(settingsState.getWidgets())
+      if (!cfg.settings[descriptor.id]) cfg.settings[descriptor.id] = {}
+      cfg.settings[descriptor.id].collapsed = isCollapsed
+      settingsState.setWidgets(cfg)
     })
   }
 
@@ -67,10 +69,13 @@ export function createWidgetPanel(descriptor, side, deps = {}) {
 
 export function mountSidebar(sideEl, side, widgetMap, deps = {}) {
   sideEl.innerHTML = ''
-  const sideConfig = settingsState.getSidebarConfig()[side]
-  for (const widgetId of sideConfig.order) {
+  const widgetsCfg = settingsState.getWidgets()
+  const ids = widgetsCfg.layout[side] || []
+  for (const widgetId of ids) {
     const descriptor = widgetMap[widgetId]
     if (!descriptor) continue
+    const resolved = resolveWidgetSettings(descriptor, widgetsCfg)
+    if (resolved.enabled === false) continue
     const panel = createWidgetPanel(descriptor, side, deps)
     sideEl.appendChild(panel)
   }

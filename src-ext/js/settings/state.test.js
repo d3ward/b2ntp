@@ -29,10 +29,10 @@ describe('settingsState defaults', () => {
     expect(settingsState.getTlbData()).toEqual(DEFAULTS.tlbData)
   })
 
-  it('returns sidebarConfig default when storage is empty', async () => {
+  it('returns widgets default when storage is empty', async () => {
     const adapter = makeAdapter()
     const { settingsState, DEFAULTS } = await freshState(adapter)
-    expect(settingsState.getSidebarConfig()).toEqual(DEFAULTS.sidebarConfig)
+    expect(settingsState.getWidgets()).toEqual(DEFAULTS.widgets)
   })
 
   it('seeds storage with defaults on init', async () => {
@@ -57,6 +57,13 @@ describe('settingsState persisted values', () => {
     const { settingsState } = await freshState(adapter)
     expect(settingsState.getTlbData()).toEqual(stored)
   })
+
+  it('loads widgets from storage when present', async () => {
+    const stored = { layout: { left: ['tabs'], right: ['weather', 'qnote'] }, settings: { qnote: { enabled: true } } }
+    const adapter = makeAdapter({ widgets_config: stored })
+    const { settingsState } = await freshState(adapter)
+    expect(settingsState.getWidgets()).toEqual(stored)
+  })
 })
 
 describe('settingsState set* and onChange', () => {
@@ -79,6 +86,16 @@ describe('settingsState set* and onChange', () => {
     const data = { dateFormat: 'auto', timeFormat: '12', seconds: true }
     settingsState.setTlbData(data)
     expect(fn).toHaveBeenCalledWith(data)
+  })
+
+  it('onChange fires after setWidgets', async () => {
+    const adapter = makeAdapter()
+    const { settingsState } = await freshState(adapter)
+    const fn = vi.fn()
+    settingsState.onChange('widgets', fn)
+    const widgets = { layout: { left: ['tabs'], right: [] }, settings: {} }
+    settingsState.setWidgets(widgets)
+    expect(fn).toHaveBeenCalledWith(widgets)
   })
 
   it('multiple listeners for the same key all fire', async () => {
