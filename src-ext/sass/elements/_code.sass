@@ -1,13 +1,16 @@
 /* ------------------- Code ------------------- */
 code
-	color: var(--blue)
-	background: var(--bg2)
+	color: var(--color-info)
+	background: var(--color-base-200)
 pre
 	display: flex
-	box-shadow: var(--shadow)
-	border-radius: var(--radius)!important
-	border-left: var(--radius) solid var(--blue)
-	background-color: var(--bg)
+	// DaisyUI's stock theme has no generic shadow token (only --depth, a
+	// component-internal intensity multiplier, not a usable box-shadow
+	// value) -- a fixed subtle shadow reads fine in both themes.
+	box-shadow: 0 2px 8px rgba(0, 0, 0, .2)
+	border-radius: var(--radius-box)!important
+	border-left: var(--radius-box) solid var(--color-info)
+	background-color: var(--color-base-100)
 	& > code
 		margin: 0
 		padding: 1.5rem 1.0rem
@@ -16,10 +19,10 @@ code,
 kbd,
 samp
 	padding: .1rem .3rem
-	background: var(--bg2)
+	background: var(--color-base-200)
 	white-space: pre
 	font-size: 90%
 	border-radius: 6px
 kbd
-	border: 1px solid var(--txt)
-	border-bottom: 3px solid var(--txt)
+	border: 1px solid var(--color-base-content)
+	border-bottom: 3px solid var(--color-base-content)

@@ -7,127 +7,23 @@
  */
 
 @plugin "daisyui" {
-  /* rootcolor sets background/text on :root and [data-theme]; b2ntp already
-     owns those via sass/theme/*.sass. rootscrollgutter shifts layout when a
-     modal opens, which the existing dialogs do not expect. */
+  /* rootcolor sets background/text on :root; base/_basic.sass sets them
+     explicitly instead (reading the same --color-base-100/-content tokens
+     directly), so excluding it just avoids two sources doing the same job.
+     rootscrollgutter shifts layout when a modal opens, which the existing
+     dialogs do not expect. */
   exclude: rootcolor, rootscrollgutter;
-  /* Only our two bridged themes below. Without this, DaisyUI also ships its
-     stock light/dark, which claim the same [data-theme] selectors we do. */
-  themes: false;
+  /* No `themes: false` here on purpose: DaisyUI's own stock "light"/"dark"
+     themes are what b2ntp uses now, keyed off the same [data-theme]
+     attribute it already toggles on <body> (driven by
+     settingsState.getNtpTheme()) -- so there's still exactly one theme
+     switch, just with DaisyUI's own default palette instead of a custom
+     brand one.
+
+     The --c0..--c26 NTP widget colour slots (theme/ntp.sass) stay outside
+     this entirely -- an independent layer for bookmarks/tabs sidebar/
+     weather, unrelated to DaisyUI's theme model. */
 }
-
-/*
- * Theming bridge.
- *
- * DaisyUI's semantic tokens are aliased to the custom properties b2ntp already
- * defines in sass/theme/light.sass and theme/dark.sass, rather than shipping
- * DaisyUI's palette as a competing second theme. The themes key off the same
- * [data-theme] attribute b2ntp already toggles on <body> (driven by
- * settingsState.getNtpTheme()), so there is exactly one theme switch.
- *
- * The --c0..--c26 NTP widget colour slots (theme/ntp.sass) are deliberately NOT
- * part of this bridge. They are an independent layer for bookmarks / tabs
- * sidebar / weather and stay outside DaisyUI's theme model.
- *
- * Every value below resolves to an existing b2ntp property. Nothing here
- * invents a colour -- that would re-create the palette drift this bridge exists
- * to prevent.
- */
-
-@plugin "daisyui/theme" {
-  name: "light";
-  default: true;
-  prefersdark: false;
-  color-scheme: light;
-
-  --color-base-100: var(--bg);
-  --color-base-200: var(--bg2);
-  --color-base-300: var(--bg3);
-  --color-base-content: var(--txt);
-
-  --color-primary: var(--primary);
-  --color-primary-content: var(--txt-on-p);
-  /* No b2ntp equivalent for secondary/accent; derived from the primary ramp
-     rather than invented. */
-  --color-secondary: var(--primary-l);
-  --color-secondary-content: var(--txt-on-p);
-  --color-accent: var(--primary-d);
-  --color-accent-content: var(--txt-on-p);
-  /* Matches the old .btn-inverted: text colour as fill, background as text. */
-  --color-neutral: var(--txt);
-  --color-neutral-content: var(--bg);
-
-  --color-info: var(--blue);
-  --color-info-content: var(--txt-on-blue);
-  --color-success: var(--green);
-  --color-success-content: var(--txt-on-green);
-  --color-warning: var(--orange);
-  --color-warning-content: var(--txt-on-orange);
-  --color-error: var(--red);
-  --color-error-content: var(--txt-on-red);
-
-  --radius-box: var(--radius);
-  --radius-field: var(--radius);
-  /* Selectors (checkbox/toggle/badge) stay on DaisyUI's pill default: b2ntp's
-     bespoke toggle is fully rounded, and --radius (.5rem) would square it off.
-     --radius governs boxes and fields, which is where b2ntp standardised it. */
-  --radius-selector: 1rem;
-
-  --size-selector: 0.25rem;
-  --size-field: 0.25rem;
-  --border: 1px;
-  /* b2ntp's UI is flat. */
-  --depth: 0;
-  --noise: 0;
-}
-
-@plugin "daisyui/theme" {
-  name: "dark";
-  default: false;
-  prefersdark: false;
-  color-scheme: dark;
-
-  --color-base-100: var(--bg);
-  --color-base-200: var(--bg2);
-  --color-base-300: var(--bg3);
-  --color-base-content: var(--txt);
-
-  --color-primary: var(--primary);
-  --color-primary-content: var(--txt-on-p);
-  --color-secondary: var(--primary-l);
-  --color-secondary-content: var(--txt-on-p);
-  --color-accent: var(--primary-d);
-  --color-accent-content: var(--txt-on-p);
-  --color-neutral: var(--txt);
-  --color-neutral-content: var(--bg);
-
-  --color-info: var(--blue);
-  --color-info-content: var(--txt-on-blue);
-  --color-success: var(--green);
-  --color-success-content: var(--txt-on-green);
-  --color-warning: var(--orange);
-  --color-warning-content: var(--txt-on-orange);
-  --color-error: var(--red);
-  --color-error-content: var(--txt-on-red);
-
-  --radius-box: var(--radius);
-  --radius-field: var(--radius);
-  --radius-selector: 1rem;
-
-  --size-selector: 0.25rem;
-  --size-field: 0.25rem;
-  --border: 1px;
-  --depth: 0;
-  --noise: 0;
-}
-
-/*
- * Border colour is deliberately NOT bridged here. DaisyUI v5 has no
- * border-colour token -- components derive borders from base-content, set as
- * --input-color on the component itself, so a :root-level alias to --brd is
- * simply overridden and does nothing. Mapping --brd is therefore done per
- * component in ticket 04, where it can be verified against real inputs.
- */
 
 /*
  * Toast exit animation.

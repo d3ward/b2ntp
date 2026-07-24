@@ -1,8 +1,8 @@
 // Settings panel navigation sidebar
 // The list itself is a DaisyUI `menu`; what stays bespoke here is only the
-// collapse/expand behaviour (4rem <-> 13.5rem). Colours are the ordinary
-// DaisyUI-bridged base tokens (--bg2/--bg3/--txt/--primary/--txt-on-p), not
-// the --c* NTP widget-chrome layer -- this nav used to share --c21..--c25
+// collapse/expand behaviour (4rem <-> 13.5rem). Colours are DaisyUI's own
+// native tokens (--color-base-200/300/content, --color-primary(-content)),
+// not the --c* NTP widget-chrome layer -- this nav used to share --c21..--c25
 // with the NTP sidebar widget, which meant editing widget-card colours on
 // the options page could silently reskin this too. Decoupled (spec.md §8,
 // ticket 06): --c* is NTP widget chrome only now.
@@ -10,14 +10,19 @@
 // The curved-cutout active-item treatment that used to live here (:before /
 // :after box-shadow pseudo-elements) was dropped deliberately at the
 // maintainer's request; DaisyUI's `menu-active` now carries the active state.
+//
+// The 1.25rem radius below was a bespoke --radius-b custom property (a
+// bigger radius than DaisyUI's own --radius-box), defined only for the light
+// theme -- dark theme silently fell back to no rounding at all. Hardcoded
+// now: same light-theme look, and the dark-theme gap is just gone.
 #settings-panel aside
 	position: sticky
 	left: 0
 	top: 0
 	width: 4rem
-	background: var(--bg2)
+	background: var(--color-base-200)
 	padding: 3rem 0 .5rem .5rem
-	border-radius: var(--radius-b)
+	border-radius: 1.25rem
 	overflow: hidden
 	transition: .5s
 	&.active
@@ -38,9 +43,9 @@
 			text-decoration: none
 			gap: 1rem
 			padding: .4rem
-			border-top-left-radius: var(--radius-b)
-			border-bottom-left-radius: var(--radius-b)
-			color: var(--txt)
+			border-top-left-radius: 1.25rem
+			border-bottom-left-radius: 1.25rem
+			color: var(--color-base-content)
 			.a-icon
 				min-width: 2rem
 				height: 2rem
@@ -51,18 +56,17 @@
 				white-space: nowrap
 				display: flex
 				align-items: center
-		// DaisyUI's menu ships its own hover/active colours. Point them at the
-		// bridged base tokens instead. No !important needed -- this Sass is
+		// DaisyUI's menu ships its own hover/active colours. Point them at
+		// DaisyUI's own tokens instead. No !important needed -- this Sass is
 		// unlayered and outranks DaisyUI's layered rules (ticket 13).
 		a:hover
-			background: var(--bg3)
-			color: var(--txt)
+			background: var(--color-base-300)
+			color: var(--color-base-content)
 		a.menu-active
-			background: var(--primary)
-			color: var(--txt-on-p)
+			background: var(--color-primary)
+			color: var(--color-primary-content)
 		// DaisyUI's menu suppresses the outline, so the reset's focus-visible
 		// rule never shows. Restore a visible ring for keyboard users.
 		a:focus-visible
-			outline: 2px solid var(--primary)
+			outline: 2px solid var(--color-primary)
 			outline-offset: -2px
-// NTP persistent widget sidebar — 1/5 of workspace width, mirrors right sidebar

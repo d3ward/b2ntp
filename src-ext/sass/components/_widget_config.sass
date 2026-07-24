@@ -17,7 +17,7 @@
     margin: 0
     min-height: 2.5rem
     border: 1px dashed var(--c0)
-    border-radius: var(--radius)
+    border-radius: var(--radius-box)
 
     &:empty::after
         content: 'No widgets'
@@ -41,11 +41,11 @@
     padding: .3rem .5rem
     cursor: default
     font-size: .82rem
-    border-radius: var(--radius)
+    border-radius: var(--radius-box)
     transition: background .1s
 
     &:hover
-        background: var(--hover)
+        background: var(--color-base-300)
 
     &.wdg-draggable
         cursor: grab
@@ -60,7 +60,7 @@
         cursor: grabbing
 
     .wdg-drag-handle
-        color: var(--txt)
+        color: var(--color-base-content)
         opacity: .35
         display: flex
         align-items: center
@@ -74,7 +74,7 @@
         display: flex
         align-items: center
         flex-shrink: 0
-        color: var(--txt)
+        color: var(--color-base-content)
 
         svg
             width: 14px
@@ -168,7 +168,7 @@
     grid-area: city
     background: var(--c2)
     padding: .2rem .5rem
-    border-radius: var(--radius)
+    border-radius: var(--radius-box)
     color: var(--c3)
 
 .wth_i
@@ -208,7 +208,7 @@
     width: 100%
     padding: .5rem
     background: var(--c2)
-    border-radius: var(--radius)
+    border-radius: var(--radius-box)
     opacity: 0
     transition: all 1.5s ease-in
 

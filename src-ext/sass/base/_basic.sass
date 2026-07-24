@@ -1,8 +1,8 @@
 @use "reset"
 
 html
-	color: var(--txt)
-	background: var(--bg)
+	color: var(--color-base-content)
+	background: var(--color-base-100)
 body
 	min-height: 100vh
 	display: flex
@@ -12,8 +12,8 @@ body
 	justify-content: center
 	font-family: inherit
 	font-size: 1rem
-	color: var(--txt)
-	background: var(--bg)
+	color: var(--color-base-content)
+	background: var(--color-base-100)
 
 	@media (prefers-reduced-motion: no-preference)
 		scroll-behavior: smooth
@@ -39,7 +39,7 @@ textarea
 
 hr
 	border: 0
-	border-top: .1rem solid var(--brd)
+	border-top: .1rem solid var(--color-base-300)
 
 section
 	overflow-x: hidden

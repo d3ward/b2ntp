@@ -166,8 +166,8 @@
 
 #stt_lwo li,
 #stt_selist li
-    background: var(--bg2)
-    color: var(--txt)
+    background: var(--color-base-200)
+    color: var(--color-base-content)
     border-radius: 10px
     border: none
     margin: 5px
@@ -187,14 +187,14 @@
 input[type="color"]
     -webkit-appearance: none
     border: none
-    border-radius: var(--radius)
+    border-radius: var(--radius-box)
     width: 32px
     height: 32px
 input[type="color"]::-webkit-color-swatch-wrapper
     padding: 0
 input[type="color"]::-webkit-color-swatch
     border: none
-    border-radius: var(--radius)
+    border-radius: var(--radius-box)
 
 .stt_clfrt:before
     content: ''
@@ -210,7 +210,7 @@ input[type="color"]::-webkit-color-swatch
     display: inline-block
     position: relative
     border-radius: 10px
-    border: 3px solid var(--txt)
+    border: 3px solid var(--color-base-content)
     width: 30px
     height: 30px
     background: transparent
@@ -239,16 +239,16 @@ input[type="color"]::-webkit-color-swatch
     & button
         width: 100%
         justify-content: flex-start
-        background: var(--bg2)
-        color: var(--txt)
+        background: var(--color-base-200)
+        color: var(--color-base-content)
 
 #sb_len
     width: 100%
     max-width: 280px
     height: 250px
     background: transparent
-    color: var(--txt)
-    border: 1px solid var(--brd)
+    color: var(--color-base-content)
+    border: 1px solid var(--color-base-300)
     border-radius: 6px
     margin-top: 5px
     padding: 5px
@@ -261,7 +261,7 @@ input[type="color"]::-webkit-color-swatch
     position: relative
     background-size: cover
     box-sizing: content-box
-    border: 5px solid var(--brd)
+    border: 5px solid var(--color-base-300)
     margin: auto
 
 #bg_crop .b2-block .blur_bg,
@@ -405,7 +405,7 @@ input[type="color"]::-webkit-color-swatch
 
 hr
     border: 0
-    border-top: 2px solid var(--primary)
+    border-top: 2px solid var(--color-primary)
     width: 100%
     margin-top: 0.5rem !important
     margin-bottom: 0.5rem !important
@@ -416,10 +416,10 @@ hr
 #code_f
     width: 100%
     min-height: 150px
-    border: 1px solid var(--brd)
+    border: 1px solid var(--color-base-300)
 
 .fldHover
-    background: var(--red) !important
+    background: var(--color-error) !important
 
 ._mw-unset
     min-width: unset

@@ -172,7 +172,7 @@ aside
 	opacity: 1
 
 code
-	color: var(--primary)!important
+	color: var(--color-primary)!important
 
 @supports (-webkit-appearance: none) or (-moz-appearance: none)
 	input[type='range']
@@ -180,8 +180,8 @@ code
 		appearance: none
 		width: 100%
 		height: 0.8rem
-		border-radius: var(--radius)
-		background: var(--bg3)
+		border-radius: var(--radius-box)
+		background: var(--color-base-300)
 		outline: none
 		margin-top: 0.8rem
 
@@ -192,15 +192,15 @@ code
 		width: 22px
 		height: 22px
 		border-radius: 50%
-		background: var(--primary)
+		background: var(--color-primary)
 		cursor: pointer
 		transition: background 0.15s ease-in-out
 
 	input[type='range']:hover::-webkit-slider-thumb
-		box-shadow: 0 0 0 1px var(--primary), 0 0 0 4px var(--primary)
+		box-shadow: 0 0 0 1px var(--color-primary), 0 0 0 4px var(--color-primary)
 
 	input[type='range']:hover::-moz-range-thumb
-		box-shadow: 0 0 0 1px var(--primary), 0 0 0 4px var(--primary)
+		box-shadow: 0 0 0 1px var(--color-primary), 0 0 0 4px var(--color-primary)
 
 	.double-slider
 		margin: 20px auto !important
@@ -235,7 +235,7 @@ code
 				border-radius: 50%
 				cursor: pointer
 				pointer-events: auto
-				background-color: var(--primary)
+				background-color: var(--color-primary)
 				background-size: 20px 20px
 				background-position: center
 				background-repeat: no-repeat
@@ -254,9 +254,9 @@ code
 .slider-track
 	width: 100%
 	height: 0.7rem
-	background: var(--bg3)
+	background: var(--color-base-300)
 	position: absolute
-	border-radius: var(--radius)
+	border-radius: var(--radius-box)
 	top: 0.1rem
 	left: 0
 

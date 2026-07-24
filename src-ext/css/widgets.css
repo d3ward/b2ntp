@@ -13,12 +13,12 @@
 
 #rail-l {
   background: var(--c25);
-  border-radius: var(--radius);
+  border-radius: var(--radius-box);
 }
 
 #rail-r {
   background: var(--c26);
-  border-radius: var(--radius);
+  border-radius: var(--radius-box);
 }
 
 /* ---- Card chrome: most widgets are transparent (region bg shows through);
@@ -27,7 +27,7 @@
 
 .widget-panel:not([data-widget="tabs"]) {
   margin: .3rem .25rem;
-  border-radius: var(--radius);
+  border-radius: var(--radius-box);
   overflow: hidden;
 }
 
