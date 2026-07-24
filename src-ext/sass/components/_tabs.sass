@@ -1,12 +1,12 @@
-// Region backgrounds (--c25/--c26) live in css/widgets.css now, alongside
-// the rest of the --c* card chrome (spec.md §8, ticket 06).
-#tabs, #right-sidebar
-	border-radius: var(--radius)
-	overflow: hidden
-	transition: width .3s ease
-	overflow-y: auto
-	max-height: calc(100vh - 3.5rem)
-
+// Region backgrounds + border-radius (--c25/--c26) live in css/widgets.css
+// now. Sticky/max-height/overflow are set once, generically, on `aside`
+// (sass/base/_ntp.sass) -- they used to be redeclared here too, with
+// different (pre-redesign) values that, being an ID selector, silently
+// outranked the generic `aside` rule regardless of source order. `.collapsed`
+// is dead: the collapse feature it belonged to was dropped when the panel
+// host lost its chrome (spec.md §3, ticket 03) and nothing has set that class
+// since.
+#rail-l, #rail-r
 	::-webkit-scrollbar
 		width: 12px
 		background: var(--c16)
@@ -24,15 +24,8 @@
 	&[hidden]
 		display: none !important
 
-	&.collapsed
-		width: 4rem
-
 	.widget-panel[hidden]
 		display: none !important
-
-	.widget-body
-		overflow-y: auto
-		max-height: 70vh
 
 	.widget-body[hidden]
 		display: none !important
@@ -138,15 +131,6 @@
 
 		&:hover .tab-close
 			opacity: .6
-
-	// Collapsed state: icon-only, hide text elements — width stays 20%, only content hides
-	&.collapsed
-		.tab-title,
-		.tab-close,
-		.tab-section-title,
-		.tab-group-header,
-		.widget-body
-			display: none !important
 
 	.clock-widget-time
 		display: block

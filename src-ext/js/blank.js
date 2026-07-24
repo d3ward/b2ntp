@@ -141,14 +141,14 @@ function onDOMReady() {
   }
 
   // Mount rails + main (search/bookmarks)
-  const ntpSidebar = document.getElementById("tabs");
-  const rightSidebar = document.getElementById("right-sidebar");
+  const railLeft = document.getElementById("rail-l");
+  const railRight = document.getElementById("rail-r");
   const mainWidgets = document.getElementById("main-widgets");
 
   function renderWidgets() {
     const widgetsCfg = settingsState.getWidgets();
-    mountRegion(ntpSidebar, widgetsCfg.layout.left, WIDGETS, { ntoast, getTabs });
-    mountRegion(rightSidebar, widgetsCfg.layout.right, WIDGETS, { ntoast });
+    mountRegion(railLeft, widgetsCfg.layout.left, WIDGETS, { ntoast, getTabs });
+    mountRegion(railRight, widgetsCfg.layout.right, WIDGETS, { ntoast });
     mountMain(mainWidgets, widgetsCfg.layout.main, WIDGETS, { ntoast, getTabs });
   }
 

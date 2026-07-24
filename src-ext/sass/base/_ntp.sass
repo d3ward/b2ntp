@@ -83,6 +83,7 @@ aside
 	position: sticky
 	top: .5rem
 	max-height: calc(100dvh - 1rem)
+	overflow-x: hidden
 	overflow-y: auto
 	min-height: 0
 
@@ -98,8 +99,8 @@ aside
 
 // The main.header slot (search, by default) -- panelHost tags its panel with
 // this class (spec.md §4: "the header widget is mounted position: sticky").
-// Its opaque background is card chrome now (css/widgets.css, ticket 06), not
-// declared here -- position is layout, colour isn't.
+// Its opaque background lives in css/widgets.css, not here -- position is
+// layout, colour isn't.
 .widget-panel.main-header
 	position: sticky
 	top: .5rem
@@ -116,10 +117,10 @@ aside
 	main
 		order: 1
 
-	#tabs
+	#rail-l
 		order: 2
 
-	#right-sidebar
+	#rail-r
 		order: 3
 
 	// Rails go static: the sticky + viewport-height cap only make sense

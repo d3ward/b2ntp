@@ -11,12 +11,12 @@
 
 /* ---- Region backgrounds ---- */
 
-#tabs {
+#rail-l {
   background: var(--c25);
   border-radius: var(--radius);
 }
 
-#right-sidebar {
+#rail-r {
   background: var(--c26);
   border-radius: var(--radius);
 }
