@@ -593,15 +593,12 @@
         </div>
       </section>
       <section id="p-widgets">
-        <nav class="wdg-tab-bar tabs tabs-border">
-          <button class="wdg-tab tab tab-active" data-tab="wdg-panel-layout">Layout</button>
-          <button class="wdg-tab tab" data-tab="wdg-panel-weather">Weather</button>
-          <button class="wdg-tab tab" data-tab="wdg-panel-tabs">Tabs</button>
-          <button class="wdg-tab tab" data-tab="wdg-panel-clock">Clock</button>
-          <button class="wdg-tab tab" data-tab="wdg-panel-qnote">Quick Note</button>
-        </nav>
-
-        <div class="wdg-tab-panel" id="wdg-panel-layout">
+        <div class="wdg-tab-bar tabs tabs-lift">
+          <label class="tab">
+            <input type="radio" name="wdg-tabs" autocomplete="off" checked="checked" />
+            Layout
+          </label>
+          <div class="wdg-tab-panel tab-content bg-base-100 border-base-300 p-6" id="wdg-panel-layout">
           <div class="row flex-column flex-sb">
             <div class="widget-region-columns">
               <div class="widget-region-col">
@@ -640,7 +637,11 @@
           </div>
         </div>
 
-        <div class="wdg-tab-panel" id="wdg-panel-weather" hidden>
+          <label class="tab">
+            <input type="radio" name="wdg-tabs" autocomplete="off" />
+            Weather
+          </label>
+          <div class="wdg-tab-panel tab-content bg-base-100 border-base-300 p-6" id="wdg-panel-weather">
           <div class="row flex-column flex-sb">
             <h4>
               <label>Weather Configuration</label>
@@ -734,7 +735,11 @@
           </div>
         </div>
 
-        <div class="wdg-tab-panel" id="wdg-panel-tabs" hidden>
+          <label class="tab">
+            <input type="radio" name="wdg-tabs" autocomplete="off" />
+            Tabs
+          </label>
+          <div class="wdg-tab-panel tab-content bg-base-100 border-base-300 p-6" id="wdg-panel-tabs">
           <div class="row flex-column flex-sb">
             <h4><label>Tabs Configuration</label></h4>
             <div id="wdg-settings-tabs" class="schema-form-host"></div>
@@ -775,18 +780,27 @@
           </div>
         </div>
 
-        <div class="wdg-tab-panel" id="wdg-panel-clock" hidden>
+          <label class="tab">
+            <input type="radio" name="wdg-tabs" autocomplete="off" />
+            Clock
+          </label>
+          <div class="wdg-tab-panel tab-content bg-base-100 border-base-300 p-6" id="wdg-panel-clock">
           <div class="row flex-column flex-sb">
             <h4><label>Clock Configuration</label></h4>
             <div id="wdg-settings-clock" class="schema-form-host"></div>
           </div>
         </div>
 
-        <div class="wdg-tab-panel" id="wdg-panel-qnote" hidden>
+          <label class="tab">
+            <input type="radio" name="wdg-tabs" autocomplete="off" />
+            Quick Note
+          </label>
+          <div class="wdg-tab-panel tab-content bg-base-100 border-base-300 p-6" id="wdg-panel-qnote">
           <div class="row flex-column flex-sb">
             <h4><label>Quick Note Configuration</label></h4>
             <div id="wdg-settings-qnote" class="schema-form-host"></div>
           </div>
+        </div>
         </div>
       </section>
       <section id="p-search">
