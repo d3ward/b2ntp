@@ -4,7 +4,6 @@ import { aos } from "./components/aos";
 import { gotop } from "./components/gotop";
 import { storage } from "./components/localStorage";
 import { settingsState, DEFAULTS } from "./settings/state";
-import "../sass/blank.sass";
 import "../css/blank.css";
 
 import { applyBackground } from "./blank/background/apply";

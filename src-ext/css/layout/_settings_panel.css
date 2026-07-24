@@ -1,0 +1,52 @@
+#settings-panel {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  background: var(--color-base-100);
+  color: var(--color-base-content);
+}
+#settings-panel .modal-main {
+  flex: 1;
+  overflow: auto;
+  width: 100%;
+  padding: .5rem;
+}
+
+/* Which page shows is pure CSS, keyed off the sr-only radio each nav
+   label wraps (_aside_ntp.css) -- no click handler, no .page-active
+   class to toggle (replaces pagesRoute.js). */
+#settings-panel .pages > section {
+  display: none;
+}
+#settings-panel:has(#nav-theme:checked) #p-theme,
+#settings-panel:has(#nav-bookmarks:checked) #p-bookmarks,
+#settings-panel:has(#nav-background:checked) #p-background,
+#settings-panel:has(#nav-widgets:checked) #p-widgets,
+#settings-panel:has(#nav-search:checked) #p-search,
+#settings-panel:has(#nav-backup:checked) #p-backup,
+#settings-panel:has(#nav-about:checked) #p-about {
+  display: flex;
+}
+
+#settings-panel section>div {
+  width: 100%;
+}
+
+#settings-panel h4 {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  font-size: unset;
+  gap: 0.5rem;
+  color: var(--color-base-content);
+  font-weight: bold;
+  margin: auto;
+  width: 100%;
+  padding: 0.5rem;
+  border-radius: var(--radius-box);
+  background: var(--color-base-300);
+}
+
+#settings-panel label {
+  flex: auto;
+}

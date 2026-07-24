@@ -1,0 +1,19 @@
+.qnote-textarea {
+  width: 100%;
+  min-height: 10rem;
+  resize: vertical;
+  background: transparent;
+  color: var(--c21);
+  border: 1px solid var(--c0);
+  border-radius: var(--radius-box);
+  padding: .5rem;
+  font-family: var(--custom-font);
+  font-size: .85rem;
+  line-height: 1.5;
+  outline: none;
+  box-sizing: border-box;
+}
+.qnote-textarea:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-primary) 30%, transparent);
+}

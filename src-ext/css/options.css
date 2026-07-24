@@ -17,3 +17,13 @@
 @source "../";
 
 @import "./_bridge.css";
+@import "./_core.css";
+@import "./base/_basic.css";
+
+/* base/_basic.css's `main>*{max-width:60rem}` is unlayered CSS, and
+   Tailwind's utilities are layered -- unlayered always wins regardless of
+   specificity, so a `max-w-none` class on #settings-panel would silently
+   lose to it. Beating an unlayered rule requires another unlayered rule. */
+#settings-panel {
+  max-width: unset;
+}

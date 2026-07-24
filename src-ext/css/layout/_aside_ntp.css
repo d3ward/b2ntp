@@ -1,0 +1,86 @@
+/* Settings panel navigation sidebar
+   The list itself is a DaisyUI `menu`; what stays bespoke here is only the
+   collapse/expand behaviour (4rem <-> 13.5rem). Colours are DaisyUI's own
+   native tokens (--color-base-200/300/content, --color-primary(-content)),
+   not the --c* NTP widget-chrome layer -- this nav used to share --c21..--c25
+   with the NTP sidebar widget, which meant editing widget-card colours on
+   the options page could silently reskin this too. Decoupled (spec.md §8,
+   ticket 06): --c* is NTP widget chrome only now.
+
+   Each item is a <label> wrapping an sr-only radio (shared name="settings-nav")
+   -- same radio + :has() technique as the Widgets tab bar (schemaForm/
+   widgetSettings), no click handler needed. The active look and the page it
+   routes to are both pure CSS: this file paints the checked label, and
+   #settings-panel:has(#nav-X:checked) #p-X{display:flex} in
+   _settings_panel.css shows the matching page.
+
+   The 1.25rem radius below was a bespoke --radius-b custom property (a
+   bigger radius than DaisyUI's own --radius-box), defined only for the light
+   theme -- dark theme silently fell back to no rounding at all. Hardcoded
+   now: same light-theme look, and the dark-theme gap is just gone. */
+#settings-panel aside {
+  position: sticky;
+  left: 0;
+  top: 0;
+  width: 4rem;
+  background: var(--color-base-200);
+  padding: 3rem 0 .5rem .5rem;
+  border-radius: 1.25rem;
+  overflow: hidden;
+  transition: .5s;
+}
+#settings-panel aside.active {
+  width: 13.5rem;
+}
+#settings-panel aside ul {
+  top: 0;
+  left: 0;
+  width: 100%;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+#settings-panel aside ul li {
+  position: relative;
+  width: 100%;
+}
+#settings-panel aside ul label {
+  display: flex;
+  width: 100%;
+  cursor: pointer;
+  gap: 1rem;
+  padding: .4rem;
+  border-top-left-radius: 1.25rem;
+  border-bottom-left-radius: 1.25rem;
+  color: var(--color-base-content);
+}
+#settings-panel aside ul label .a-icon {
+  min-width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#settings-panel aside ul label .a-title {
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+}
+/* DaisyUI's menu ships its own hover/active colours. Point them at
+   DaisyUI's own tokens instead. No !important needed -- this CSS is
+   unlayered and outranks DaisyUI's layered rules (ticket 13). */
+#settings-panel aside ul label:hover {
+  background: var(--color-base-300);
+  color: var(--color-base-content);
+}
+#settings-panel aside ul label:has(:checked) {
+  background: var(--color-primary);
+  color: var(--color-primary-content);
+}
+/* DaisyUI's menu suppresses the outline, so the reset's focus-visible
+   rule never shows. Restore a visible ring for keyboard users -- the
+   radio itself is what takes focus, so this reads it via :has(). */
+#settings-panel aside ul label:has(:focus-visible) {
+  outline: 2px solid var(--color-primary);
+  outline-offset: -2px;
+}

@@ -11,7 +11,6 @@ import { getBookmarks } from "./blank/bookmarks";
 import { BackgroundStore } from "./blank/BackgroundStore";
 import { WIDGETS } from "./widgets/registry";
 import { ensureWidgetsSeeded } from "./widgets/resolver";
-import "../sass/options.sass";
 import "../css/options.css";
 
 await storage.init();

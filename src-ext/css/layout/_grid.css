@@ -1,0 +1,51 @@
+/* ----------- Grid columns and row ----------- */
+.b2-grid {
+  flex-wrap: wrap;
+}
+.row, .b2-grid {
+  display: flex;
+  align-items: stretch;
+}
+.row>[class*="col"], .row>div, .b2-grid>[class*="col"], .b2-grid>div {
+  flex: 0 0 auto;
+  flex-shrink: 0;
+  width: 100%;
+  max-width: 100%;
+  padding: .5rem;
+}
+.row>[class*="col"]>*, .row>div>*, .b2-grid>[class*="col"]>*, .b2-grid>div>* {
+  margin: 0;
+}
+.row .col, .row>div, .b2-grid .col, .b2-grid>div {
+  flex: 1 1 100%;
+}
+.row .col-2, .b2-grid .col-2 {
+  width: calc((100%) / (12/2));
+}
+.row .col-3, .b2-grid .col-3 {
+  width: calc((100%) / (12/3));
+}
+.row .col-4, .b2-grid .col-4 {
+  width: calc((100%) / (12/4));
+}
+.row .col-6, .b2-grid .col-6 {
+  width: calc((100%) / (12/6));
+}
+.row .col-8, .b2-grid .col-8 {
+  width: calc((100%) / (12/8));
+}
+.row .col-9, .b2-grid .col-9 {
+  width: calc((100%) / (12/9));
+}
+.row .col-10, .b2-grid .col-10 {
+  width: calc((100%) / (12/10));
+}
+
+@media (max-width: 40em) {
+  .row:not(.keep-width), .b2-grid:not(.keep-width) {
+    flex-direction: column !important;
+  }
+  .row:not(.keep-width)>[class*="col"], .row:not(.keep-width)>div, .b2-grid:not(.keep-width)>[class*="col"], .b2-grid:not(.keep-width)>div {
+    width: auto;
+  }
+}

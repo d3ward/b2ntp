@@ -1,0 +1,88 @@
+/* ----------------- Bookmarks ---------------- */
+@keyframes expand {
+  from {
+    transform: scale(0.1);
+    opacity: 0;
+  }
+}
+
+#bookmarks {
+  display: -webkit-box;
+  display: flex;
+  flex-wrap: var(--grid-wrap);
+  overflow-x: auto;
+  width: 100%;
+  border-radius: var(--radius-box);
+  animation: expand 1.3s;
+}
+#bookmarks a {
+  border: none !important;
+}
+#bookmarks .section {
+  background-color: var(--c10);
+  -webkit-box-flex: 0;
+  position: relative;
+  flex: 0 0 auto;
+  margin-top: .5rem;
+  margin-left: 10px;
+  width: calc(var(--grid-width) - 10px);
+  border-radius: var(--radius-box);
+  overflow: hidden;
+  color: var(--c11);
+}
+#bookmarks .section .title {
+  margin: 0;
+  padding: .5rem;
+}
+#bookmarks .section div {
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-height: 50vh;
+  margin-bottom: 10px;
+  padding: 15px;
+  background-color: transparent;
+}
+#bookmarks .section div a {
+  text-decoration: none;
+  padding: 10px;
+  border-radius: var(--radius-box);
+  background-color: var(--c12);
+  color: var(--c13);
+  overflow-wrap: break-word;
+  display: block;
+}
+#bookmarks .section div a:hover, #bookmarks .section div a.selected {
+  background-color: var(--c14);
+  color: var(--c15);
+  transition: all .1s ease-in;
+}
+
+/* ---------------- Scrollbars ---------------- */
+
+#bookmarks ::-webkit-scrollbar {
+  width: 12px;
+  background: var(--c16);
+}
+
+#bookmarks ::-webkit-scrollbar-track {
+  -webkit-border-radius: 10px;
+  background: var(--c16);
+  border-radius: var(--radius-box);
+}
+
+#bookmarks ::-webkit-scrollbar-thumb {
+  -webkit-border-radius: 10px;
+  border-radius: var(--radius-box);
+  background: var(--c17);
+}
+
+@media screen and (max-width: 480px) {
+  #bookmarks>.section {
+    margin: 10px;
+    width: calc(100% - 20px);
+  }
+}
+
+div#bookmarks>div.section>div>a+a {
+  margin-top: 5px;
+}

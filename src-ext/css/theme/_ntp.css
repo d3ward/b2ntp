@@ -1,0 +1,163 @@
+body,
+[data-theme="light"] {
+  /* ---------------- Grid Layout NTP --------------- */
+  --grid-wrap: wrap;
+  --grid-width: 33.33%;
+  --bg-cw: 0px;
+  --bg-ch: 0px;
+  --bg-cl: #e6e7eb;
+  --bg-cd: #060609;
+  --bg-c: var(--bg-cl);
+  --bg-img-l: -;
+  --bg-img-d: -;
+  --bg-img: var(--bg-img-l);
+  --bg-blur: 0px;
+  --bg-dark: 100%;
+  --custom-font: -apple-system, system-ui, BlinkMacSystemFont, Roboto, sans-serif;
+  /****************************** COLORS ******************************/
+  /*  Weather Background	   */
+  --cl0: #fafafa;
+  --cd0: #000;
+  /*  Text and  Icons color	*/
+  --cl1: #000;
+  --cd1: #fafafa;
+  /*  City Label Background	*/
+  --cl2: #e5e7eb;
+  --cd2: #101010;
+  /*  City Label Text		  */
+  --cl3: #000;
+  --cd3: #fafafa;
+  /* ------------------ Toolbar ----------------- */
+  /*Toolbar Background */
+  --cl4: #fafafa;
+  --cd4: #000;
+  /*Toolbar Icon */
+  --cl5: #292e39;
+  --cd5: #CCC;
+  /* Toolbar Text */
+  --cl6: #292e39;
+  --cd6: #666;
+  /* ---------------- Search Bar ---------------- */
+  /* Search Bar Background */
+  --cl7: #fafafa;
+  --cd7: #000;
+  /* Search Bar Text */
+  --cl8: #000;
+  --cd8: #fafafa;
+  /* Search Bar Border Hover/focus */
+  --cl9: #985add;
+  --cd9: #985add;
+  /* Text color Placeholder	*/
+  --cl18: #000;
+  --cd18: #fff;
+  /* Caret color	 */
+  --cl19: #985add;
+  --cd19: #985add;
+  /* ----------------- Bookmarks ---------------- */
+  /* Bookmarks Folder background */
+  --cl10: #fafafa;
+  --cd10: #000;
+  /* Bookmarks Title Folder Color*/
+  --cl11: #000;
+  --cd11: #fafafa;
+  /* Bookmarks Link Background */
+  --cl12: #e5e7eb;
+  --cd12: #101010;
+  /* Bookmarks Link Text Color*/
+  --cl13: #000;
+  --cd13: #fafafa;
+  /* Bookmark link hover background */
+  --cl14: #985add;
+  --cd14: #8034d5;
+  /* Bookmark link hover text */
+  --cl15: #fafafa;
+  --cd15: #fafafa;
+  /* Track Scrollbar  */
+  --cl16: #f3f4f6;
+  --cld6: #f3f4f6;
+  /* Handle Scrollbar */
+  --cl17: #6b7280;
+  --cd17: #6b7280;
+  /* ----------------- Sidebar ------------------ */
+  /* Sidebar Background */
+  --cl20: #fafafa;
+  --cd20: #000;
+  /* Sidebar Item Text & Icons */
+  --cl21: #000;
+  --cd21: #fafafa;
+  /* Sidebar Item Hover Background */
+  --cl22: #e5e7eb;
+  --cd22: #101010;
+  /* Sidebar Active Item Background */
+  --cl23: #985add;
+  --cd23: #8034d5;
+  /* Sidebar Active Item Text */
+  --cl24: #fafafa;
+  --cd24: #fafafa;
+  /* Left Rail Background -- transparent by default on both themes */
+  --cl25: transparent;
+  --cd25: transparent;
+  /* Right Rail Background -- transparent by default on both themes */
+  --cl26: transparent;
+  --cd26: transparent;
+
+  /* NTP Colors */
+  --c0: var(--cl0);
+  --c1: var(--cl1);
+  --c2: var(--cl2);
+  --c3: var(--cl3);
+  --c4: var(--cl4);
+  --c5: var(--cl5);
+  --c6: var(--cl6);
+  --c7: var(--cl7);
+  --c8: var(--cl8);
+  --c9: var(--cl9);
+  --c10: var(--cl10);
+  --c11: var(--cl11);
+  --c12: var(--cl12);
+  --c13: var(--cl13);
+  --c14: var(--cl14);
+  --c15: var(--cl15);
+  --c16: var(--cl16);
+  --c17: var(--cl17);
+  --c18: var(--cl18);
+  --c19: var(--cl19);
+  --c20: var(--cl20);
+  --c21: var(--cl21);
+  --c22: var(--cl22);
+  --c23: var(--cl23);
+  --c24: var(--cl24);
+  --c25: var(--cl25);
+  --c26: var(--cl26);
+}
+[data-theme="dark"] {
+  --bg-img: var(--bg-img-d);
+  --bg-c: var(--bg-cd);
+  --c0: var(--cd0);
+  --c1: var(--cd1);
+  --c2: var(--cd2);
+  --c3: var(--cd3);
+  --c4: var(--cd4);
+  --c5: var(--cd5);
+  --c6: var(--cd6);
+  --c7: var(--cd7);
+  --c8: var(--cd8);
+  --c9: var(--cd9);
+  --c10: var(--cd10);
+  --c11: var(--cd11);
+  --c12: var(--cd12);
+  --c13: var(--cd13);
+  --c14: var(--cd14);
+  --c15: var(--cd15);
+  --c16: var(--cd16);
+  --c17: var(--cd17);
+  --c18: var(--cd18);
+  --c19: var(--cd19);
+  --c20: var(--cd20);
+  --c21: var(--cd21);
+  --c22: var(--cd22);
+  --c23: var(--cd23);
+  --c24: var(--cd24);
+  --c25: var(--cd25);
+  --c26: var(--cd26);
+}

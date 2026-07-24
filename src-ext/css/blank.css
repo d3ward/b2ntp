@@ -1,12 +1,12 @@
 /*
  * Tailwind CSS + DaisyUI entry for the New Tab Page (blank.html).
  *
- * Kept as plain CSS on purpose: Tailwind's at-rule processing and the Sass
- * compiler do not compose in a single file. Loaded alongside the compiled Sass
- * entry (blank.sass) from blank.js.
+ * The whole page's CSS lives here now -- _core.css and base/_ntp.css (the
+ * former sass/ tree, now plain CSS) are just @imports below, alongside
+ * _bridge.css and widgets.css. There is no separate Sass build step any more.
  *
  * Preflight is deliberately NOT imported. b2ntp has its own hand-rolled reset
- * in sass/base/_reset.sass; pulling in Tailwind's would restyle every element
+ * in css/base/_reset.css; pulling in Tailwind's would restyle every element
  * on the page. We import the theme and utilities layers only.
  *
  * Cascade note: the @layer declarations below DO reach the browser. The
@@ -14,10 +14,11 @@
  * the css.postcss block in vite.ext.config.js) -- it used to rewrite every
  * @layer into specificity hacks and strip the at-rule, which forced
  * !important on anything that had to override DaisyUI. With real layers,
- * everything here sits in a layer, the compiled Sass is unlayered, and
- * unlayered author styles beat layered ones regardless of specificity -- so
- * bespoke Sass wins by default. (The root postcss.config.js still applies the
- * polyfill for the src-web marketing site, which is out of scope.)
+ * everything here sits in a layer, the imports below (_core.css, base/_ntp.css,
+ * etc.) are unlayered, and unlayered author styles beat layered ones
+ * regardless of specificity -- so bespoke CSS wins by default. (The root
+ * postcss.config.js still applies the polyfill for the src-web marketing
+ * site, which is out of scope.)
  *
  * SOURCE SCOPING -- this is the whole point of having a separate entry.
  *
@@ -56,3 +57,5 @@
 
 @import "./_bridge.css";
 @import "./widgets.css";
+@import "./_core.css";
+@import "./base/_ntp.css";
