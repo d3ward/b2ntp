@@ -1,62 +1,19 @@
 @charset "utf-8"
 @use "_core"
 @use "base/basic"
-@use "layout/header"
-@use "layout/main"
 
-// ---- Options page: a card-like frame centered on the page, not a
-// full-page app shell. body is the backdrop; .settings-card is the frame
-// (fixed, capped height so it never grows past the viewport); everything
-// below it -- header, main, #settings-panel, aside -- keeps the same
-// flex/overflow layout it always had, just sized to the card instead of
-// the viewport.
-
-body
-  align-items: center
-  justify-content: center
-  gap: 0
-  min-height: 100vh
-  padding: 2rem 1rem
-
-.settings-card
-  display: flex
-  flex-direction: column
-  width: 100%
-  max-width: 75rem
-  height: min(88vh, 54rem)
-  background: var(--bg2)
-  border: 1px solid var(--bg3)
-  border-radius: var(--radius-b)
-  box-shadow: var(--shadow)
-  overflow: hidden
-
-header
-  position: sticky
-  top: 0
-  z-index: 10
-  flex-shrink: 0
-  max-width: unset
-  width: 100%
-  background: var(--bg)
-  border-bottom: 1px solid var(--bg3)
-
-main
-  flex: 1
-  max-width: unset
-  width: 100%
-  align-items: stretch
-  justify-content: flex-start
-  margin: 0
-  padding: 0
-  min-height: 0
-  overflow: hidden
-
+// ---- Options page shell ----
+//
+// The card frame (body padding, the card itself, header, main) is plain
+// Tailwind/DaisyUI utility classes on the elements in options.html now --
+// layout/header.sass and layout/main.sass (options-only, nothing else used
+// them) are gone, along with the max-width/sticky/flex overrides that used
+// to live here.
+//
+// This one rule can't move to a utility class, though: base/_basic.sass's
+// `main>*{max-width:60rem}` is unlayered Sass, and Tailwind's utilities are
+// layered -- unlayered always wins regardless of specificity, so a
+// `max-w-none` class on #settings-panel would silently lose to it. Beating
+// an unlayered rule requires another unlayered rule.
 #settings-panel
-  height: 100%
-  // base/_basic.sass's generic `main>*{max-width:60rem}` targets this (the
-  // sole direct child of `main`) -- override it so the panel fills the card.
   max-width: unset
-
-#settings-panel aside
-  height: 100%
-  overflow-y: auto

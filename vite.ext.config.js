@@ -35,7 +35,15 @@ export default defineConfig(({ mode }) => ({
         postcssPresetEnv({ stage: 2, features: { 'cascade-layers': false } }),
         purgecss({
           content: ['./src-ext/**/*.{html,js}'],
-          defaultExtractor: content => content.match(/[\w-/:]+(?<!:)/g) || []
+          // Splits only on whitespace/quotes/tag delimiters, so a Tailwind
+          // arbitrary-value class (`h-[min(88vh,54rem)]`, `shadow-[var(--shadow)]`)
+          // survives as one token instead of being fragmented at its own
+          // brackets/parens/commas -- the previous `[\w-/:]+` extractor treated
+          // those as separators, so no fragment ever matched the full class
+          // name and PurgeCSS silently dropped the rule (as it already had for
+          // gotop.html's `min-w-[2.6rem]`/`z-[1]`/`duration-[250ms]`, found
+          // while debugging this).
+          defaultExtractor: content => content.match(/[^\s"'`<>=]+/g) || []
         })
       ]
     }
