@@ -211,11 +211,7 @@ export function initBackgroundSettings({
     var s = el.id;
     var s1 = s.split("_");
     el.addEventListener("click", function () {
-      // s1[2] is a slot id -- numeric ("25") for the original --c0..--c26
-      // ramp, or a name ("Main"/"Card"/"Border") for the newer named slots
-      // (ticket 06). Both are just concatenated into the CSS var name below,
-      // so it's kept as a string rather than parsed as a number.
-      if (s1[2]) f_cp_rgb(ntp_bdy, picker, s1[1], s1[2]);
+      if (s1[2]) f_cp_rgb(ntp_bdy, picker, s1[1], parseInt(s1[2]));
       else f_cp_mtc(s1[1]);
     });
   });
@@ -470,11 +466,11 @@ function f_cp_bg(ntp_bdy, picker, dlg_color_picker) {
   dlg_color_picker.showModal();
 }
 
-function f_cp_rgb(ntp_bdy, picker, type, slotId) {
-  cp_current_el = slotId;
+function f_cp_rgb(ntp_bdy, picker, type, number) {
+  cp_current_el = number;
   cp_type = "color_" + type;
   current_color = getComputedStyle(ntp_bdy).getPropertyValue(
-    "--c" + (cp_type == "color_cl" ? "l" : "d") + slotId
+    "--c" + (cp_type == "color_cl" ? "l" : "d") + number
   );
   console.log("f_rgb - cp_type : " + cp_type, " color : " + current_color);
   picker.setColor(current_color, true);

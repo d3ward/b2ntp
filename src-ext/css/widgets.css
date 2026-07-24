@@ -1,8 +1,8 @@
 /*
- * Widget chrome: region backgrounds + card surface/border/text, driven by
- * the --c* colour layer (sass/theme/ntp.sass). Independent of DaisyUI --
- * see _bridge.css's note that --c0..--c26 (and --cMain/--cCard/--cBorder)
- * are deliberately not part of that bridge.
+ * Widget chrome: region backgrounds + per-widget background overrides,
+ * driven by the --c* colour layer (sass/theme/ntp.sass). Independent of
+ * DaisyUI -- see _bridge.css's note that --c0..--c26 are deliberately not
+ * part of that bridge.
  *
  * Native CSS on purpose: Sass is being retired repo-wide (spec.md §8).
  * Imported by css/blank.css only -- this is NTP-only chrome, not shared
@@ -21,27 +21,28 @@
   border-radius: var(--radius);
 }
 
-main {
-  background: var(--cMain);
-}
+/* ---- Card chrome: most widgets are transparent (region bg shows through);
+   only tabs and weather carry their own background. No shared border --
+   a single global card look isn't the intended design here. ---- */
 
-/* ---- Card chrome: one global set, no per-widget override ---- */
-
-.widget-panel {
-  background: var(--cCard);
-  border: 1px solid var(--cBorder);
-  border-radius: var(--radius);
-  color: var(--c21);
+.widget-panel:not([data-widget="tabs"]) {
   margin: .3rem .25rem;
+  border-radius: var(--radius);
   overflow: hidden;
 }
 
+.widget-panel[data-widget="tabs"] {
+  background: var(--c20);
+}
+
+.widget-panel[data-widget="weather"] {
+  background: var(--c0);
+}
+
 /* The sticky main.header card needs an opaque backdrop so scrolling body
-   content doesn't bleed through under it -- already opaque via --cCard
-   above; stated explicitly since it's the one card chrome rule the spec
-   calls out by name. */
+   content doesn't bleed through under it. */
 .widget-panel.main-header {
-  background: var(--cCard);
+  background: var(--bg-c);
 }
 
 /* ---- Responsive (spec.md §7, ticket 09) ---- */
