@@ -1,6 +1,6 @@
 import { initTabs } from '../blank/tabs.js'
-import { initWeather } from '../blank/weather/widget.js'
-import { initClock } from '../blank/clock.js'
+import { initWeather, settingsSchema as weatherSettingsSchema } from '../blank/weather/widget.js'
+import { initClock, settingsSchema as clockSettingsSchema } from '../blank/clock.js'
 import { initQuickNote } from '../blank/qnote.js'
 
 export const WIDGETS = {
@@ -17,7 +17,7 @@ export const WIDGETS = {
     label: 'Weather',
     icon: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 18a4.6 4.4 0 0 1 0 -9a5 4.5 0 0 1 11 2h1a3.5 3.5 0 0 1 0 7h-12"/></svg>`,
     placement: { region: 'right', order: 0 },
-    settings: {},
+    settings: weatherSettingsSchema,
     init: initWeather,
   },
   clock: {
@@ -25,7 +25,7 @@ export const WIDGETS = {
     label: 'Clock',
     icon: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0"/><path d="M12 7v5l3 3"/></svg>`,
     placement: { region: 'left', order: 1 },
-    settings: {},
+    settings: clockSettingsSchema,
     init: initClock,
   },
   qnote: {

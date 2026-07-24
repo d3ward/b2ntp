@@ -1,6 +1,7 @@
 import { WIDGETS } from '../widgets/registry.js'
 import { settingsState } from './state.js'
-import { resolveWidgetSettings } from '../widgets/resolver.js'
+import { resolveWidgetSettings, setWidgetSettingOverride } from '../widgets/resolver.js'
+import { renderSettingsForm } from '../widgets/schemaForm.js'
 
 const DRAG_HANDLE_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="5" r="1.5"/><circle cx="15" cy="5" r="1.5"/><circle cx="9" cy="12" r="1.5"/><circle cx="15" cy="12" r="1.5"/><circle cx="9" cy="19" r="1.5"/><circle cx="15" cy="19" r="1.5"/></svg>`
 
@@ -76,6 +77,21 @@ export function initWidgetSettings() {
       item.appendChild(name)
       item.appendChild(toggle)
       listEl.appendChild(item)
+
+      if (active && Object.keys(descriptor.settings || {}).length > 0) {
+        const settingsRow = document.createElement('li')
+        settingsRow.className = 'wdg-settings-row'
+        // `cfg` (renderColumn's snapshot) is fine for the initial values below,
+        // but the onChange write re-fetches getCfg() fresh -- it must not
+        // write back a config that's gone stale from a change made elsewhere
+        // on the page since this row was drawn.
+        const resolved = resolveWidgetSettings(descriptor, cfg)
+        const form = renderSettingsForm(descriptor.settings, resolved, (key, value) => {
+          settingsState.setWidgets(setWidgetSettingOverride(descriptor, getCfg(), key, value))
+        })
+        settingsRow.appendChild(form)
+        listEl.appendChild(settingsRow)
+      }
     }
 
     activeIds.forEach((id) => renderItem(id, true))
@@ -134,6 +150,10 @@ export function initWidgetSettings() {
       const cfg = structuredClone(getCfg())
       cfg.layout[side] = newOrder
       settingsState.setWidgets(cfg)
+      // A settings row is a sibling <li>, not part of the dragged node, so the
+      // drag handlers above never move it -- re-render from the persisted
+      // order rather than patching the DOM in place.
+      render()
     })
   }
 

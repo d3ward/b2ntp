@@ -1,21 +1,32 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 
+let _mockWidgets = { layout: { left: [], right: [] }, settings: {} }
+
 vi.mock('../settings/state.js', () => ({
   settingsState: {
-    getTlbData: vi.fn(() => ({ dateFormat: 'auto', timeFormat: '24', seconds: false })),
+    getWidgets: vi.fn(() => _mockWidgets),
   },
 }))
 
-const { initClock } = await import('./clock.js')
+const { initClock, settingsSchema } = await import('./clock.js')
 
 beforeEach(() => {
   vi.useFakeTimers()
   document.body.className = ''
+  _mockWidgets = { layout: { left: [], right: [] }, settings: {} }
 })
 
 afterEach(() => {
   vi.useRealTimers()
   vi.clearAllMocks()
+})
+
+describe('settingsSchema', () => {
+  it('declares showSeconds, timeFormat, dateFormat with the pre-existing tlbData defaults', () => {
+    expect(settingsSchema.showSeconds.default).toBe(false)
+    expect(settingsSchema.timeFormat.default).toBe('24')
+    expect(settingsSchema.dateFormat.default).toBe('auto')
+  })
 })
 
 describe('initClock', () => {
@@ -60,5 +71,29 @@ describe('initClock', () => {
     // Verify tick ran without error (content is still a string)
     expect(typeof container.querySelector('.clock-widget-time').textContent).toBe('string')
     expect(timeBefore).toBeDefined()
+  })
+
+  it('shows seconds when showSeconds is overridden true', () => {
+    _mockWidgets = { layout: { left: [], right: [] }, settings: { clock: { showSeconds: true } } }
+    const container = document.createElement('div')
+    initClock({ container })
+    const time = container.querySelector('.clock-widget-time').textContent
+    // h:mm:ss has two ':' separators; h:mm (no seconds) has one
+    expect(time.split(':').length).toBeGreaterThanOrEqual(3)
+  })
+
+  it('omits seconds by default', () => {
+    const container = document.createElement('div')
+    initClock({ container })
+    const time = container.querySelector('.clock-widget-time').textContent
+    expect(time.split(':').length).toBeLessThanOrEqual(2)
+  })
+
+  it('uses 12-hour format when overridden', () => {
+    _mockWidgets = { layout: { left: [], right: [] }, settings: { clock: { timeFormat: '12' } } }
+    const container = document.createElement('div')
+    initClock({ container })
+    const time = container.querySelector('.clock-widget-time').textContent
+    expect(/AM|PM/.test(time)).toBe(true)
   })
 })

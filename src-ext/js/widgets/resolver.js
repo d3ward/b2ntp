@@ -14,6 +14,30 @@ export function isWidgetEnabled(descriptor, widgetsConfig) {
   return resolveWidgetSettings(descriptor, widgetsConfig).enabled !== false
 }
 
+// Sparse-write a single setting: a value equal to the descriptor's own
+// default is a no-op override, so it's deleted rather than stored; a widget
+// left with no overrides at all drops its key entirely (spec.md §5/§6).
+export function setWidgetSettingOverride(descriptor, widgetsConfig, key, value) {
+  const schema = descriptor.settings || {}
+  const defaultValue = schema[key] ? schema[key].default : undefined
+  const settings = { ...(widgetsConfig.settings || {}) }
+  const overrides = { ...(settings[descriptor.id] || {}) }
+
+  if (value === defaultValue) {
+    delete overrides[key]
+  } else {
+    overrides[key] = value
+  }
+
+  if (Object.keys(overrides).length === 0) {
+    delete settings[descriptor.id]
+  } else {
+    settings[descriptor.id] = overrides
+  }
+
+  return { ...widgetsConfig, settings }
+}
+
 export function mergeRegistryIntoLayout(layout, registry) {
   const known = new Set(Object.values(layout).flat())
   const missing = Object.values(registry)

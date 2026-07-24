@@ -15,6 +15,7 @@ const {
   isWidgetEnabled,
   mergeRegistryIntoLayout,
   ensureWidgetsSeeded,
+  setWidgetSettingOverride,
 } = await import('./resolver.js')
 
 function makeDescriptor(id, overrides = {}) {
@@ -145,5 +146,53 @@ describe('ensureWidgetsSeeded', () => {
       layout: { left: ['a'], right: [] },
       settings: {},
     })
+  })
+})
+
+describe('setWidgetSettingOverride', () => {
+  const descriptor = makeDescriptor('clock', {
+    settings: { showSeconds: { type: 'bool', default: false } },
+  })
+
+  it('stores a value that differs from the descriptor default', () => {
+    const cfg = { layout: { left: [], right: [] }, settings: {} }
+    const result = setWidgetSettingOverride(descriptor, cfg, 'showSeconds', true)
+    expect(result.settings.clock).toEqual({ showSeconds: true })
+  })
+
+  it('deletes the key when the value equals the descriptor default', () => {
+    const cfg = { layout: { left: [], right: [] }, settings: { clock: { showSeconds: true } } }
+    const result = setWidgetSettingOverride(descriptor, cfg, 'showSeconds', false)
+    expect(result.settings.clock).toBeUndefined()
+  })
+
+  it('drops the widget key entirely once its last override is removed', () => {
+    const cfg = { layout: { left: [], right: [] }, settings: { clock: { showSeconds: true } } }
+    const result = setWidgetSettingOverride(descriptor, cfg, 'showSeconds', false)
+    expect(Object.prototype.hasOwnProperty.call(result.settings, 'clock')).toBe(false)
+  })
+
+  it('preserves a sibling override on the same widget when only one key changes', () => {
+    const multiField = makeDescriptor('clock', {
+      settings: {
+        showSeconds: { type: 'bool', default: false },
+        timeFormat: { type: 'select', default: '24' },
+      },
+    })
+    const cfg = { layout: { left: [], right: [] }, settings: { clock: { timeFormat: '12' } } }
+    const result = setWidgetSettingOverride(multiField, cfg, 'showSeconds', true)
+    expect(result.settings.clock).toEqual({ timeFormat: '12', showSeconds: true })
+  })
+
+  it('does not mutate the original widgetsConfig', () => {
+    const cfg = { layout: { left: [], right: [] }, settings: { clock: { showSeconds: false } } }
+    setWidgetSettingOverride(descriptor, cfg, 'showSeconds', true)
+    expect(cfg.settings.clock).toEqual({ showSeconds: false })
+  })
+
+  it('treats a key with no schema entry as always an override (no default to compare against)', () => {
+    const cfg = { layout: { left: [], right: [] }, settings: {} }
+    const result = setWidgetSettingOverride(descriptor, cfg, 'enabled', false)
+    expect(result.settings.clock).toEqual({ enabled: false })
   })
 })

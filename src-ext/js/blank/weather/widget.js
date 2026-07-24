@@ -1,7 +1,22 @@
 import { storage } from "../../components/localStorage";
 import { settingsState } from "../../settings/state";
 import { capitalizeF } from "../../components/utilities";
+import { resolveWidgetSettings } from "../../widgets/resolver";
 import icons from "../../../data/weatherIcons.json";
+
+export const settingsSchema = {
+  units: {
+    type: "select",
+    default: "C",
+    label: "Units",
+    options: [["C", "Celsius"], ["F", "Fahrenheit"]],
+  },
+};
+
+// Descriptor-shaped just enough for resolveWidgetSettings -- importing the
+// real descriptor from registry.js would be circular (registry.js imports
+// initWeather from here).
+const WEATHER_DESCRIPTOR = { id: "weather", settings: settingsSchema };
 
 let _container = null;
 
@@ -26,6 +41,9 @@ export function initWeather({ container }) {
   settingsState.onChange("weatherConfig", () => {
     _renderWeather();
   });
+  settingsState.onChange("widgets", () => {
+    _renderWeather();
+  });
 
   _renderWeather();
 }
@@ -44,17 +62,21 @@ function _wttrIcon(code) {
   return `10${sfx}`;
 }
 
-function _updateDOM(data) {
+function _updateDOM(data, units) {
   const cur = data.current_condition[0];
   const day = data.weather[0];
   const area = data.nearest_area[0];
-  const tt = "&#8451;";
+  const isF = units === "F";
+  const tt = isF ? "&#8457;" : "&#8451;";
+  const temp = isF ? cur.temp_F : cur.temp_C;
+  const maxTemp = isF ? day.maxtempF : day.maxtempC;
+  const minTemp = isF ? day.mintempF : day.mintempC;
 
   _container.querySelectorAll(".wth_c").forEach((el) => { el.innerText = area.areaName[0].value; });
   _container.querySelectorAll(".wth_i").forEach((el) => { el.innerHTML = icons[_wttrIcon(cur.weatherCode)] || ""; });
   _container.querySelectorAll(".wth_d1").forEach((el) => { el.innerText = capitalizeF(cur.weatherDesc[0].value); });
-  _container.querySelectorAll(".wth_t").forEach((el) => { el.innerHTML = cur.temp_C + tt; });
-  _container.querySelectorAll(".wth_mm").forEach((el) => { el.innerHTML = day.maxtempC + tt + " / " + day.mintempC + tt; });
+  _container.querySelectorAll(".wth_t").forEach((el) => { el.innerHTML = temp + tt; });
+  _container.querySelectorAll(".wth_mm").forEach((el) => { el.innerHTML = maxTemp + tt + " / " + minTemp + tt; });
   _container.querySelectorAll(".wth_w").forEach((el) => {
     el.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" style="transform: rotate(${cur.winddirDegree})" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-circle-arrow-up"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" /><path d="M12 8l-4 4" /><path d="M12 8v8" /><path d="M16 12l-4 -4" /></svg> ${cur.windspeedKmph} km/h`;
   });
@@ -65,7 +87,13 @@ function _updateDOM(data) {
 
 async function _renderWeather() {
   if (!_container) return;
+  // location stays on the legacy weatherConfig key: its settings-page control
+  // is a text input plus a "use current location" geolocation button, and
+  // that button isn't one of the declarative schema field types. units is a
+  // genuinely new setting, so it's the one field that lives on the new
+  // widgets.settings model.
   const wth_data = settingsState.getWeatherConfig();
+  const { units } = resolveWidgetSettings(WEATHER_DESCRIPTOR, settingsState.getWidgets());
 
   if (!wth_data.location) {
     _container.querySelectorAll(".wth_l").forEach((el) => { el.style.display = "none"; });
@@ -79,14 +107,14 @@ async function _renderWeather() {
   const cachedData = storage.get("cachedWeatherData");
 
   if (lastUpdate !== null && Date.now() / 1000 - lastUpdate <= 600 && cachedData) {
-    _updateDOM(cachedData);
+    _updateDOM(cachedData, units);
   } else {
     try {
       const resp = await fetch(`https://wttr.in/${encodeURIComponent(wth_data.location)}?format=j1`);
       const data = await resp.json();
       storage.set("cachedWeatherData", data);
       storage.set("cachedWeatherUpdate", Math.floor(Date.now() / 1000));
-      _updateDOM(data);
+      _updateDOM(data, units);
     } catch (e) {
       console.error("Weather fetch failed", e);
     }
