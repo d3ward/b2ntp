@@ -7,7 +7,7 @@ import { storage } from "./components/localStorage";
 import { settingsState, DEFAULTS } from "./settings/state";
 import { initBackgroundSettings } from "./blank/background/settings";
 import { initWeatherSettings } from "./blank/weather/settings";
-import { initWidgetSettings } from "./settings/widgetSettings";
+import { initWidgetSettings, initWidgetDetailSettings } from "./settings/widgetSettings";
 import { getBookmarks } from "./blank/bookmarks";
 import { BackgroundStore } from "./blank/BackgroundStore";
 import { WIDGETS } from "./widgets/registry";
@@ -344,6 +344,11 @@ function onReady() {
   wireDialogOpeners();
   initWidgetTabs();
   initWidgetSettings();
+  initWidgetDetailSettings("wdg-settings-weather", "weather");
+  initWidgetDetailSettings("wdg-settings-tabs", "tabs");
+  initWidgetDetailSettings("wdg-settings-clock", "clock");
+  initWidgetDetailSettings("wdg-settings-qnote", "qnote");
+  initWidgetDetailSettings("wdg-settings-search", "search");
   initWeatherSettings({ ntoast });
   initBackgroundSettings({
     ntp_bdy,

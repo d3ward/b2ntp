@@ -42,7 +42,7 @@ vi.mock('./state.js', () => ({
 }))
 
 const { settingsState } = await import('./state.js')
-const { initWidgetSettings } = await import('./widgetSettings.js')
+const { initWidgetSettings, initWidgetDetailSettings } = await import('./widgetSettings.js')
 
 function ids(listEl) {
   return [...listEl.querySelectorAll(':scope > .wdg-order-item')].map((el) => el.dataset.id)
@@ -142,52 +142,6 @@ describe('initWidgetSettings — toggle writes visibility only', () => {
   })
 })
 
-describe('initWidgetSettings — gear-triggered settings row', () => {
-  it('has no settings row until the gear is clicked', () => {
-    initWidgetSettings()
-    expect(document.querySelector('#wdg-order-right .wdg-settings-row')).toBeNull()
-  })
-
-  it('opens the settings row on gear click, with the resolved value', () => {
-    _mockConfig.settings.weather = { units: 'F' }
-    initWidgetSettings()
-    document.querySelector('[data-id="weather"] .wdg-gear-btn').click()
-    const select = document.querySelector('#wdg-order-right .wdg-settings-row select')
-    expect(select).not.toBeNull()
-    expect(select.value).toBe('F')
-  })
-
-  it('closes it again on a second click', () => {
-    initWidgetSettings()
-    const gear = document.querySelector('[data-id="weather"] .wdg-gear-btn')
-    gear.click()
-    document.querySelector('[data-id="weather"] .wdg-gear-btn').click()
-    expect(document.querySelector('#wdg-order-right .wdg-settings-row')).toBeNull()
-  })
-
-  it('gives a widget with an empty schema no gear button', () => {
-    initWidgetSettings()
-    expect(document.querySelector('[data-id="tabs"] .wdg-gear-btn')).toBeNull()
-  })
-
-  it('does not offer settings for a disabled widget even with a schema', () => {
-    _mockConfig.settings.weather = { enabled: false }
-    initWidgetSettings()
-    expect(document.querySelector('[data-id="weather"] .wdg-gear-btn')).toBeNull()
-  })
-
-  it('writing a setting re-fetches config fresh rather than using a stale snapshot', () => {
-    initWidgetSettings()
-    document.querySelector('[data-id="weather"] .wdg-gear-btn').click()
-    const select = document.querySelector('#wdg-order-right .wdg-settings-row select')
-    select.value = 'F'
-    select.dispatchEvent(new Event('change'))
-    expect(settingsState.setWidgets).toHaveBeenLastCalledWith(
-      expect.objectContaining({ settings: { weather: { units: 'F' } } })
-    )
-  })
-})
-
 describe('initWidgetSettings — drag reorder / cross-region move', () => {
   it('reorders within a region and persists via onEnd', () => {
     _mockConfig.layout.right = ['weather', 'qnote']
@@ -236,19 +190,44 @@ describe('initWidgetSettings — drag reorder / cross-region move', () => {
     )
   })
 
-  it('keeps the settings row attached to its widget after a reorder', () => {
-    _mockConfig.layout.right = ['weather', 'qnote']
-    initWidgetSettings()
-    document.querySelector('[data-id="weather"] .wdg-gear-btn').click()
+})
 
-    const rightList = document.getElementById('wdg-order-right')
-    const qnoteItem = rightList.querySelector('[data-id="qnote"]')
-    const weatherItem = rightList.querySelector('[data-id="weather"]')
-    rightList.insertBefore(qnoteItem, weatherItem)
-    _sortableInstances.get(rightList).options.onEnd()
+describe('initWidgetDetailSettings', () => {
+  beforeEach(() => {
+    document.body.innerHTML += '<div id="wdg-settings-weather"></div><div id="wdg-settings-tabs"></div>'
+  })
 
-    const items = [...document.getElementById('wdg-order-right').children]
-    const weatherIndex = items.findIndex((el) => el.dataset.id === 'weather')
-    expect(items[weatherIndex + 1]?.classList.contains('wdg-settings-row')).toBe(true)
+  it('renders the widget schema form with the resolved value', () => {
+    _mockConfig.settings.weather = { units: 'F' }
+    initWidgetDetailSettings('wdg-settings-weather', 'weather')
+    const select = document.querySelector('#wdg-settings-weather select')
+    expect(select).not.toBeNull()
+    expect(select.value).toBe('F')
+  })
+
+  it('writes a change via setWidgets', () => {
+    initWidgetDetailSettings('wdg-settings-weather', 'weather')
+    const select = document.querySelector('#wdg-settings-weather select')
+    select.value = 'F'
+    select.dispatchEvent(new Event('change'))
+    expect(settingsState.setWidgets).toHaveBeenCalledWith(
+      expect.objectContaining({ settings: { weather: { units: 'F' } } })
+    )
+  })
+
+  it('shows an empty-state message for a widget with no schema', () => {
+    initWidgetDetailSettings('wdg-settings-tabs', 'tabs')
+    const host = document.getElementById('wdg-settings-tabs')
+    expect(host.querySelector('select, input')).toBeNull()
+    expect(host.textContent).toMatch(/no settings/i)
+  })
+
+  it('does nothing for an unknown widget id', () => {
+    expect(() => initWidgetDetailSettings('wdg-settings-weather', 'nope')).not.toThrow()
+    expect(document.getElementById('wdg-settings-weather').innerHTML).toBe('')
+  })
+
+  it('does nothing when the container is missing', () => {
+    expect(() => initWidgetDetailSettings('does-not-exist', 'weather')).not.toThrow()
   })
 })

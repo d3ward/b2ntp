@@ -5,12 +5,8 @@ import { resolveWidgetSettings, setWidgetSettingOverride } from '../widgets/reso
 import { renderSettingsForm } from '../widgets/schemaForm.js'
 
 const DRAG_HANDLE_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="5" r="1.5"/><circle cx="15" cy="5" r="1.5"/><circle cx="9" cy="12" r="1.5"/><circle cx="15" cy="12" r="1.5"/><circle cx="9" cy="19" r="1.5"/><circle cx="15" cy="19" r="1.5"/></svg>`
-const GEAR_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065z"/><path d="M9 12a3 3 0 1 0 6 0a3 3 0 0 0 -6 0"/></svg>`
 
 export function initWidgetSettings() {
-  // Widgets whose settings row is currently expanded via the gear button.
-  const openSettings = new Set()
-
   const leftListEl = document.getElementById('wdg-order-left')
   const rightListEl = document.getElementById('wdg-order-right')
   const mainHeaderListEl = document.getElementById('wdg-order-main-header')
@@ -32,9 +28,11 @@ export function initWidgetSettings() {
     render()
   }
 
-  // Builds one widget row (and its settings row, if expanded) and appends
-  // both to listEl. CORE widgets (search, bookmarks) get no toggle and no
-  // drag handle -- spec.md §6: not removable, not movable out of `main`.
+  // Builds one widget row and appends it to listEl. CORE widgets (search,
+  // bookmarks) get no toggle and no drag handle -- spec.md §6: not
+  // removable, not movable out of `main`. Per-widget settings live in each
+  // widget's own settings tab now (initWidgetDetailSettings below), not
+  // inline here.
   function appendItem(listEl, id, { draggable }) {
     const descriptor = WIDGETS[id]
     if (!descriptor) return
@@ -69,24 +67,6 @@ export function initWidgetSettings() {
 
     item.append(handle, icon, name)
 
-    // No gear for a disabled widget -- its settings aren't reachable until
-    // it's re-enabled, so there's nothing for the gear to open.
-    const hasSchema = Object.keys(descriptor.settings || {}).length > 0
-    if (hasSchema && active) {
-      const gear = document.createElement('button')
-      gear.type = 'button'
-      gear.className = 'wdg-gear-btn'
-      gear.innerHTML = GEAR_SVG
-      gear.setAttribute('aria-label', `${descriptor.label} settings`)
-      gear.setAttribute('aria-expanded', String(openSettings.has(id)))
-      gear.addEventListener('click', () => {
-        if (openSettings.has(id)) openSettings.delete(id)
-        else openSettings.add(id)
-        render()
-      })
-      item.appendChild(gear)
-    }
-
     if (!isCore) {
       const toggle = document.createElement('input')
       toggle.type = 'checkbox'
@@ -98,16 +78,6 @@ export function initWidgetSettings() {
     }
 
     listEl.appendChild(item)
-
-    if (hasSchema && active && openSettings.has(id)) {
-      const row = document.createElement('li')
-      row.className = 'wdg-settings-row'
-      const form = renderSettingsForm(descriptor.settings, resolved, (key, value) => {
-        settingsState.setWidgets(setWidgetSettingOverride(descriptor, getCfg(), key, value))
-      })
-      row.appendChild(form)
-      listEl.appendChild(row)
-    }
   }
 
   function renderRail(listEl, region) {
@@ -130,9 +100,6 @@ export function initWidgetSettings() {
     renderMain()
   }
 
-  // Settings rows are plain <li> siblings with no drag handle, so they never
-  // initiate a drag -- but read the order back from `.wdg-order-item` only,
-  // in case SortableJS repositions one as a side effect of a neighbour's drag.
   function readOrder(listEl) {
     return [...listEl.querySelectorAll(':scope > .wdg-order-item')].map((el) => el.dataset.id)
   }
@@ -153,7 +120,6 @@ export function initWidgetSettings() {
   const sortableOptions = {
     group: 'wdg-regions',
     handle: '.wdg-drag-handle',
-    filter: '.wdg-settings-row',
     ghostClass: 'dragging',
     animation: 150,
     onEnd: persistFromDom,
@@ -161,6 +127,38 @@ export function initWidgetSettings() {
   new Sortable(leftListEl, sortableOptions)
   new Sortable(rightListEl, sortableOptions)
   new Sortable(mainBodyListEl, sortableOptions)
+
+  render()
+}
+
+// A generic settings panel for one widget's own declarative schema (§5),
+// used by each widget's dedicated settings tab/page instead of the Layout
+// arrangement list (which only handles placement + visibility). Works for
+// any widget id, including ones outside the Widgets page entirely -- e.g.
+// `search`'s panel lives on the Search settings page, next to the rest of
+// the search bar's settings.
+export function initWidgetDetailSettings(containerId, widgetId) {
+  const containerEl = document.getElementById(containerId)
+  const descriptor = WIDGETS[widgetId]
+  if (!containerEl || !descriptor) return
+
+  const schema = descriptor.settings || {}
+
+  function render() {
+    containerEl.innerHTML = ''
+    if (Object.keys(schema).length === 0) {
+      const empty = document.createElement('p')
+      empty.className = 'schema-field-hint'
+      empty.textContent = 'This widget has no settings yet.'
+      containerEl.appendChild(empty)
+      return
+    }
+    const resolved = resolveWidgetSettings(descriptor, settingsState.getWidgets())
+    const form = renderSettingsForm(schema, resolved, (key, value) => {
+      settingsState.setWidgets(setWidgetSettingOverride(descriptor, settingsState.getWidgets(), key, value))
+    })
+    containerEl.appendChild(form)
+  }
 
   render()
 }

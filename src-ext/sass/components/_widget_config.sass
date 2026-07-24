@@ -83,23 +83,6 @@
     .wdg-item-name
         flex: 1
 
-    .wdg-gear-btn
-        display: flex
-        align-items: center
-        justify-content: center
-        flex-shrink: 0
-        background: none
-        border: none
-        padding: .15rem
-        cursor: pointer
-        color: var(--txt)
-        opacity: .6
-        border-radius: var(--radius)
-
-        &:hover
-            opacity: 1
-            background: var(--hover)
-
     .wdg-toggle
         margin-left: auto
         flex-shrink: 0
@@ -109,9 +92,11 @@
         width: 14px
         height: 14px
 
-.wdg-settings-row
-    padding: .3rem .5rem .6rem 1.8rem
-    cursor: default
+// Host for a widget's own generic settings form (schemaForm.js), on that
+// widget's dedicated settings tab/page -- see initWidgetDetailSettings in
+// settings/widgetSettings.js.
+.schema-form-host
+    margin: .5rem 0
 
 .schema-form
     display: flex

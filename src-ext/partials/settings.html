@@ -596,6 +596,9 @@
         <nav class="wdg-tab-bar tabs tabs-border">
           <button class="wdg-tab tab tab-active" data-tab="wdg-panel-layout">Layout</button>
           <button class="wdg-tab tab" data-tab="wdg-panel-weather">Weather</button>
+          <button class="wdg-tab tab" data-tab="wdg-panel-tabs">Tabs</button>
+          <button class="wdg-tab tab" data-tab="wdg-panel-clock">Clock</button>
+          <button class="wdg-tab tab" data-tab="wdg-panel-qnote">Quick Note</button>
         </nav>
 
         <div class="wdg-tab-panel" id="wdg-panel-layout">
@@ -732,6 +735,7 @@
                 </div>
               </div>
             </div>
+            <div id="wdg-settings-weather" class="schema-form-host"></div>
             <h4>
               <label>Weather Colors</label>
               <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg">
@@ -761,6 +765,27 @@
               <div class="stt_clfrt" id="stt_cl_3"></div>
               <div class="stt_clfrt" id="stt_cld_3"></div>
             </div>
+          </div>
+        </div>
+
+        <div class="wdg-tab-panel" id="wdg-panel-tabs" hidden>
+          <div class="row flex-column flex-sb">
+            <h4><label>Tabs Configuration</label></h4>
+            <div id="wdg-settings-tabs" class="schema-form-host"></div>
+          </div>
+        </div>
+
+        <div class="wdg-tab-panel" id="wdg-panel-clock" hidden>
+          <div class="row flex-column flex-sb">
+            <h4><label>Clock Configuration</label></h4>
+            <div id="wdg-settings-clock" class="schema-form-host"></div>
+          </div>
+        </div>
+
+        <div class="wdg-tab-panel" id="wdg-panel-qnote" hidden>
+          <div class="row flex-column flex-sb">
+            <h4><label>Quick Note Configuration</label></h4>
+            <div id="wdg-settings-qnote" class="schema-form-host"></div>
           </div>
         </div>
       </section>
@@ -873,6 +898,7 @@
               </div>
             </details>
           </div>
+          <div id="wdg-settings-search" class="schema-form-host"></div>
           <h4>
             <label> Search Bar Colors</label>
             <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg">
