@@ -75,3 +75,31 @@
   overflow: visible;
   background: transparent;
 }
+
+/*
+ * Dialog content margin reset.
+ *
+ * There is no Tailwind preflight import here (css/blank.css explains why --
+ * b2ntp uses its own hand-rolled sass/base/_reset.sass instead), so browser
+ * default heading/paragraph/list margins are still live everywhere. Most of
+ * the app never notices, because its own component Sass sets margins
+ * explicitly wherever it matters -- but a dialog title (<h3>) sits directly
+ * in a flex header row, where a default UA margin pushes it out of line with
+ * the close button, and the changelog dialog's body is raw marked() output
+ * (CHANGELOG.md, rendered at build time -- config/vite.plugins.js) with
+ * nowhere to attach a class to zero its own margins.
+ */
+.modal-box * {
+  margin: 0;
+}
+
+/*
+ * The changelog dialog's body is that same raw marked() output -- give its
+ * headings the weight/size the rest of the app gets from component-specific
+ * Sass, since generated markdown HTML has no class to hang styling off.
+ */
+#dlg_changelog :is(h1, h2, h3, h4, h5, h6) {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: .5rem;
+}
