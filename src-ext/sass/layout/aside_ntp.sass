@@ -1,8 +1,11 @@
 // Settings panel navigation sidebar
 // The list itself is a DaisyUI `menu`; what stays bespoke here is only the
-// collapse/expand behaviour (4rem <-> 13.5rem) and the NTP colour slots
-// --c21..--c25, which this nav shares with the NTP sidebar widget and only
-// consumes -- it never redefines them.
+// collapse/expand behaviour (4rem <-> 13.5rem). Colours are the ordinary
+// DaisyUI-bridged base tokens (--bg2/--bg3/--txt/--primary/--txt-on-p), not
+// the --c* NTP widget-chrome layer -- this nav used to share --c21..--c25
+// with the NTP sidebar widget, which meant editing widget-card colours on
+// the options page could silently reskin this too. Decoupled (spec.md §8,
+// ticket 06): --c* is NTP widget chrome only now.
 //
 // The curved-cutout active-item treatment that used to live here (:before /
 // :after box-shadow pseudo-elements) was dropped deliberately at the
@@ -12,7 +15,7 @@
 	left: 0
 	top: 0
 	width: 4rem
-	background: var(--c25)
+	background: var(--bg2)
 	padding: 3rem 0 .5rem .5rem
 	border-radius: var(--radius-b)
 	overflow: hidden
@@ -37,7 +40,7 @@
 			padding: .4rem
 			border-top-left-radius: var(--radius-b)
 			border-bottom-left-radius: var(--radius-b)
-			color: var(--c21)
+			color: var(--txt)
 			.a-icon
 				min-width: 2rem
 				height: 2rem
@@ -49,18 +52,17 @@
 				display: flex
 				align-items: center
 		// DaisyUI's menu ships its own hover/active colours. Point them at the
-		// slots this nav already consumed so it stays in step with the NTP
-		// sidebar. No !important needed -- this Sass is unlayered and outranks
-		// DaisyUI's layered rules (ticket 13).
+		// bridged base tokens instead. No !important needed -- this Sass is
+		// unlayered and outranks DaisyUI's layered rules (ticket 13).
 		a:hover
-			background: var(--c22)
-			color: var(--c21)
+			background: var(--bg3)
+			color: var(--txt)
 		a.menu-active
-			background: var(--c23)
-			color: var(--c24)
+			background: var(--primary)
+			color: var(--txt-on-p)
 		// DaisyUI's menu suppresses the outline, so the reset's focus-visible
 		// rule never shows. Restore a visible ring for keyboard users.
 		a:focus-visible
-			outline: 2px solid var(--c23)
+			outline: 2px solid var(--primary)
 			outline-offset: -2px
 // NTP persistent widget sidebar — 1/5 of workspace width, mirrors right sidebar

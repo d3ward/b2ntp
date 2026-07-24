@@ -1,0 +1,45 @@
+/*
+ * Widget chrome: region backgrounds + card surface/border/text, driven by
+ * the --c* colour layer (sass/theme/ntp.sass). Independent of DaisyUI --
+ * see _bridge.css's note that --c0..--c26 (and --cMain/--cCard/--cBorder)
+ * are deliberately not part of that bridge.
+ *
+ * Native CSS on purpose: Sass is being retired repo-wide (spec.md §8).
+ * Imported by css/blank.css only -- this is NTP-only chrome, not shared
+ * with the options page.
+ */
+
+/* ---- Region backgrounds ---- */
+
+#tabs {
+  background: var(--c25);
+  border-radius: var(--radius);
+}
+
+#right-sidebar {
+  background: var(--c26);
+  border-radius: var(--radius);
+}
+
+main {
+  background: var(--cMain);
+}
+
+/* ---- Card chrome: one global set, no per-widget override ---- */
+
+.widget-panel {
+  background: var(--cCard);
+  border: 1px solid var(--cBorder);
+  border-radius: var(--radius);
+  color: var(--c21);
+  margin: .3rem .25rem;
+  overflow: hidden;
+}
+
+/* The sticky main.header card needs an opaque backdrop so scrolling body
+   content doesn't bleed through under it -- already opaque via --cCard
+   above; stated explicitly since it's the one card chrome rule the spec
+   calls out by name. */
+.widget-panel.main-header {
+  background: var(--cCard);
+}
