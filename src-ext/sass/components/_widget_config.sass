@@ -1,21 +1,15 @@
 
 /* --------- Widget Settings UI (Options Page) --------- */
 
-.widget-sidebar-columns
+.widget-region-columns
     display: grid
-    grid-template-columns: 1fr 1fr
+    grid-template-columns: 1fr 1fr 1fr
     gap: 1rem
 
     h5
         font-size: .85rem
         font-weight: 600
         margin-bottom: .4rem
-
-.widget-sidebar-col > div
-    display: flex
-    align-items: center
-    justify-content: space-between
-    margin-bottom: .3rem
 
 .wdg-order-list
     list-style: none
@@ -33,6 +27,13 @@
         font-size: .78rem
         opacity: .4
 
+// The main-region header slot (search) is visually pinned above the body
+// list within the same column -- it is a fixed single-widget slot, not
+// draggable, and never a drop target (spec.md §6).
+.wdg-main-header
+    margin-bottom: .5rem
+    border-style: solid
+
 .wdg-order-item
     display: flex
     align-items: center
@@ -46,12 +47,14 @@
     &:hover
         background: var(--hover)
 
-    &.wdg-active
+    &.wdg-draggable
         cursor: grab
 
     &.wdg-inactive
         opacity: .5
 
+    // SortableJS's ghostClass (see widgetSettings.js) -- the placeholder left
+    // in the source list while the real element is dragged.
     &.dragging
         opacity: .35
         cursor: grabbing
@@ -63,8 +66,9 @@
         align-items: center
         flex-shrink: 0
 
-    &.wdg-inactive .wdg-drag-handle
-        visibility: hidden
+    .wdg-drag-handle-spacer
+        width: 14px
+        flex-shrink: 0
 
     .wdg-item-icon
         display: flex
@@ -78,6 +82,23 @@
 
     .wdg-item-name
         flex: 1
+
+    .wdg-gear-btn
+        display: flex
+        align-items: center
+        justify-content: center
+        flex-shrink: 0
+        background: none
+        border: none
+        padding: .15rem
+        cursor: pointer
+        color: var(--txt)
+        opacity: .6
+        border-radius: var(--radius)
+
+        &:hover
+            opacity: 1
+            background: var(--hover)
 
     .wdg-toggle
         margin-left: auto

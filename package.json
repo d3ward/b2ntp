@@ -53,6 +53,7 @@
     "embla-carousel-autoplay": "^8.6.0",
     "markdown-it": "^14.1.0",
     "marked": "^16.0.0",
+    "sortablejs": "^1.15.7",
     "vanilla-picker": "^2.12.3"
   }
 }
