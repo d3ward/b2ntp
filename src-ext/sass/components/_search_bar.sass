@@ -1,15 +1,14 @@
 
 /* ---------- Toolbar and Search Bar ---------- */
+// Stickiness lives on .widget-panel.main-header (base/_ntp.sass) now that
+// search is its own widget -- .tool_search is just the search widget's own
+// inner layout.
 .tool_search
     display: flex
     flex-direction: column
     align-items: center
     gap: .8rem
     width: 100%
-    position: sticky
-    top: .5rem
-    z-index: 2
-    background: var(--bg-c)
 .toolbar,
 #sb_input
     border: none

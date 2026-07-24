@@ -1,16 +1,17 @@
 import { describe, it, expect } from 'vitest'
-import { WIDGETS } from './registry'
+import { WIDGETS, CORE_WIDGET_IDS } from './registry'
 
 const REQUIRED_FIELDS = ['id', 'label', 'icon', 'placement', 'settings', 'init']
 const VALID_REGIONS = ['left', 'main', 'right']
+const ALL_IDS = ['tabs', 'weather', 'clock', 'qnote', 'search', 'bookmarks']
 
 describe('WIDGETS registry shape', () => {
-  it('exports an object with all four widget IDs', () => {
-    expect(Object.keys(WIDGETS)).toEqual(expect.arrayContaining(['tabs', 'weather', 'clock', 'qnote']))
-    expect(Object.keys(WIDGETS)).toHaveLength(4)
+  it('exports an object with every widget id', () => {
+    expect(Object.keys(WIDGETS)).toEqual(expect.arrayContaining(ALL_IDS))
+    expect(Object.keys(WIDGETS)).toHaveLength(ALL_IDS.length)
   })
 
-  for (const id of ['tabs', 'weather', 'clock', 'qnote']) {
+  for (const id of ALL_IDS) {
     describe(`${id} descriptor`, () => {
       it('has all required fields', () => {
         const entry = WIDGETS[id]
@@ -70,6 +71,12 @@ describe('WIDGETS registry placement assignments', () => {
     expect(WIDGETS.qnote.placement.region).toBe('right')
   })
 
+  it('search and bookmarks are placed in the main region, search first', () => {
+    expect(WIDGETS.search.placement.region).toBe('main')
+    expect(WIDGETS.bookmarks.placement.region).toBe('main')
+    expect(WIDGETS.search.placement.order).toBeLessThan(WIDGETS.bookmarks.placement.order)
+  })
+
   it('orders are unique within each region', () => {
     const byRegion = {}
     for (const descriptor of Object.values(WIDGETS)) {
@@ -79,6 +86,18 @@ describe('WIDGETS registry placement assignments', () => {
     }
     for (const orders of Object.values(byRegion)) {
       expect(new Set(orders).size).toBe(orders.length)
+    }
+  })
+})
+
+describe('CORE_WIDGET_IDS', () => {
+  it('marks exactly search and bookmarks as CORE', () => {
+    expect(CORE_WIDGET_IDS).toEqual(new Set(['search', 'bookmarks']))
+  })
+
+  it('every CORE id names a real registry widget', () => {
+    for (const id of CORE_WIDGET_IDS) {
+      expect(WIDGETS).toHaveProperty(id)
     }
   })
 })

@@ -12,7 +12,10 @@ vi.mock('../widgets/registry.js', () => ({
       settings: { units: { type: 'select', default: 'C', options: [['C', 'C'], ['F', 'F']] } },
     },
     qnote: { id: 'qnote', label: 'Quick Note', icon: '<svg></svg>', settings: {} },
+    search: { id: 'search', label: 'Search', icon: '<svg></svg>', settings: {} },
+    bookmarks: { id: 'bookmarks', label: 'Bookmarks', icon: '<svg></svg>', settings: {} },
   },
+  CORE_WIDGET_IDS: new Set(['search', 'bookmarks']),
 }))
 
 vi.mock('./state.js', () => ({
@@ -83,6 +86,21 @@ describe('initWidgetSettings — schema form rendering', () => {
       layout: { left: ['tabs'], right: ['weather'] },
       settings: {},
     })
+  })
+})
+
+describe('initWidgetSettings — CORE widgets', () => {
+  it('never lists search or bookmarks in the left/right arrangement lists', () => {
+    initWidgetSettings()
+    expect(document.querySelector('[data-id="search"]')).toBeNull()
+    expect(document.querySelector('[data-id="bookmarks"]')).toBeNull()
+  })
+
+  it('still lists every non-CORE widget', () => {
+    initWidgetSettings()
+    expect(document.querySelector('#wdg-order-left [data-id="tabs"]')).not.toBeNull()
+    expect(document.querySelector('#wdg-order-right [data-id="weather"]')).not.toBeNull()
+    expect(document.querySelector('#wdg-order-right [data-id="qnote"]')).not.toBeNull()
   })
 })
 

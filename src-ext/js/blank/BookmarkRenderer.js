@@ -25,6 +25,10 @@ function createBookmarkLinkEl(item, isFirst, highlightFirst) {
 
 function createTabLinkEl(item, isFirst, highlightFirst) {
   const link = document.createElement('a')
+  // Prefixed so it never collides with a real bookmark id, and so it's
+  // always present for aria-activedescendant even though createBookmarkLinkEl
+  // uses the bare id.
+  link.id = `tab-${item.id}`
   link.href = item.url || '#'
   link.dataset.tabId = item.id
   link.className = 'tab-result'
@@ -50,11 +54,11 @@ function createTabLinkEl(item, isFirst, highlightFirst) {
 
 export const BookmarkRenderer = {
   /**
+   * @param {HTMLElement} container
    * @param {Array<{title:string, id:string, items:Array<{title:string,url:string,id:string,favIconUrl?:string}>}>} sections
    * @param {boolean} highlightFirst — place `.selected` on the first item
    */
-  render(sections, highlightFirst = false) {
-    const container = document.getElementById('bookmarks')
+  render(container, sections, highlightFirst = false) {
     if (!container) return
 
     const fragment = document.createDocumentFragment()

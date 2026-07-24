@@ -2,8 +2,31 @@ import { initTabs } from '../blank/tabs.js'
 import { initWeather, settingsSchema as weatherSettingsSchema } from '../blank/weather/widget.js'
 import { initClock, settingsSchema as clockSettingsSchema } from '../blank/clock.js'
 import { initQuickNote } from '../blank/qnote.js'
+import { initSearch } from '../blank/search.js'
+import { initBookmarks } from '../blank/bookmarks.js'
+
+// Not removable, not movable out of `main` (spec.md §4/§6). Enforcement lives
+// in the arrangement UX (ticket 07/08); this set is the shared source of
+// truth it and any other host code checks against.
+export const CORE_WIDGET_IDS = new Set(['search', 'bookmarks'])
 
 export const WIDGETS = {
+  search: {
+    id: 'search',
+    label: 'Search',
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0"/><path d="M21 21l-6 -6"/></svg>`,
+    placement: { region: 'main', order: 0 },
+    settings: {},
+    init: initSearch,
+  },
+  bookmarks: {
+    id: 'bookmarks',
+    label: 'Bookmarks',
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 4h6a2 2 0 0 1 2 2v14l-5 -3l-5 3v-14a2 2 0 0 1 2 -2"/></svg>`,
+    placement: { region: 'main', order: 1 },
+    settings: {},
+    init: initBookmarks,
+  },
   tabs: {
     id: 'tabs',
     label: 'Tabs',

@@ -1,4 +1,4 @@
-import { WIDGETS } from '../widgets/registry.js'
+import { WIDGETS, CORE_WIDGET_IDS } from '../widgets/registry.js'
 import { settingsState } from './state.js'
 import { resolveWidgetSettings, setWidgetSettingOverride } from '../widgets/resolver.js'
 import { renderSettingsForm } from '../widgets/schemaForm.js'
@@ -38,7 +38,9 @@ export function initWidgetSettings() {
 
   function renderColumn(listEl, side) {
     const cfg = getCfg()
-    const allIds = Object.keys(WIDGETS)
+    // CORE widgets (search, bookmarks) live in main and aren't movable into a
+    // rail -- this list is left/right arrangement only (spec.md §4/§6).
+    const allIds = Object.keys(WIDGETS).filter((id) => !CORE_WIDGET_IDS.has(id))
     const activeIds = (cfg.layout[side] || []).filter((id) => isActive(id, side, cfg))
     const inactiveIds = allIds.filter((id) => !activeIds.includes(id))
 

@@ -6,12 +6,11 @@ import { settingsState, DEFAULTS } from "./settings/state";
 import "../sass/blank.sass";
 import "../css/blank.css";
 
-import { initBookmarks } from "./blank/bookmarks";
 import { applyBackground } from "./blank/background/apply";
 import { BackgroundStore } from "./blank/BackgroundStore";
 import { getTabs } from "./blank/tabs";
 import { WIDGETS } from "./widgets/registry";
-import { mountRegion } from "./widgets/panelHost";
+import { mountRegion, mountMain } from "./widgets/panelHost";
 import { ensureWidgetsSeeded } from "./widgets/resolver";
 
 await storage.init();
@@ -124,8 +123,6 @@ document.addEventListener("keydown", (event) => {
   }
 });
 
-await initBookmarks({ ntoast, getTabs });
-
 function onDOMReady() {
   aos();
 
@@ -141,21 +138,23 @@ function onDOMReady() {
     };
   }
 
-  // Mount rails
+  // Mount rails + main (search/bookmarks)
   const ntpSidebar = document.getElementById("tabs");
   const rightSidebar = document.getElementById("right-sidebar");
+  const mainWidgets = document.getElementById("main-widgets");
 
-  function renderRails() {
+  function renderWidgets() {
     const widgetsCfg = settingsState.getWidgets();
     mountRegion(ntpSidebar, widgetsCfg.layout.left, WIDGETS, { ntoast, getTabs });
     mountRegion(rightSidebar, widgetsCfg.layout.right, WIDGETS, { ntoast });
+    mountMain(mainWidgets, widgetsCfg.layout.main, WIDGETS, { ntoast, getTabs });
   }
 
-  renderRails();
+  renderWidgets();
 
   settingsState.onChange('widgets', () => {
     document.body.classList.remove('clock-widget-active');
-    renderRails();
+    renderWidgets();
   });
 }
 

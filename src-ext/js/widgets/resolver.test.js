@@ -132,6 +132,71 @@ describe('mergeRegistryIntoLayout', () => {
   })
 })
 
+describe('mergeRegistryIntoLayout — main region', () => {
+  function mainDescriptor(id, order) {
+    return makeDescriptor(id, { placement: { region: 'main', order } })
+  }
+
+  it('seeds an empty main from scratch: lowest order becomes header, the rest body', () => {
+    const layout = { left: [], right: [] }
+    const registry = { search: mainDescriptor('search', 0), bookmarks: mainDescriptor('bookmarks', 1) }
+    const result = mergeRegistryIntoLayout(layout, registry)
+    expect(result.main).toEqual({ header: 'search', body: ['bookmarks'] })
+  })
+
+  it('does not add a main key when the registry has no main-region widgets', () => {
+    const layout = { left: [], right: [] }
+    const registry = { tabs: makeDescriptor('tabs') }
+    const result = mergeRegistryIntoLayout(layout, registry)
+    expect(result).not.toHaveProperty('main')
+  })
+
+  it('returns the same reference when main is already fully seeded', () => {
+    const layout = { left: [], right: [], main: { header: 'search', body: ['bookmarks'] } }
+    const registry = { search: mainDescriptor('search', 0), bookmarks: mainDescriptor('bookmarks', 1) }
+    expect(mergeRegistryIntoLayout(layout, registry)).toBe(layout)
+  })
+
+  it('appends a newly-registered main widget to body when a header already exists', () => {
+    const layout = { left: [], right: [], main: { header: 'search', body: [] } }
+    const registry = {
+      search: mainDescriptor('search', 0),
+      bookmarks: mainDescriptor('bookmarks', 1),
+    }
+    const result = mergeRegistryIntoLayout(layout, registry)
+    expect(result.main).toEqual({ header: 'search', body: ['bookmarks'] })
+  })
+
+  it('fills an empty header slot from a missing widget even if body already has entries', () => {
+    const layout = { left: [], right: [], main: { header: null, body: ['bookmarks'] } }
+    const registry = {
+      search: mainDescriptor('search', 0),
+      bookmarks: mainDescriptor('bookmarks', 1),
+    }
+    const result = mergeRegistryIntoLayout(layout, registry)
+    expect(result.main).toEqual({ header: 'search', body: ['bookmarks'] })
+  })
+
+  it('does not mutate the original layout.main', () => {
+    const layout = { left: [], right: [], main: { header: null, body: [] } }
+    const registry = { search: mainDescriptor('search', 0) }
+    mergeRegistryIntoLayout(layout, registry)
+    expect(layout.main).toEqual({ header: null, body: [] })
+  })
+
+  it('merges rail and main widgets independently in the same call', () => {
+    const layout = { left: [], right: [] }
+    const registry = {
+      tabs: makeDescriptor('tabs', { placement: { region: 'left', order: 0 } }),
+      search: mainDescriptor('search', 0),
+      bookmarks: mainDescriptor('bookmarks', 1),
+    }
+    const result = mergeRegistryIntoLayout(layout, registry)
+    expect(result.left).toEqual(['tabs'])
+    expect(result.main).toEqual({ header: 'search', body: ['bookmarks'] })
+  })
+})
+
 describe('ensureWidgetsSeeded', () => {
   it('does not write when every registry widget is already in layout', () => {
     _mockConfig = { layout: { left: ['a'], right: [] }, settings: {} }

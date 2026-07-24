@@ -14,7 +14,7 @@ vi.mock('../settings/state.js', () => ({
 }))
 
 // Import after mock is registered
-const { createWidgetPanel, mountRegion, mountMain } = await import('./panelHost.js')
+const { createWidgetPanel, mountRegion, mountMain, createQueryBus } = await import('./panelHost.js')
 
 function makeMockDescriptor(id = 'test', overrides = {}) {
   return {
@@ -78,6 +78,49 @@ describe('createWidgetPanel — init call', () => {
   })
 })
 
+describe('createQueryBus', () => {
+  it('delivers an emitted payload to a subscribed handler', () => {
+    const bus = createQueryBus()
+    const fn = vi.fn()
+    bus.on('query', fn)
+    bus.emit('query', 'hello')
+    expect(fn).toHaveBeenCalledWith('hello')
+  })
+
+  it('supports multiple handlers for the same event', () => {
+    const bus = createQueryBus()
+    const fn1 = vi.fn()
+    const fn2 = vi.fn()
+    bus.on('nav', fn1)
+    bus.on('nav', fn2)
+    bus.emit('nav', 'down')
+    expect(fn1).toHaveBeenCalledWith('down')
+    expect(fn2).toHaveBeenCalledWith('down')
+  })
+
+  it('does not call handlers for a different event', () => {
+    const bus = createQueryBus()
+    const fn = vi.fn()
+    bus.on('query', fn)
+    bus.emit('activate')
+    expect(fn).not.toHaveBeenCalled()
+  })
+
+  it('emitting with no subscribers does not throw', () => {
+    const bus = createQueryBus()
+    expect(() => bus.emit('selection', null)).not.toThrow()
+  })
+
+  it('unsubscribe stops the handler from firing', () => {
+    const bus = createQueryBus()
+    const fn = vi.fn()
+    const unsubscribe = bus.on('query', fn)
+    unsubscribe()
+    bus.emit('query', 'x')
+    expect(fn).not.toHaveBeenCalled()
+  })
+})
+
 describe('mountRegion', () => {
   it('appends one panel per widget in order', () => {
     const container = document.createElement('div')
@@ -127,6 +170,17 @@ describe('mountRegion', () => {
     expect(container.querySelector('.widget-panel-header')).toBeNull()
     expect(container.querySelector('.widget-chevron')).toBeNull()
   })
+
+  it('gives every widget in the same mount call the same bus instance', () => {
+    const container = document.createElement('div')
+    const a = makeMockDescriptor('a')
+    const b = makeMockDescriptor('b')
+    mountRegion(container, ['a', 'b'], { a, b })
+    const busA = a.init.mock.calls[0][0].bus
+    const busB = b.init.mock.calls[0][0].bus
+    expect(busA).toBeDefined()
+    expect(busA).toBe(busB)
+  })
 })
 
 describe('mountMain', () => {
@@ -143,7 +197,31 @@ describe('mountMain', () => {
     expect(panels[1].dataset.widget).toBe('bookmarks')
   })
 
-  it('tolerates a missing header (stub usage before ticket 05)', () => {
+  it('tags the header panel with main-header, not the body panels', () => {
+    const mainEl = document.createElement('div')
+    const widgetMap = {
+      search: makeMockDescriptor('search'),
+      bookmarks: makeMockDescriptor('bookmarks'),
+    }
+    mountMain(mainEl, { header: 'search', body: ['bookmarks'] }, widgetMap)
+    const searchPanel = mainEl.querySelector('[data-widget="search"]')
+    const bookmarksPanel = mainEl.querySelector('[data-widget="bookmarks"]')
+    expect(searchPanel.classList.contains('main-header')).toBe(true)
+    expect(bookmarksPanel.classList.contains('main-header')).toBe(false)
+  })
+
+  it('gives the header and body widgets the same bus instance', () => {
+    const mainEl = document.createElement('div')
+    const search = makeMockDescriptor('search')
+    const bookmarks = makeMockDescriptor('bookmarks')
+    mountMain(mainEl, { header: 'search', body: ['bookmarks'] }, { search, bookmarks })
+    const searchBus = search.init.mock.calls[0][0].bus
+    const bookmarksBus = bookmarks.init.mock.calls[0][0].bus
+    expect(searchBus).toBeDefined()
+    expect(searchBus).toBe(bookmarksBus)
+  })
+
+  it('tolerates a missing header', () => {
     const mainEl = document.createElement('div')
     mountMain(mainEl, { body: ['bookmarks'] }, { bookmarks: makeMockDescriptor('bookmarks') })
     const panels = mainEl.querySelectorAll('.widget-panel')

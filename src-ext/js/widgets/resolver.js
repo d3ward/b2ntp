@@ -38,20 +38,63 @@ export function setWidgetSettingOverride(descriptor, widgetsConfig, key, value) 
   return { ...widgetsConfig, settings }
 }
 
-export function mergeRegistryIntoLayout(layout, registry) {
-  const known = new Set(Object.values(layout).flat())
-  const missing = Object.values(registry)
-    .filter((descriptor) => !known.has(descriptor.id))
+// Flat regions (left/right, ...): append each missing widget to its own
+// region array, in placement.order.
+function mergeRailsIntoLayout(layout, railDescriptors) {
+  const railRegions = Object.keys(layout).filter((region) => region !== 'main')
+  const known = new Set(railRegions.flatMap((region) => layout[region]))
+  const missing = railDescriptors
+    .filter((d) => !known.has(d.id))
     .sort((a, b) => a.placement.order - b.placement.order)
-  if (missing.length === 0) return layout
+  if (missing.length === 0) return null
 
   const next = {}
-  for (const [region, ids] of Object.entries(layout)) next[region] = [...ids]
+  for (const region of railRegions) next[region] = [...layout[region]]
   for (const descriptor of missing) {
     const region = descriptor.placement.region
     if (!next[region]) next[region] = []
     next[region].push(descriptor.id)
   }
+  return next
+}
+
+// `main` is `{ header: <id|null>, body: [<id>, ...] }`, not a flat array like
+// every other region. The first missing main-region widget (by
+// placement.order) claims the header slot if it's empty; every other one
+// lands in body. In practice that's just search (order 0) and bookmarks
+// (order 1) -- search occupies main.header by default (spec.md §4).
+// Returns null when there's nothing missing to seed -- including when the
+// layout had no `main` key and the registry has no main-region widgets
+// either, so the caller doesn't invent an empty one.
+function mergeMainIntoLayout(layout, mainDescriptors) {
+  const mainLayout = layout.main || { header: null, body: [] }
+  const known = new Set([mainLayout.header, ...(mainLayout.body || [])].filter(Boolean))
+  const missing = mainDescriptors
+    .filter((d) => !known.has(d.id))
+    .sort((a, b) => a.placement.order - b.placement.order)
+  if (missing.length === 0) return null
+
+  let header = mainLayout.header
+  const body = [...(mainLayout.body || [])]
+  for (const descriptor of missing) {
+    if (!header) header = descriptor.id
+    else body.push(descriptor.id)
+  }
+  return { header, body }
+}
+
+export function mergeRegistryIntoLayout(layout, registry) {
+  const descriptors = Object.values(registry)
+  const mainDescriptors = descriptors.filter((d) => d.placement.region === 'main')
+  const railDescriptors = descriptors.filter((d) => d.placement.region !== 'main')
+
+  const mergedRails = mergeRailsIntoLayout(layout, railDescriptors)
+  const mergedMain = mergeMainIntoLayout(layout, mainDescriptors)
+
+  if (mergedRails === null && mergedMain === null) return layout
+
+  const next = mergedRails ?? { ...layout }
+  if (mergedMain !== null) next.main = mergedMain
   return next
 }
 

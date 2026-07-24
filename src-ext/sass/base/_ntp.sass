@@ -86,6 +86,21 @@ aside
 	overflow-y: auto
 	min-height: 0
 
+// main is a flex column with align-items:center, so unlike aside's block-level
+// children, its widget-panels (search, bookmarks) need an explicit full
+// width -- otherwise they'd shrink to content width and center instead of
+// spanning main like the rails' panels do.
+main > .widget-panel
+	width: 100%
+
+// The main.header slot (search, by default) -- panelHost tags its panel with
+// this class (spec.md §4: "the header widget is mounted position: sticky").
+.widget-panel.main-header
+	position: sticky
+	top: .5rem
+	z-index: 2
+	background: var(--bg-c)
+
 .no-animations *,
 .no-animations *::before,
 .no-animations *::after
