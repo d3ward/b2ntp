@@ -57,6 +57,18 @@ describe('createWidgetPanel — DOM structure', () => {
   })
 })
 
+describe('createWidgetPanel — scrolls', () => {
+  it('adds the scrolls class when the descriptor declares scrolls: true', () => {
+    const panel = createWidgetPanel(makeMockDescriptor('tall', { scrolls: true }), {})
+    expect(panel.classList.contains('scrolls')).toBe(true)
+  })
+
+  it('adds no scrolls class when the descriptor omits it', () => {
+    const panel = createWidgetPanel(makeMockDescriptor('flat'), {})
+    expect(panel.classList.contains('scrolls')).toBe(false)
+  })
+})
+
 describe('createWidgetPanel — init call', () => {
   it('calls descriptor.init with { container, ...deps } and no badge', () => {
     const desc = makeMockDescriptor()
@@ -248,5 +260,20 @@ describe('mountMain', () => {
     const panels = mainEl.querySelectorAll('.widget-panel')
     expect(panels).toHaveLength(1)
     expect(panels[0].dataset.widget).toBe('search')
+  })
+
+  describe('mobile-static header', () => {
+    it('stays off by default (mobileSticky defaults true)', () => {
+      const mainEl = document.createElement('div')
+      mountMain(mainEl, { header: 'search', body: [] }, { search: makeMockDescriptor('search') })
+      expect(mainEl.querySelector('[data-widget="search"]').classList.contains('mobile-static')).toBe(false)
+    })
+
+    it('is added when the header widget resolves mobileSticky: false', () => {
+      _mockConfig = { layout: { left: [], right: [] }, settings: { search: { mobileSticky: false } } }
+      const mainEl = document.createElement('div')
+      mountMain(mainEl, { header: 'search', body: [] }, { search: makeMockDescriptor('search') })
+      expect(mainEl.querySelector('[data-widget="search"]').classList.contains('mobile-static')).toBe(true)
+    })
   })
 })

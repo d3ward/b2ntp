@@ -105,6 +105,31 @@ aside
 	top: .5rem
 	z-index: 2
 
+// One breakpoint, 3-col -> 1-col stack (spec.md §7, ticket 09) -- no
+// intermediate 2-column layout. Stack order is main -> left -> right
+// (search + bookmarks lead); main is the middle DOM child (blank.html), so
+// this is `order`, not a markup reshuffle.
+@media (max-width: 48rem)
+	.workspace
+		grid-template-columns: 1fr
+
+	main
+		order: 1
+
+	#tabs
+		order: 2
+
+	#right-sidebar
+		order: 3
+
+	// Rails go static: the sticky + viewport-height cap only make sense
+	// alongside sibling columns. Stacked into one column they'd pin a rail's
+	// widgets over content that should simply flow beneath them instead.
+	aside
+		position: static
+		max-height: none
+		overflow-y: visible
+
 .no-animations *,
 .no-animations *::before,
 .no-animations *::after

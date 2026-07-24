@@ -24,14 +24,21 @@ export function createQueryBus() {
   }
 }
 
-// resolvedSettings isn't consumed here yet -- no widget-level chrome decision
-// depends on it now that collapse is gone -- but the mount shape carries it
-// through so a later ticket (e.g. a `scrolls`-driven chrome choice) doesn't
-// need to re-thread it through every caller.
+// resolvedSettings itself isn't consumed here -- `scrolls` below is a static
+// contract field on the descriptor, not a per-user setting -- but the mount
+// shape carries it through regardless, which is what let mountMain's own
+// mobileSticky check (a resolved setting) slot in later without re-threading
+// anything through every caller.
 export function createWidgetPanel(descriptor, resolvedSettings, deps = {}) {
   const panel = document.createElement('div')
   panel.className = 'widget-panel'
   panel.dataset.widget = descriptor.id
+  // Read by css/widgets.css: a scrolling widget gets its own capped,
+  // internally-scrolling box on desktop, released to flow full-height on
+  // mobile (spec.md §7, ticket 09). A class, not a data-attribute: PurgeCSS's
+  // extractor matches literal tokens in content, and `dataset.scrolls` in
+  // this file never renders the string "data-scrolls" anywhere it can see.
+  if (descriptor.scrolls) panel.classList.add('scrolls')
 
   const body = document.createElement('div')
   body.className = 'widget-body'
@@ -68,7 +75,15 @@ export function mountMain(mainEl, { header, body } = {}, widgetMap, deps = {}) {
 
   if (header) {
     const panel = mountWidgetIfEnabled(mainEl, header, widgetMap, widgetsCfg, mergedDeps)
-    if (panel) panel.classList.add('main-header')
+    if (panel) {
+      panel.classList.add('main-header')
+      // Sticky is a `main` region rule and stays on by default (spec.md §7);
+      // the header widget's own settings.mobileSticky:false is the one way
+      // to opt out of it, on mobile only -- see the media query in
+      // css/widgets.css.
+      const resolved = resolveWidgetSettings(widgetMap[header], widgetsCfg)
+      if (resolved.mobileSticky === false) panel.classList.add('mobile-static')
+    }
   }
   for (const id of body || []) {
     mountWidgetIfEnabled(mainEl, id, widgetMap, widgetsCfg, mergedDeps)
