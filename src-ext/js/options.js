@@ -1,6 +1,5 @@
 import packageJSON from "../../package.json";
 import { toast } from "./components/toast";
-import { pagesRoute } from "./components/pagesRoute";
 import { aos } from "./components/aos";
 import { formatTime } from "./components/utilities";
 import { storage } from "./components/localStorage";
@@ -325,7 +324,6 @@ function initStorageStats() {
 
 function onReady() {
   aos();
-  pagesRoute();
   initializeThemeSettings();
   initBookmarksSettings();
   wireDialogOpeners();

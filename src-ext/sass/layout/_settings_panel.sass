@@ -11,6 +11,20 @@
 		width: 100%
 		padding: .5rem
 
+	// Which page shows is pure CSS, keyed off the sr-only radio each nav
+	// label wraps (aside_ntp.sass) -- no click handler, no .page-active
+	// class to toggle (replaces pagesRoute.js).
+	.pages > section
+		display: none
+	&:has(#nav-theme:checked) #p-theme,
+	&:has(#nav-bookmarks:checked) #p-bookmarks,
+	&:has(#nav-background:checked) #p-background,
+	&:has(#nav-widgets:checked) #p-widgets,
+	&:has(#nav-search:checked) #p-search,
+	&:has(#nav-backup:checked) #p-backup,
+	&:has(#nav-about:checked) #p-about
+		display: flex
+
 	section>div
 		width: 100%
 

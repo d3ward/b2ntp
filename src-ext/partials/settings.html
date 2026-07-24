@@ -2,7 +2,8 @@
   <aside class="active">
     <ul class="menu">
       <li>
-        <a topage="#p-theme" class="menu-active" tabindex="0" role="button">
+        <label>
+          <input type="radio" name="settings-nav" id="nav-theme" class="sr-only" checked="checked" />
           <span class="a-icon">
             <svg xmlns="http://www.w3.org/2000/svg"
               width="24"
@@ -20,10 +21,11 @@
             </svg>
           </span>
           <span class="a-title">Theme</span>
-        </a>
+        </label>
       </li>
       <li>
-        <a topage="#p-bookmarks" tabindex="0" role="button">
+        <label>
+          <input type="radio" name="settings-nav" id="nav-bookmarks" class="sr-only" />
           <span class="a-icon">
             <svg xmlns="http://www.w3.org/2000/svg"
               width="24"
@@ -42,11 +44,12 @@
             </svg>
           </span>
           <span class="a-title">Bookmarks</span>
-        </a>
+        </label>
       </li>
 
       <li>
-        <a topage="#p-background" tabindex="0" role="button">
+        <label>
+          <input type="radio" name="settings-nav" id="nav-background" class="sr-only" />
           <span class="a-icon">
             <svg xmlns="http://www.w3.org/2000/svg"
               width="24"
@@ -67,10 +70,11 @@
             </svg>
           </span>
           <span class="a-title"> Background </span>
-        </a>
+        </label>
       </li>
       <li>
-        <a topage="#p-widgets" tabindex="0" role="button">
+        <label>
+          <input type="radio" name="settings-nav" id="nav-widgets" class="sr-only" />
           <span class="a-icon">
             <svg xmlns="http://www.w3.org/2000/svg"
               width="24"
@@ -94,10 +98,11 @@
             </svg>
           </span>
           <span class="a-title">Widgets</span>
-        </a>
+        </label>
       </li>
       <li>
-        <a topage="#p-search" tabindex="0" role="button">
+        <label>
+          <input type="radio" name="settings-nav" id="nav-search" class="sr-only" />
           <span class="a-icon">
             <svg xmlns="http://www.w3.org/2000/svg"
               width="24"
@@ -116,10 +121,11 @@
           </span>
 
           <span class="a-title">Search &amp; Toolbar</span>
-        </a>
+        </label>
       </li>
       <li>
-        <a topage="#p-backup" tabindex="0" role="button">
+        <label>
+          <input type="radio" name="settings-nav" id="nav-backup" class="sr-only" />
           <span class="a-icon">
             <svg xmlns="http://www.w3.org/2000/svg"
               width="24"
@@ -139,10 +145,11 @@
           </span>
 
           <span class="a-title">Backup</span>
-        </a>
+        </label>
       </li>
       <li>
-        <a topage="#p-about" tabindex="0" role="button">
+        <label>
+          <input type="radio" name="settings-nav" id="nav-about" class="sr-only" />
           <span class="a-icon">
             <svg xmlns="http://www.w3.org/2000/svg"
               width="24"
@@ -161,14 +168,14 @@
               <path d="M11 12h1v4h1" />
             </svg>
           </span>
-          <span class="a-title">About</span></a
-        >
+          <span class="a-title">About</span>
+        </label>
       </li>
     </ul>
   </aside>
   <div class="modal-main">
     <div class="pages">
-      <section class="page-active" id="p-theme">
+      <section id="p-theme">
         <div class="row flex-column flex-sb">
           <h4><label>Theme</label></h4>
           <div>

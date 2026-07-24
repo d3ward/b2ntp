@@ -7,9 +7,12 @@
 // the options page could silently reskin this too. Decoupled (spec.md §8,
 // ticket 06): --c* is NTP widget chrome only now.
 //
-// The curved-cutout active-item treatment that used to live here (:before /
-// :after box-shadow pseudo-elements) was dropped deliberately at the
-// maintainer's request; DaisyUI's `menu-active` now carries the active state.
+// Each item is a <label> wrapping an sr-only radio (shared name="settings-nav")
+// -- same radio + :has() technique as the Widgets tab bar (schemaForm/
+// widgetSettings), no click handler needed. The active look and the page it
+// routes to are both pure CSS: this file paints the checked label, and
+// #settings-panel:has(#nav-X:checked) #p-X{display:flex} in
+// _settings_panel.sass shows the matching page.
 //
 // The 1.25rem radius below was a bespoke --radius-b custom property (a
 // bigger radius than DaisyUI's own --radius-box), defined only for the light
@@ -37,10 +40,10 @@
 		li
 			position: relative
 			width: 100%
-		a
+		label
 			display: flex
 			width: 100%
-			text-decoration: none
+			cursor: pointer
 			gap: 1rem
 			padding: .4rem
 			border-top-left-radius: 1.25rem
@@ -59,14 +62,15 @@
 		// DaisyUI's menu ships its own hover/active colours. Point them at
 		// DaisyUI's own tokens instead. No !important needed -- this Sass is
 		// unlayered and outranks DaisyUI's layered rules (ticket 13).
-		a:hover
+		label:hover
 			background: var(--color-base-300)
 			color: var(--color-base-content)
-		a.menu-active
+		label:has(:checked)
 			background: var(--color-primary)
 			color: var(--color-primary-content)
 		// DaisyUI's menu suppresses the outline, so the reset's focus-visible
-		// rule never shows. Restore a visible ring for keyboard users.
-		a:focus-visible
+		// rule never shows. Restore a visible ring for keyboard users -- the
+		// radio itself is what takes focus, so this reads it via :has().
+		label:has(:focus-visible)
 			outline: 2px solid var(--color-primary)
 			outline-offset: -2px
