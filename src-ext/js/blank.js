@@ -1,6 +1,7 @@
 import packageJSON from "../../package.json";
 import { toast } from "./components/toast";
 import { aos } from "./components/aos";
+import { gotop } from "./components/gotop";
 import { storage } from "./components/localStorage";
 import { settingsState, DEFAULTS } from "./settings/state";
 import "../sass/blank.sass";
@@ -125,6 +126,7 @@ document.addEventListener("keydown", (event) => {
 
 function onDOMReady() {
   aos();
+  gotop();
 
   // Apply auto-switch theme
   updateTheme();

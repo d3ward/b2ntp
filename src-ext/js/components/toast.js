@@ -38,6 +38,20 @@ export function toast(options = []) {
             try { t.parent.hidePopover() } catch { /* already closed */ }
         }
     }
+    // Top-layer order is last-shown-wins: if a toast is already up and a
+    // <dialog> opens afterwards, the dialog (and its ::backdrop) stacks above
+    // the toast. Auto-dismiss still works -- it's a timer removing the DOM
+    // node -- but a click meant for the toast hits the backdrop instead, so
+    // click-to-dismiss silently stops working. Re-promote the toast on every
+    // dialog open so it stays on top of whatever opened last.
+    t.bump = () => {
+        if (t.parent.hasAttribute('popover') && t.parent.matches(':popover-open')) {
+            try { t.parent.hidePopover(); t.parent.showPopover() } catch { /* mid-transition */ }
+        }
+    }
+    document.addEventListener('toggle', (e) => {
+        if (e.target.tagName === 'DIALOG' && e.newState === 'open') t.bump()
+    }, true)
 
     t.close = (el) => {
         el.classList.add('toast-out')

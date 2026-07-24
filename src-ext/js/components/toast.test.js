@@ -89,6 +89,44 @@ describe('toast — top-layer promotion', () => {
     expect(() => toast().success('one')).not.toThrow()
     expect(el.showPopover).not.toHaveBeenCalled()
   })
+
+  it('re-promotes above a <dialog> that opens after the toast', () => {
+    const el = mountContainer()
+    toast().success('one')
+    expect(el.showPopover).toHaveBeenCalledTimes(1)
+
+    const dlg = document.createElement('dialog')
+    document.body.appendChild(dlg)
+    const toggle = new Event('toggle')
+    toggle.newState = 'open'
+    dlg.dispatchEvent(toggle)
+
+    // Re-promotion is hide+show, so the toast ends up on top of whatever
+    // opened last -- back where a click can reach it instead of the dialog's
+    // ::backdrop.
+    expect(el.hidePopover).toHaveBeenCalledTimes(1)
+    expect(el.showPopover).toHaveBeenCalledTimes(2)
+  })
+
+  it('ignores dialogs closing and non-dialog toggles', () => {
+    const el = mountContainer()
+    toast().success('one')
+
+    const dlg = document.createElement('dialog')
+    document.body.appendChild(dlg)
+    const closing = new Event('toggle')
+    closing.newState = 'closed'
+    dlg.dispatchEvent(closing)
+
+    const details = document.createElement('details')
+    document.body.appendChild(details)
+    const opening = new Event('toggle')
+    opening.newState = 'open'
+    details.dispatchEvent(opening)
+
+    expect(el.showPopover).toHaveBeenCalledTimes(1)
+    expect(el.hidePopover).not.toHaveBeenCalled()
+  })
 })
 
 describe('toast — dismissal timing contract', () => {
