@@ -1,12 +1,12 @@
 <dialog class="modal" id="dlg_changelog" aria-labelledby="dlg_changelog-title">
-	<div class="modal-box" tabindex="-1" autofocus>
-		<header>
-			<h3 id="dlg_changelog-title">#Changelog - b2ntp</h3>
+	<div class="modal-box max-h-[80dvh] max-w-[42rem] flex flex-col items-start overflow-hidden p-0 outline-none motion-reduce:transition-none motion-reduce:animate-none" tabindex="-1" autofocus>
+		<header class="border-b border-base-300 flex items-center justify-between w-full p-4">
+			<h3 id="dlg_changelog-title" class="text-xl font-semibold">#Changelog - b2ntp</h3>
 			<form method="dialog"><button class="btn">
 				<svg xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-x"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M18 6l-12 12" /><path d="M6 6l12 12" /></svg>
 			</button></form>
 		</header>
-		<section>
+		<section class="overflow-auto w-full p-4">
 			<div class="b2-grid better_r">
 				<div>
 					<div class="card card-border bg-base-200">
@@ -17,7 +17,7 @@
 				</div>
 			</div>
 		</section>
-		<footer class="modal-action">
+		<footer class="modal-action border-t border-base-300 w-full p-4 mt-0">
 			<form method="dialog"><button class="btn">
 				Close
 			</button></form>

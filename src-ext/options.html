@@ -24,9 +24,9 @@
   <body class="p-8">
     <!-- Color Picker Modal -->
     <dialog class="modal" id="dlg_clvn" aria-labelledby="dlg_clvn-title">
-      <div class="modal-box" tabindex="-1" autofocus>
-        <header>
-          <h3 id="dlg_clvn-title">Color Picker</h3>
+      <div class="modal-box max-h-[80dvh] max-w-[42rem] flex flex-col items-start overflow-hidden p-0 outline-none motion-reduce:transition-none motion-reduce:animate-none" tabindex="-1" autofocus>
+        <header class="border-b border-base-300 flex items-center justify-between w-full p-4">
+          <h3 id="dlg_clvn-title" class="text-xl font-semibold">Color Picker</h3>
           <form method="dialog"><button class="btn">
             <svg xmlns="http://www.w3.org/2000/svg"
               width="24"
@@ -42,10 +42,10 @@
             </svg>
           </button></form>
         </header>
-        <section>
+        <section class="overflow-auto w-full p-4">
           <div id="cp_v"></div>
         </section>
-        <footer class="modal-action flex items-center justify-center">
+        <footer class="modal-action flex items-center justify-center border-t border-base-300 w-full p-4 mt-0">
           <form method="dialog"><button class="btn">Cancel</button></form>
           <button class="btn" id="cp_ok">OK</button>
         </footer>
@@ -55,7 +55,7 @@
 
     <!-- Toast -->
     <div class="toast toast-top toast-center" id="nt1" toast-pos="top" popover="manual"></div>
-    <div class="card bg-base-200 border border-base-300 shadow-[var(--shadow)] w-full max-w-[75rem] h-[min(88vh,54rem)] overflow-hidden">
+    <div class="card bg-base-200 border border-base-300 shadow-xl w-full max-w-[75rem] h-[min(88vh,54rem)] overflow-hidden">
       <header class="flex items-center justify-between w-full p-4 sticky top-0 z-10 shrink-0 bg-base-100 border-b border-base-300">
         <h3 class="flex items-center gap-2">
           <svg xmlns="http://www.w3.org/2000/svg"
