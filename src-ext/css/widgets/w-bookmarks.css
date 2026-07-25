@@ -86,3 +86,9 @@
 div#bookmarks>div.section>div>a+a {
   margin-top: 5px;
 }
+
+/* The bookmarks widget's own card background (settings.html: Grid Colors ->
+   Bookmarks Widget Background). */
+.widget-panel[data-widget="bookmarks"] {
+  background: var(--c28);
+}

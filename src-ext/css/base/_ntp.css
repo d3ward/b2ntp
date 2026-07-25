@@ -119,8 +119,10 @@ aside {
 
 /* The main.header slot (search, by default) -- panelHost tags its panel with
    this class (spec.md §4: "the header widget is mounted position: sticky").
-   Its opaque background lives in css/widgets.css, not here -- position is
-   layout, colour isn't. */
+   Its opaque background lives in its own css/widgets/w-*.css file, not here
+   -- position is layout, colour isn't. blank.js moves the toolbar inside
+   this same panel (prepended, above the widget's own content), so it rides
+   along as one sticky unit instead of needing its own offset. */
 .widget-panel.main-header {
   position: sticky;
   top: .5rem;

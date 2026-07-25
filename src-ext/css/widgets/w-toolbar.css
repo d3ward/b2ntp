@@ -1,0 +1,35 @@
+/* ---------------- Toolbar ---------------- */
+/* Stickiness lives on .widget-panel.main-header (base/_ntp.css) -- blank.js
+   moves the toolbar into that same panel (above the search widget's own
+   content), so the two share one sticky box. */
+.toolbar {
+  border: none;
+  border-radius: var(--radius-box);
+  background-color: var(--c4);
+  color: var(--c5);
+  padding: 0.4rem;
+  height: 2.5rem;
+  width: 100%;
+  max-width: 40rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.clock_date {
+  display: flex;
+  align-items: center;
+}
+.clock_date > * {
+  margin: 0;
+  padding: 0;
+}
+
+body.clock-widget-active .clock_date {
+  display: none;
+}
+
+span#clock {
+  margin-right: 15px;
+  color: var(--c6);
+}

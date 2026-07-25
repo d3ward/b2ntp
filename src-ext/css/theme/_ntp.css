@@ -100,6 +100,22 @@ body,
   /* Right Rail Background -- transparent by default on both themes */
   --cl26: transparent;
   --cd26: transparent;
+  /* Main Rail Background -- transparent by default on both themes */
+  --cl31: transparent;
+  --cd31: transparent;
+  /* ------------ Widget Backgrounds ------------ */
+  /* Search Widget Background */
+  --cl27: #fafafa;
+  --cd27: #000;
+  /* Bookmarks Widget Background */
+  --cl28: #fafafa;
+  --cd28: #000;
+  /* Clock Widget Background */
+  --cl29: #fafafa;
+  --cd29: #000;
+  /* Quick Note Widget Background */
+  --cl30: #fafafa;
+  --cd30: #000;
 
   /* NTP Colors */
   --c0: var(--cl0);
@@ -129,6 +145,11 @@ body,
   --c24: var(--cl24);
   --c25: var(--cl25);
   --c26: var(--cl26);
+  --c27: var(--cl27);
+  --c28: var(--cl28);
+  --c29: var(--cl29);
+  --c30: var(--cl30);
+  --c31: var(--cl31);
 }
 [data-theme="dark"] {
   --bg-img: var(--bg-img-d);
@@ -160,4 +181,9 @@ body,
   --c24: var(--cd24);
   --c25: var(--cd25);
   --c26: var(--cd26);
+  --c27: var(--cd27);
+  --c28: var(--cd28);
+  --c29: var(--cd29);
+  --c30: var(--cd30);
+  --c31: var(--cd31);
 }

@@ -1,7 +1,6 @@
-/* ---------- Toolbar and Search Bar ---------- */
-/* Stickiness lives on .widget-panel.main-header (base/_ntp.css) now that
-   search is its own widget -- .tool_search is just the search widget's own
-   inner layout. */
+/* ---------------- Search ---------------- */
+/* Stickiness lives on .widget-panel.main-header (base/_ntp.css) -- .tool_search
+   is just the search widget's own inner layout. */
 .tool_search {
   display: flex;
   flex-direction: column;
@@ -9,49 +8,16 @@
   gap: .8rem;
   width: 100%;
 }
-.toolbar,
+
+#action,
 #sb_input {
-  border: none;
-  border-radius: var(--radius-box);
-  width: calc(100% - 10px);
-}
-
-.toolbar {
-  background-color: var(--c4);
-  color: var(--c5);
-  padding: 0.4rem;
-  height: 2.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.clock_date {
-  display: flex;
-  align-items: center;
-}
-.clock_date > * {
-  margin: 0;
-  padding: 0;
-}
-
-body.clock-widget-active .clock_date {
-  display: none;
-}
-
-span#clock {
-  margin-right: 15px;
-  color: var(--c6);
-}
-#action,#sb_input,.toolbar {
   width: 100%;
   max-width: 40rem;
 }
+
 #sb_input {
-  /* display/line-height were inherited from the generic input rule in
-     _form.sass until ticket 04 removed it. The NTP search bar is out of
-     scope for DaisyUI, so it keeps them explicitly rather than gaining an
-     `input` class. */
+  border: none;
+  border-radius: var(--radius-box);
   display: block;
   line-height: 1.25rem;
   background-color: var(--c7);
@@ -83,7 +49,8 @@ span#clock {
   opacity: 1;
 }
 
-#sb_txt {
-  min-height: 200px;
-  resize: vertical;
+/* The search widget's own card background (settings.html: Search Bar
+   Colors -> Search Widget Background). */
+.widget-panel[data-widget="search"] {
+  background: var(--c27);
 }

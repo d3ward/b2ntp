@@ -3,7 +3,8 @@
  *
  * The whole page's CSS lives here now -- _core.css and base/_ntp.css (the
  * former sass/ tree, now plain CSS) are just @imports below, alongside
- * _bridge.css and widgets.css. There is no separate Sass build step any more.
+ * _bridge.css and widgets/_chrome.css. There is no separate Sass build step
+ * any more.
  *
  * Preflight is deliberately NOT imported. b2ntp has its own hand-rolled reset
  * in css/base/_reset.css; pulling in Tailwind's would restyle every element
@@ -56,6 +57,6 @@
 @source "../js/components/toast.js";
 
 @import "./_bridge.css";
-@import "./widgets.css";
+@import "./widgets/_chrome.css";
 @import "./_core.css";
 @import "./base/_ntp.css";

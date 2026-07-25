@@ -20,9 +20,19 @@
      switch, just with DaisyUI's own default palette instead of a custom
      brand one.
 
-     The --c0..--c26 NTP widget colour slots (theme/ntp.sass) stay outside
-     this entirely -- an independent layer for bookmarks/tabs sidebar/
-     weather, unrelated to DaisyUI's theme model. */
+     The --c0..--c31 NTP widget/region colour slots (theme/_ntp.css) stay
+     outside this entirely -- an independent layer for bookmarks/tabs
+     sidebar/weather/rail backgrounds, unrelated to DaisyUI's theme model. */
+}
+
+/* DaisyUI's stock light/dark themes set --radius-box: 0.5rem and
+   --radius-field: 0.25rem. Rather than fork either theme just to bump these
+   tokens, override them here -- unlayered, so they beat the themes' own
+   (layered) declarations regardless of source order. */
+[data-theme="light"],
+[data-theme="dark"] {
+  --radius-box: 1rem;
+  --radius-field: 0.5rem;
 }
 
 /*

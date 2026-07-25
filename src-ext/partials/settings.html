@@ -1,183 +1,167 @@
-<section id="settings-panel" class="h-full">
-  <aside class="active">
-    <ul class="menu">
+<section id="settings-panel" class="h-full gap-2 w-full py-2 pl-2 bg-base-100 text-base-content">
+  <aside class="shrink-0">
+    <ul class="menu menu-vertical flex-nowrap gap-1 bg-base-200 rounded-box w-56 min-h-full">
       <li>
-        <label>
+        <label class="has-checked:bg-primary has-checked:text-primary-content has-[:focus-visible]:outline has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-primary has-[:focus-visible]:-outline-offset-2">
           <input type="radio" name="settings-nav" id="nav-theme" class="sr-only" checked="checked" />
-          <span class="a-icon">
-            <svg xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.5"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-              <path d="M3 21v-4a4 4 0 1 1 4 4h-4" />
-              <path d="M21 3a16 16 0 0 0 -12.5 12.5" />
-            </svg>
-          </span>
-          <span class="a-title">Theme</span>
+          <svg xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+            <path d="M3 21v-4a4 4 0 1 1 4 4h-4" />
+            <path d="M21 3a16 16 0 0 0 -12.5 12.5" />
+          </svg>
+          <span class="whitespace-nowrap">Theme</span>
         </label>
       </li>
       <li>
-        <label>
+        <label class="has-checked:bg-primary has-checked:text-primary-content has-[:focus-visible]:outline has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-primary has-[:focus-visible]:-outline-offset-2">
           <input type="radio" name="settings-nav" id="nav-bookmarks" class="sr-only" />
-          <span class="a-icon">
-            <svg xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.5"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-              <path d="M15 10v11l-5 -3l-5 3v-11a3 3 0 0 1 3 -3h4a3 3 0 0 1 3 3z"
-              />
-              <path d="M11 3h5a3 3 0 0 1 3 3v11" />
-            </svg>
-          </span>
-          <span class="a-title">Bookmarks</span>
+          <svg xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+            <path d="M15 10v11l-5 -3l-5 3v-11a3 3 0 0 1 3 -3h4a3 3 0 0 1 3 3z"
+            />
+            <path d="M11 3h5a3 3 0 0 1 3 3v11" />
+          </svg>
+          <span class="whitespace-nowrap">Bookmarks</span>
         </label>
       </li>
 
       <li>
-        <label>
+        <label class="has-checked:bg-primary has-checked:text-primary-content has-[:focus-visible]:outline has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-primary has-[:focus-visible]:-outline-offset-2">
           <input type="radio" name="settings-nav" id="nav-background" class="sr-only" />
-          <span class="a-icon">
-            <svg xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.5"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-              <path d="M4 8l4 -4" />
-              <path d="M14 4l-10 10" />
-              <path d="M4 20l16 -16" />
-              <path d="M20 10l-10 10" />
-              <path d="M20 16l-4 4" />
-            </svg>
-          </span>
-          <span class="a-title"> Background </span>
+          <svg xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+            <path d="M4 8l4 -4" />
+            <path d="M14 4l-10 10" />
+            <path d="M4 20l16 -16" />
+            <path d="M20 10l-10 10" />
+            <path d="M20 16l-4 4" />
+          </svg>
+          <span class="whitespace-nowrap">Background</span>
         </label>
       </li>
       <li>
-        <label>
+        <label class="has-checked:bg-primary has-checked:text-primary-content has-[:focus-visible]:outline has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-primary has-[:focus-visible]:-outline-offset-2">
           <input type="radio" name="settings-nav" id="nav-widgets" class="sr-only" />
-          <span class="a-icon">
-            <svg xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.5"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-              <path d="M4 4m0 1a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z"
-              />
-              <path d="M14 4m0 1a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z"
-              />
-              <path d="M4 14m0 1a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z"
-              />
-              <path d="M14 14m0 1a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z"
-              />
-            </svg>
-          </span>
-          <span class="a-title">Widgets</span>
+          <svg xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+            <path d="M4 4m0 1a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z"
+            />
+            <path d="M14 4m0 1a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z"
+            />
+            <path d="M4 14m0 1a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z"
+            />
+            <path d="M14 14m0 1a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z"
+            />
+          </svg>
+          <span class="whitespace-nowrap">Widgets</span>
         </label>
       </li>
       <li>
-        <label>
+        <label class="has-checked:bg-primary has-checked:text-primary-content has-[:focus-visible]:outline has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-primary has-[:focus-visible]:-outline-offset-2">
           <input type="radio" name="settings-nav" id="nav-search" class="sr-only" />
-          <span class="a-icon">
-            <svg xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.5"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-              <path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" />
-              <path d="M21 21l-6 -6" />
-            </svg>
-          </span>
-
-          <span class="a-title">Search &amp; Toolbar</span>
+          <svg xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+            <path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" />
+            <path d="M21 21l-6 -6" />
+          </svg>
+          <span class="whitespace-nowrap">Search &amp; Toolbar</span>
         </label>
       </li>
       <li>
-        <label>
+        <label class="has-checked:bg-primary has-checked:text-primary-content has-[:focus-visible]:outline has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-primary has-[:focus-visible]:-outline-offset-2">
           <input type="radio" name="settings-nav" id="nav-backup" class="sr-only" />
-          <span class="a-icon">
-            <svg xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.5"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-              <path d="M12 6m-8 0a8 3 0 1 0 16 0a8 3 0 1 0 -16 0" />
-              <path d="M4 6v6a8 3 0 0 0 16 0v-6" />
-              <path d="M4 12v6a8 3 0 0 0 16 0v-6" />
-            </svg>
-          </span>
-
-          <span class="a-title">Backup</span>
+          <svg xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+            <path d="M12 6m-8 0a8 3 0 1 0 16 0a8 3 0 1 0 -16 0" />
+            <path d="M4 6v6a8 3 0 0 0 16 0v-6" />
+            <path d="M4 12v6a8 3 0 0 0 16 0v-6" />
+          </svg>
+          <span class="whitespace-nowrap">Backup</span>
         </label>
       </li>
       <li>
-        <label>
+        <label class="has-checked:bg-primary has-checked:text-primary-content has-[:focus-visible]:outline has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-primary has-[:focus-visible]:-outline-offset-2">
           <input type="radio" name="settings-nav" id="nav-about" class="sr-only" />
-          <span class="a-icon">
-            <svg xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.5"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-              <path d="M12 9h.01" />
-              <path d="M3 5a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v14a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-14z"
-              />
-              <path d="M11 12h1v4h1" />
-            </svg>
-          </span>
-          <span class="a-title">About</span>
+          <svg xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+            <path d="M12 9h.01" />
+            <path d="M3 5a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v14a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-14z"
+            />
+            <path d="M11 12h1v4h1" />
+          </svg>
+          <span class="whitespace-nowrap">About</span>
         </label>
       </li>
     </ul>
   </aside>
-  <div class="modal-main">
+  <div class="flex-1 overflow-auto w-full p-2">
     <div class="pages">
       <section id="p-theme">
-        <div class="row flex-column flex-sb">
-          <h4><label>Theme</label></h4>
+        <div class="grid grid-cols-1 gap-4 w-full *:flex *:items-center *:justify-end *:gap-2">
+          <h4 class="flex items-center justify-end gap-2 text-base-content font-bold m-auto w-full p-2 rounded-box bg-base-300"><label>Theme</label></h4>
           <div>
             <label>Theme Toggle Shortcut:</label>
             <div id="theme-shortcut-label"><kbd class="kbd">Alt</kbd> + <kbd class="kbd">T</kbd></div>
@@ -228,7 +212,7 @@
         </div>
       </section>
       <section id="p-bookmarks">
-        <div class="text-center">
+        <div class="text-center w-full">
           <button id="sync-bk" class="btn btn-primary">
             <svg xmlns="http://www.w3.org/2000/svg"
               width="24"
@@ -271,8 +255,8 @@
             </div>
           </div>
         </div>
-        <div class="row flex-column flex-sb">
-          <h4><label>Grid Layout</label></h4>
+        <div class="grid grid-cols-1 gap-4 w-full *:flex *:items-center *:justify-end *:gap-2">
+          <h4 class="flex items-center justify-end gap-2 text-base-content font-bold m-auto w-full p-2 rounded-box bg-base-300"><label>Grid Layout</label></h4>
           <div>
             <div class="flex w-full justify-center gap-2">
               <div class="flex-1">
@@ -343,7 +327,7 @@
               </div>
             </div>
           </div>
-          <h4>
+          <h4 class="flex items-center justify-end gap-2 text-base-content font-bold m-auto w-full p-2 rounded-box bg-base-300">
             <label> Grid Colors</label>
             <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg">
               <use href="#cl-icon"></use>
@@ -392,11 +376,16 @@
             <div class="stt_clfrt" id="stt_cl_17"></div>
             <div class="stt_clfrt" id="stt_cld_17"></div>
           </div>
+          <div>
+            <label> Bookmarks Widget Background</label>
+            <div class="stt_clfrt" id="stt_cl_28"></div>
+            <div class="stt_clfrt" id="stt_cld_28"></div>
+          </div>
         </div>
       </section>
       <section id="p-background">
-        <div class="row flex-column" id="bg_crop">
-          <h4><label>NTP Background</label></h4>
+        <div class="grid grid-cols-1 gap-4 w-full" id="bg_crop">
+          <h4 class="flex items-center justify-end gap-2 text-base-content font-bold m-auto w-full p-2 rounded-box bg-base-300"><label>NTP Background</label></h4>
           <div id="bg_pld">
             <div class="b2-block">
               <div class="blur_bg"></div>
@@ -409,7 +398,7 @@
                   limited to 2MB
                 </small></span
               >
-              <div class="row flex-column">
+              <div class="grid grid-cols-1 gap-4">
                 <div>
                   <label for="wllp_value">Background Value Theme</label>
                   <textarea class="textarea" type="text" id="wllp_value" style="width: 100%">
@@ -600,13 +589,13 @@
         </div>
       </section>
       <section id="p-widgets">
-        <div class="wdg-tab-bar tabs tabs-lift">
+        <div class="wdg-tab-bar tabs tabs-lift w-full">
           <label class="tab">
             <input type="radio" name="wdg-tabs" autocomplete="off" checked="checked" />
             Layout
           </label>
           <div class="wdg-tab-panel tab-content bg-base-100 border-base-300 p-6" id="wdg-panel-layout">
-          <div class="row flex-column flex-sb">
+          <div class="grid grid-cols-1 gap-4 *:flex *:items-center *:justify-end *:gap-2">
             <div class="widget-region-columns">
               <div class="widget-region-col">
                 <h5>Left Rail</h5>
@@ -622,8 +611,8 @@
                 <ul id="wdg-order-right" class="wdg-order-list"></ul>
               </div>
             </div>
-            <h4>
-              <label>Sidebar Colors</label>
+            <h4 class="flex items-center justify-end gap-2 text-base-content font-bold m-auto w-full p-2 rounded-box bg-base-300">
+              <label>Region Colors</label>
               <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg">
                 <use href="#cl-icon"></use>
               </svg>
@@ -635,6 +624,11 @@
               <label>Left Sidebar</label>
               <div class="stt_clfrt" id="stt_cl_25"></div>
               <div class="stt_clfrt" id="stt_cld_25"></div>
+            </div>
+            <div>
+              <label>Main</label>
+              <div class="stt_clfrt" id="stt_cl_31"></div>
+              <div class="stt_clfrt" id="stt_cld_31"></div>
             </div>
             <div>
               <label>Right Sidebar</label>
@@ -649,13 +643,13 @@
             Weather
           </label>
           <div class="wdg-tab-panel tab-content bg-base-100 border-base-300 p-6" id="wdg-panel-weather">
-          <div class="row flex-column flex-sb">
-            <h4>
+          <div class="grid grid-cols-1 gap-4 *:flex *:items-center *:justify-end *:gap-2">
+            <h4 class="flex items-center justify-end gap-2 text-base-content font-bold m-auto w-full p-2 rounded-box bg-base-300">
               <label>Weather Configuration</label>
             </h4>
-            <div class="row">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <div class="b2-grid" id="wt_grid">
+                <div class="grid grid-cols-1 gap-4" id="wt_grid">
                   <div>
                     Location
                     <input class="input"
@@ -710,7 +704,7 @@
               </div>
             </div>
             <div id="wdg-settings-weather" class="schema-form-host"></div>
-            <h4>
+            <h4 class="flex items-center justify-end gap-2 text-base-content font-bold m-auto w-full p-2 rounded-box bg-base-300">
               <label>Weather Colors</label>
               <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg">
                 <use href="#cl-icon"></use>
@@ -747,10 +741,10 @@
             Tabs
           </label>
           <div class="wdg-tab-panel tab-content bg-base-100 border-base-300 p-6" id="wdg-panel-tabs">
-          <div class="row flex-column flex-sb">
-            <h4><label>Tabs Configuration</label></h4>
+          <div class="grid grid-cols-1 gap-4 *:flex *:items-center *:justify-end *:gap-2">
+            <h4 class="flex items-center justify-end gap-2 text-base-content font-bold m-auto w-full p-2 rounded-box bg-base-300"><label>Tabs Configuration</label></h4>
             <div id="wdg-settings-tabs" class="schema-form-host"></div>
-            <h4>
+            <h4 class="flex items-center justify-end gap-2 text-base-content font-bold m-auto w-full p-2 rounded-box bg-base-300">
               <label>Tabs Colors</label>
               <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg">
                 <use href="#cl-icon"></use>
@@ -792,9 +786,23 @@
             Clock
           </label>
           <div class="wdg-tab-panel tab-content bg-base-100 border-base-300 p-6" id="wdg-panel-clock">
-          <div class="row flex-column flex-sb">
-            <h4><label>Clock Configuration</label></h4>
+          <div class="grid grid-cols-1 gap-4 *:flex *:items-center *:justify-end *:gap-2">
+            <h4 class="flex items-center justify-end gap-2 text-base-content font-bold m-auto w-full p-2 rounded-box bg-base-300"><label>Clock Configuration</label></h4>
             <div id="wdg-settings-clock" class="schema-form-host"></div>
+            <h4 class="flex items-center justify-end gap-2 text-base-content font-bold m-auto w-full p-2 rounded-box bg-base-300">
+              <label>Clock Colors</label>
+              <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg">
+                <use href="#cl-icon"></use>
+              </svg>
+              <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg">
+                <use href="#cd-icon"></use>
+              </svg>
+            </h4>
+            <div>
+              <label>Background</label>
+              <div class="stt_clfrt" id="stt_cl_29"></div>
+              <div class="stt_clfrt" id="stt_cld_29"></div>
+            </div>
           </div>
         </div>
 
@@ -803,16 +811,30 @@
             Quick Note
           </label>
           <div class="wdg-tab-panel tab-content bg-base-100 border-base-300 p-6" id="wdg-panel-qnote">
-          <div class="row flex-column flex-sb">
-            <h4><label>Quick Note Configuration</label></h4>
+          <div class="grid grid-cols-1 gap-4 *:flex *:items-center *:justify-end *:gap-2">
+            <h4 class="flex items-center justify-end gap-2 text-base-content font-bold m-auto w-full p-2 rounded-box bg-base-300"><label>Quick Note Configuration</label></h4>
             <div id="wdg-settings-qnote" class="schema-form-host"></div>
+            <h4 class="flex items-center justify-end gap-2 text-base-content font-bold m-auto w-full p-2 rounded-box bg-base-300">
+              <label>Quick Note Colors</label>
+              <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg">
+                <use href="#cl-icon"></use>
+              </svg>
+              <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg">
+                <use href="#cd-icon"></use>
+              </svg>
+            </h4>
+            <div>
+              <label>Background</label>
+              <div class="stt_clfrt" id="stt_cl_30"></div>
+              <div class="stt_clfrt" id="stt_cld_30"></div>
+            </div>
           </div>
         </div>
         </div>
       </section>
       <section id="p-search">
-        <div class="row flex-column flex-sb">
-          <h4><label>Toolbar</label></h4>
+        <div class="grid grid-cols-1 gap-4 w-full *:flex *:items-center *:justify-end *:gap-2">
+          <h4 class="flex items-center justify-end gap-2 text-base-content font-bold m-auto w-full p-2 rounded-box bg-base-300"><label>Toolbar</label></h4>
           <div>
             <label for="timeFormat">Choose time format:</label>
             <select class="select" id="timeFormat">
@@ -835,7 +857,7 @@
               aria-label="Toggle time seconds"
             />
           </div>
-          <h4>
+          <h4 class="flex items-center justify-end gap-2 text-base-content font-bold m-auto w-full p-2 rounded-box bg-base-300">
             <label> Toolbar Colors</label>
             <svg id="cl-icon"
               xmlns="http://www.w3.org/2000/svg"
@@ -886,7 +908,7 @@
             <div class="stt_clfrt" id="stt_cld_6"></div>
           </div>
           <hr />
-          <h4><label>Search Bar</label></h4>
+          <h4 class="flex items-center justify-end gap-2 text-base-content font-bold m-auto w-full p-2 rounded-box bg-base-300"><label>Search Bar</label></h4>
           <div>
             <textarea class="textarea" id="sb_txt" rows="10"></textarea>
           </div>
@@ -920,7 +942,7 @@
             </details>
           </div>
           <div id="wdg-settings-search" class="schema-form-host"></div>
-          <h4>
+          <h4 class="flex items-center justify-end gap-2 text-base-content font-bold m-auto w-full p-2 rounded-box bg-base-300">
             <label> Search Bar Colors</label>
             <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg">
               <use href="#cl-icon"></use>
@@ -954,11 +976,16 @@
             <div class="stt_clfrt" id="stt_cl_19"></div>
             <div class="stt_clfrt" id="stt_cld_19"></div>
           </div>
+          <div>
+            <label> Search Widget Background</label>
+            <div class="stt_clfrt" id="stt_cl_27"></div>
+            <div class="stt_clfrt" id="stt_cld_27"></div>
+          </div>
         </div>
       </section>
       <section id="p-backup">
-        <div class="row flex-column text-center">
-          <h4>
+        <div class="grid grid-cols-1 gap-4 text-center w-full">
+          <h4 class="flex items-center justify-end gap-2 text-base-content font-bold m-auto w-full p-2 rounded-box bg-base-300">
             <label> NTP Data</label>
           </h4>
           <div>
@@ -1069,7 +1096,7 @@
             </span>
           </div>
           <hr />
-          <h4>
+          <h4 class="flex items-center justify-end gap-2 text-base-content font-bold m-auto w-full p-2 rounded-box bg-base-300">
             <label>Theme Manager</label>
           </h4>
           <div>
@@ -1190,7 +1217,7 @@
         </div>
       </section>
       <section id="p-about">
-        <div class="b2-grid">
+        <div class="grid grid-cols-1 gap-4 w-full">
           <div class="flex items-center justify-center">
             <svg xmlns="http://www.w3.org/2000/svg"
               width="264.833"

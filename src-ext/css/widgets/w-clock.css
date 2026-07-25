@@ -1,0 +1,25 @@
+/* ------------------ Clock ------------------ */
+/* Moved out of w-tabs.css, where it lived only because it shared a rail with
+   the tabs widget -- it's the clock widget's own look, not tabs chrome. */
+.clock-widget-time {
+  display: block;
+  font-size: 1.4rem;
+  font-weight: 600;
+  text-align: center;
+  padding: .6rem .5rem .1rem;
+  color: var(--c21);
+}
+
+.clock-widget-date {
+  display: block;
+  font-size: .75rem;
+  opacity: .65;
+  text-align: center;
+  padding: .1rem .5rem .6rem;
+  color: var(--c21);
+}
+
+/* The clock widget's own card background (settings.html: Clock Colors). */
+.widget-panel[data-widget="clock"] {
+  background: var(--c29);
+}

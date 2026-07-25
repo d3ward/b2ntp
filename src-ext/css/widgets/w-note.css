@@ -1,3 +1,4 @@
+/* ------------------ Quick Note ------------------ */
 .qnote-textarea {
   width: 100%;
   min-height: 10rem;
@@ -16,4 +17,10 @@
 .qnote-textarea:focus {
   border-color: var(--color-primary);
   box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-primary) 30%, transparent);
+}
+
+/* The quick-note widget's own card background (settings.html: Quick Note
+   Colors -> Background). */
+.widget-panel[data-widget="qnote"] {
+  background: var(--c30);
 }

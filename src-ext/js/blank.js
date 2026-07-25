@@ -143,12 +143,23 @@ function onDOMReady() {
   const railLeft = document.getElementById("rail-l");
   const railRight = document.getElementById("rail-r");
   const mainWidgets = document.getElementById("main-widgets");
+  // Captured once, before the first mount, while it's still a plain sibling
+  // in <main> -- mountMain wipes #main-widgets on every re-render, so this
+  // reference (not a fresh query) is what survives being moved in and out of
+  // it. Its listeners (clock/settings-button) are bound once at load time in
+  // this same file, not re-bound per mount, so the node itself must persist.
+  const toolbarEl = document.querySelector(".toolbar");
 
   function renderWidgets() {
     const widgetsCfg = settingsState.getWidgets();
     mountRegion(railLeft, widgetsCfg.layout.left, WIDGETS, { ntoast, getTabs });
     mountRegion(railRight, widgetsCfg.layout.right, WIDGETS, { ntoast });
     mountMain(mainWidgets, widgetsCfg.layout.main, WIDGETS, { ntoast, getTabs });
+    // Folds the toolbar into the sticky header panel (above the search
+    // widget's own content) so the two share one sticky box instead of two
+    // stacked ones -- see css/base/_ntp.css's .widget-panel.main-header.
+    const headerPanel = mainWidgets.querySelector(".widget-panel.main-header");
+    if (headerPanel) headerPanel.prepend(toolbarEl);
   }
 
   renderWidgets();

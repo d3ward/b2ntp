@@ -204,39 +204,46 @@
   background: var(--cd26);
 }
 
+#stt_cl_27 {
+  background: var(--cl27);
+}
+#stt_cld_27 {
+  background: var(--cd27);
+}
+
+#stt_cl_28 {
+  background: var(--cl28);
+}
+#stt_cld_28 {
+  background: var(--cd28);
+}
+
+#stt_cl_29 {
+  background: var(--cl29);
+}
+#stt_cld_29 {
+  background: var(--cd29);
+}
+
+#stt_cl_30 {
+  background: var(--cl30);
+}
+#stt_cld_30 {
+  background: var(--cd30);
+}
+
+#stt_cl_31 {
+  background: var(--cl31);
+}
+#stt_cld_31 {
+  background: var(--cd31);
+}
+
 #custom_sb_preview,#sb_icon_preview_c {
   background: var(--sb_preview_c);
 }
 
 /****************** Settings  ***************/
-
-#stt_lwo,
-#stt_selist {
-  padding: 0;
-  margin: auto;
-  list-style: none;
-  width: 100%;
-  max-width: 450px;
-}
-
-#stt_lwo li,
-#stt_selist li {
-  background: var(--color-base-200);
-  color: var(--color-base-content);
-  border-radius: 10px;
-  border: none;
-  margin: 5px;
-  padding: 5px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: 2.6rem;
-}
-
-#stt_lwo .srtb_ghost,
-#stt_selist .srtb_ghost {
-  opacity: 0;
-}
 
 /* Colour swatch inputs: no DaisyUI equivalent for an arbitrary-colour trigger,
    so these stay bespoke. Moved here from elements/_form.sass in ticket 06,
@@ -286,34 +293,6 @@ input[type="color"]::-webkit-color-swatch {
   background-color: var(--ntp-bgc);
   background-image: var(--ntp-bgi);
   background-size: var(--ntp-bgs);
-}
-
-#p-home {
-  gap: .5rem;
-  flex-direction: column;
-}
-#p-home > div {
-  display: flex;
-  flex-direction: column;
-  gap: .5rem;
-}
-#p-home button {
-  width: 100%;
-  justify-content: flex-start;
-  background: var(--color-base-200);
-  color: var(--color-base-content);
-}
-
-#sb_len {
-  width: 100%;
-  max-width: 280px;
-  height: 250px;
-  background: transparent;
-  color: var(--color-base-content);
-  border: 1px solid var(--color-base-300);
-  border-radius: 6px;
-  margin-top: 5px;
-  padding: 5px;
 }
 
 #bg_crop .b2-block {
@@ -414,23 +393,8 @@ input[type="color"]::-webkit-color-swatch {
   fill: var(--c17);
 }
 
-.ns_readed {
-  display: none;
-}
 
-#tlg_sldr {
-  flex-direction: column;
-  padding: 0.8rem;
-}
 
-#sld_tg {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 45px;
-  gap: 0.5rem;
-}
 
 #sld_vw.open_sld {
   transform: scale(1);
@@ -453,14 +417,43 @@ input[type="color"]::-webkit-color-swatch {
   display: none;
 }
 
-#p-background {
-  max-width: unset;
+/* Which page shows is pure CSS, keyed off the sr-only radio each nav
+   label wraps (partials/settings.html) -- no click handler, no .page-active
+   class to toggle (replaces pagesRoute.js). Lives here, unlayered, rather
+   than as Tailwind utility classes on each section: this file's `.pages > *`
+   rule above is also unlayered, and an unlayered rule always outranks a
+   layered one (Tailwind's utilities, incl. arbitrary has-* variants)
+   regardless of specificity -- so a utility-class override would silently
+   lose to the default-hidden rule above. */
+#settings-panel:has(#nav-theme:checked) #p-theme,
+#settings-panel:has(#nav-bookmarks:checked) #p-bookmarks,
+#settings-panel:has(#nav-background:checked) #p-background,
+#settings-panel:has(#nav-widgets:checked) #p-widgets,
+#settings-panel:has(#nav-search:checked) #p-search,
+#settings-panel:has(#nav-backup:checked) #p-backup,
+#settings-panel:has(#nav-about:checked) #p-about {
+  display: flex;
 }
 
-._flex {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
+/* Form-row labels throughout the settings page grow to fill the row so the
+   paired control lands flush at the far edge (paired with each row's own
+   *:flex *:items-center *:justify-end *:gap-2 utilities in settings.html,
+   which right-align every direct child). */
+#settings-panel label {
+  flex: auto;
+}
+
+/* base/_basic.css defaults every <section> (unlayered) to a flex *column* --
+   #settings-panel is itself a <section>, so a Tailwind flex-row utility
+   class here would silently lose to that regardless of specificity. Only
+   the direction needs overriding, unlayered; display:flex is already
+   inherited from that same generic rule. */
+#settings-panel {
+  flex-direction: row;
+}
+
+#p-background {
+  max-width: unset;
 }
 
 #b_add,#b_add2,#b_save,#b_close {
@@ -469,60 +462,143 @@ input[type="color"]::-webkit-color-swatch {
   justify-content: center !important;
 }
 
-.flex-column {
-  display: flex;
-  flex-direction: column;
-}
-
-._overflowhidden {
-  overflow: hidden !important;
-}
-
-.flex-sb > *,
-._flex-sb {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 0.5rem;
-}
-
-hr {
-  border: 0;
-  border-top: 2px solid var(--color-primary);
-  width: 100%;
-  margin-top: 0.5rem !important;
-  margin-bottom: 0.5rem !important;
-}
-
-._as-center {
-  align-self: center;
-}
-
-#code_f {
-  width: 100%;
-  min-height: 150px;
-  border: 1px solid var(--color-base-300);
-}
-
-.fldHover {
-  background: var(--color-error) !important;
-}
-
-._mw-unset {
-  min-width: unset;
-}
-
-#dlg_new_tf button {
-  justify-content: center;
-}
-
-._flex-sb, .flex-sb>* {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 0.5rem;
-}
 #wllp_value,#custom_sb_value {
   resize: vertical;
   max-height: 200px;
+}
+
+/* Search-shortcut config textarea (Search & Toolbar -> Search Bar) -- a
+   settings-page-only control, distinct from the NTP's actual search input
+   (#sb_input, css/widgets/w-search.css). */
+#sb_txt {
+  min-height: 200px;
+  resize: vertical;
+}
+
+
+/* --------- Widget Settings UI (Options Page) --------- */
+
+.widget-region-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1rem;
+}
+.widget-region-columns h5 {
+  font-size: .85rem;
+  font-weight: 600;
+  margin-bottom: .4rem;
+}
+
+.wdg-order-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  min-height: 2.5rem;
+  border: 1px dashed var(--c0);
+  border-radius: var(--radius-box);
+}
+.wdg-order-list:empty::after {
+  content: 'No widgets';
+  display: block;
+  text-align: center;
+  padding: .6rem;
+  font-size: .78rem;
+  opacity: .4;
+}
+
+/* The main-region header slot (search) is visually pinned above the body
+   list within the same column -- it is a fixed single-widget slot, not
+   draggable, and never a drop target (spec.md §6). */
+.wdg-main-header {
+  margin-bottom: .5rem;
+  border-style: solid;
+}
+
+.wdg-order-item {
+  display: flex;
+  align-items: center;
+  gap: .45rem;
+  padding: .3rem .5rem;
+  cursor: default;
+  font-size: .82rem;
+  border-radius: var(--radius-box);
+  transition: background .1s;
+}
+.wdg-order-item:hover {
+  background: var(--color-base-300);
+}
+.wdg-order-item.wdg-draggable {
+  cursor: grab;
+}
+.wdg-order-item.wdg-inactive {
+  opacity: .5;
+}
+/* SortableJS's ghostClass (see widgetSettings.js) -- the placeholder left
+   in the source list while the real element is dragged. */
+.wdg-order-item.dragging {
+  opacity: .35;
+  cursor: grabbing;
+}
+.wdg-order-item .wdg-drag-handle {
+  color: var(--color-base-content);
+  opacity: .35;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+.wdg-order-item .wdg-drag-handle-spacer {
+  width: 14px;
+  flex-shrink: 0;
+}
+.wdg-order-item .wdg-item-icon {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  color: var(--color-base-content);
+}
+.wdg-order-item .wdg-item-icon svg {
+  width: 14px;
+  height: 14px;
+}
+.wdg-order-item .wdg-item-name {
+  flex: 1;
+}
+.wdg-order-item .wdg-toggle {
+  margin-left: auto;
+  flex-shrink: 0;
+}
+.wdg-order-item svg {
+  flex-shrink: 0;
+  width: 14px;
+  height: 14px;
+}
+
+/* Host for a widget's own generic settings form (schemaForm.js), on that
+   widget's dedicated settings tab/page -- see initWidgetDetailSettings in
+   settings/widgetSettings.js. */
+.schema-form-host {
+  margin: .5rem 0;
+}
+
+.schema-form {
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+}
+
+.schema-field {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  font-size: .82rem;
+}
+.schema-field .schema-field-label {
+  flex: 1;
+}
+
+.schema-field-hint {
+  flex-basis: 100%;
+  margin: 0;
+  font-size: .72rem;
+  opacity: .6;
 }
