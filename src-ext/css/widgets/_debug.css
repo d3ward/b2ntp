@@ -1,0 +1,17 @@
+/*
+ * Layout debug colours -- toggle from devtools with
+ * document.documentElement.classList.toggle('debug') to see the real
+ * boundaries of each layout piece regardless of its configured theme colour.
+ * Add one rule per new debug colour as needed; keep them grouped here rather
+ * than scattered across the real chrome files.
+ */
+
+.debug #rail-l,
+.debug #rail-m,
+.debug #rail-r {
+  background: red !important;
+}
+
+.debug .widget-panel {
+  background: green !important;
+}

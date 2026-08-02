@@ -2,9 +2,9 @@
  * Tailwind CSS + DaisyUI entry for the New Tab Page (blank.html).
  *
  * The whole page's CSS lives here now -- _core.css and base/_ntp.css (the
- * former sass/ tree, now plain CSS) are just @imports below, alongside
- * _bridge.css and widgets/_chrome.css. There is no separate Sass build step
- * any more.
+ * former sass/ tree, now plain CSS, and also home to the widget chrome
+ * moved in from widgets/_chrome.css) are just @imports below, alongside
+ * _bridge.css. There is no separate Sass build step any more.
  *
  * Preflight is deliberately NOT imported. b2ntp has its own hand-rolled reset
  * in css/base/_reset.css; pulling in Tailwind's would restyle every element
@@ -57,6 +57,6 @@
 @source "../js/components/toast.js";
 
 @import "./_bridge.css";
-@import "./widgets/_chrome.css";
+@import "./widgets/_debug.css";
 @import "./_core.css";
 @import "./base/_ntp.css";

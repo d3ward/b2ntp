@@ -43,7 +43,11 @@ export default defineConfig(({ mode }) => ({
           // name and PurgeCSS silently dropped the rule (as it already had for
           // gotop.html's `min-w-[2.6rem]`/`z-[1]`/`duration-[250ms]`, found
           // while debugging this).
-          defaultExtractor: content => content.match(/[^\s"'`<>=]+/g) || []
+          defaultExtractor: content => content.match(/[^\s"'`<>=]+/g) || [],
+          // `.debug` (css/widgets/_debug.css) is only ever toggled from
+          // devtools -- it never appears as a literal string in any scanned
+          // file, so PurgeCSS would otherwise drop the whole rule.
+          safelist: ['debug']
         })
       ]
     }

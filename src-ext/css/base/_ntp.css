@@ -79,14 +79,14 @@ body {
   width: 100%;
   max-width: 120rem;
   margin: 0 auto;
-  gap: .5rem;
+  gap: 1rem;
   padding: 4rem 1rem;
 }
 .workspace > * {
   padding: .5rem;
 }
 /* main widget container toolbar-search-bookmarks */
-main {
+main{
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -98,6 +98,9 @@ main {
 /* Sidebar Widgets — sticky, capped to the viewport so a rail taller than the
    screen scrolls internally instead of running past it. */
 aside {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
   position: sticky;
   top: .5rem;
   max-height: calc(100dvh - 1rem);
@@ -311,4 +314,108 @@ code {
 
 #timeFormat,#dateFormat,#auto-switch-type {
   max-width: 20rem;
+}
+
+
+/*
+ * Shared widget chrome: region backgrounds + the generic per-widget-panel
+ * box (margin/radius/overflow) + responsive rail behaviour. Each widget's
+ * own background lives in its own w-*.css file instead (driven by the same
+ * --c* colour layer -- see _bridge.css's note that --c0..--c31 are
+ * deliberately not part of that bridge).
+ *
+ * Native CSS on purpose: Sass is being retired repo-wide (spec.md §8).
+ * Imported by css/blank.css only -- this is NTP-only chrome, not shared
+ * with the options page.
+ */
+
+/* ---- Region backgrounds ---- */
+
+#rail-l {
+  background: var(--c25);
+  border-radius: var(--radius-box);
+}
+
+#rail-r {
+  background: var(--c26);
+  border-radius: var(--radius-box);
+}
+
+#rail-m {
+  background: var(--c31);
+  border-radius: var(--radius-box);
+}
+
+/* Generic to any widget sitting in a rail -- not specific to whichever
+   widget currently occupies it, so it lives here rather than in a w-*.css
+   file. Sticky/max-height/overflow for the rails themselves are set once,
+   generically, on `aside` (css/base/_ntp.css). */
+#rail-l ::-webkit-scrollbar, #rail-r ::-webkit-scrollbar {
+  width: 12px;
+  background: var(--c16);
+}
+
+#rail-l ::-webkit-scrollbar-track, #rail-r ::-webkit-scrollbar-track {
+  -webkit-border-radius: 10px;
+  background: var(--c16);
+  border-radius: var(--radius-box);
+}
+
+#rail-l ::-webkit-scrollbar-thumb, #rail-r ::-webkit-scrollbar-thumb {
+  -webkit-border-radius: 10px;
+  border-radius: var(--radius-box);
+  background: var(--c17);
+}
+
+#rail-l[hidden], #rail-r[hidden] {
+  display: none !important;
+}
+
+#rail-l .widget-panel[hidden], #rail-r .widget-panel[hidden] {
+  display: none !important;
+}
+
+#rail-l .widget-body[hidden], #rail-r .widget-body[hidden] {
+  display: none !important;
+}
+
+/* ---- Card chrome: every widget carries its own opaque background (each
+   independently colorable in settings.html, set in its own w-*.css file)
+   plus this shared margin/radius. No shared border -- a single global card
+   look isn't the intended design here, just a consistent per-widget one.
+   Every widget now always having its own opaque background also means the
+   sticky main.header slot (whichever widget that is) needs no separate
+   backdrop rule to keep scrolling body content from bleeding through under
+   it -- it already has one. ---- */
+
+.widget-panel {
+  border-radius: var(--radius-box);
+  overflow: hidden;
+      padding: 1rem;
+}
+
+/* ---- Responsive (spec.md §7, ticket 09) ---- */
+
+/* A widget that declares `scrolls: true` (panelHost.js) gets its own capped,
+   internally-scrolling box on desktop instead of growing the whole rail --
+   released below at the mobile breakpoint, where a capped box in a single
+   narrow column is a trap rather than a convenience. */
+.widget-panel.scrolls {
+  max-height: 16rem;
+  overflow-y: auto;
+}
+
+@media (max-width: 48rem) {
+  /* Sticky is on by default for the main header (sass/base/_ntp.sass); the
+     only way off it is the header widget's own settings.mobileSticky:false
+     (panelHost.js's mountMain), and only on mobile -- desktop always stays
+     sticky regardless of that setting. */
+  .widget-panel.main-header.mobile-static {
+    position: static;
+  }
+
+  .widget-panel.scrolls {
+    max-height: none;
+    overflow-y: visible;
+  }
 }
